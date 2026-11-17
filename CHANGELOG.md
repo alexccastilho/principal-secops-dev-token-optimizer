@@ -2,6 +2,12 @@
 
 Todas as mudanças relevantes deste projeto. Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), versões em [SemVer](https://semver.org/lang/pt-BR/).
 
+## [2.0.1] - 2026-11-16
+
+### Alterado
+- Seção 7 do SKILL.md: a instrução do caminho do scanner continua fazendo sentido depois que o Claude Code substitui `${CLAUDE_SKILL_DIR}`. Testado nos dois cenários (caminho substituído e marcador literal no claude.ai).
+- Relatório de análise atualizado com os ajustes feitos no empacotamento.
+
 ## [2.0.0] - 2026-11-16
 
 Revisão profunda da skill. O relatório completo, com achados por severidade e a validação feita, está em [docs/ANALISE-v2.0.0.md](docs/ANALISE-v2.0.0.md).

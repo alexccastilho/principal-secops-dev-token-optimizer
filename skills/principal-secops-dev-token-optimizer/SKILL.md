@@ -16,7 +16,7 @@ description: >
 license: MIT
 metadata:
   author: Alex Camacho Castilho
-  version: "2.0.0"
+  version: "2.0.1"
   repository: https://github.com/alexccastilho/principal-secops-dev-token-optimizer
 ---
 
@@ -146,7 +146,7 @@ Pairing rules:
 
 Before sending code, check everything written or changed in this task.
 
-**Scanner.** `scripts/revisar_codigo.py` sits in this skill's own folder, the one this `SKILL.md` was loaded from. That folder changes with the install (a plugin folder, `~/.claude/skills/`, `/mnt/skills/user/`), so build the script path from it and never assume a fixed location. Claude Code fills in `${CLAUDE_SKILL_DIR}` below; if it still shows literally (claude.ai), replace it with that folder. Do not `cd` into the skill folder: run from where you are and pass the project path as the argument:
+**Scanner.** `scripts/revisar_codigo.py` sits in this skill's own folder, the one this `SKILL.md` was loaded from. That folder changes with the install (a plugin folder, `~/.claude/skills/`, `/mnt/skills/user/`), so build the script path from it and never assume a fixed location. Claude Code writes that folder into the command below by itself. If the command still starts with a `$` placeholder instead of a real folder (claude.ai), swap the placeholder for that folder. Do not `cd` into the skill folder: run from where you are and pass the project path as the argument:
 
 ```bash
 python3 "${CLAUDE_SKILL_DIR}/scripts/revisar_codigo.py" <arquivo ou pasta do projeto>
