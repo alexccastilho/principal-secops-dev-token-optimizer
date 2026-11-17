@@ -1,3 +1,5 @@
+<p align="center"><img src=".claude-plugin/icon.png" alt="Ícone do plugin" width="160"></p>
+
 # Principal SecOps Dev & Token Optimizer
 
 Skill para **Claude Code** e **claude.ai** que faz o Claude trabalhar como um desenvolvedor sênior de segurança (SecOps) atendendo uma pessoa que **não programa**. Ele entrega código seguro, padronizado e funcionando, explica em português simples e gasta o mínimo de tokens.
@@ -76,12 +78,14 @@ Para gerar o ZIP você mesmo: `python tools/build_zip.py` (o arquivo sai em `dis
 .claude-plugin/
   marketplace.json      # catálogo do marketplace (Claude Code)
   plugin.json           # manifesto do plugin, com versão e autoria
+  icon.png              # ícone do plugin
 skills/principal-secops-dev-token-optimizer/
   SKILL.md              # instruções principais
   references/           # guias por stack, carregados sob demanda
   scripts/revisar_codigo.py  # scanner usado antes da entrega
   evals/evals.json      # cenários de avaliação
 tools/build_zip.py      # gera o ZIP para o claude.ai
+tools/make_icon.py      # desenha o ícone do plugin (precisa do Pillow)
 ```
 
 ## Uso do scanner fora da skill

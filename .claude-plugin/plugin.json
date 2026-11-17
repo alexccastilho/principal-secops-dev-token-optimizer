@@ -1,7 +1,8 @@
 {
   "name": "principal-secops-dev-token-optimizer",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Principal SecOps Dev & Token Optimizer: código seguro, padronizado e funcionando, entregue em pt-BR simples para quem não programa, com economia de tokens.",
+  "icon": ".claude-plugin/icon.png",
   "author": {
     "name": "Alex Camacho Castilho",
     "url": "https://github.com/alexccastilho"
@@ -9,5 +10,15 @@
   "homepage": "https://github.com/alexccastilho/principal-secops-dev-token-optimizer",
   "repository": "https://github.com/alexccastilho/principal-secops-dev-token-optimizer",
   "license": "MIT",
-  "keywords": ["security", "secops", "owasp", "asvs", "lgpd", "code-review", "token-optimization", "pt-br", "non-programmer"]
+  "keywords": [
+    "security",
+    "secops",
+    "owasp",
+    "asvs",
+    "lgpd",
+    "code-review",
+    "token-optimization",
+    "pt-br",
+    "non-programmer"
+  ]
 }

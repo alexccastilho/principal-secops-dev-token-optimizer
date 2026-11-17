@@ -2,6 +2,11 @@
 
 Todas as mudanças relevantes deste projeto. Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), versões em [SemVer](https://semver.org/lang/pt-BR/).
 
+## [2.0.2] - 2026-11-16
+
+### Adicionado
+- Ícone do plugin (`.claude-plugin/icon.png`, 1024x1024): escudo com o símbolo de código. O gerador está em `tools/make_icon.py`.
+
 ## [2.0.1] - 2026-11-16
 
 ### Alterado
