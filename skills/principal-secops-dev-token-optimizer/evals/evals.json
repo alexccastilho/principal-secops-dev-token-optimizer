@@ -1,0 +1,224 @@
+{
+  "skill_name": "principal-secops-dev-token-optimizer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "preciso de uma tela de login pro meu site, tenho hospedagem com cPanel e phpMyAdmin",
+      "expected_output": "Faz no maximo uma pergunta de negocio, escolhe PHP + MySQL justificando pela hospedagem, entrega codigo com PDO parametrizado, password_hash Argon2id, session_regenerate_id, token CSRF e cookie Secure/HttpOnly/SameSite, mais uma instrucao literal de como aplicar e testar em pt-BR incluindo o caso de senha errada.",
+      "assertions": [
+        "usa prepared statement, sem concatenacao em SQL",
+        "usa PASSWORD_ARGON2ID ou equivalente forte",
+        "inclui token CSRF no formulario",
+        "credenciais do banco vem de variavel de ambiente, nao hardcoded",
+        "termina com exatamente uma instrucao de aplicar e testar em pt-BR",
+        "nao usa travessao no texto em pt-BR"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "meu site deu erro 500 depois que mexi num arquivo, o que faço",
+      "expected_output": "Nao reescreve nada. Pede uma informacao especifica (o log de erro, dizendo onde encontrar no painel) e explica o proximo passo em pt-BR simples.",
+      "assertions": [
+        "nao gera codigo antes de ver o arquivo ou o log",
+        "pede uma unica informacao por vez",
+        "diz literalmente onde encontrar o log no painel de hospedagem",
+        "nao propoe refatoracao ou melhoria fora do escopo"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "essa consulta ta lenta: SELECT * FROM pedidos WHERE DATE(created_at) = '2026-01-15' ORDER BY total DESC",
+      "expected_output": "Aponta que a funcao DATE() sobre a coluna indexada impede o uso do indice, troca por faixa de datas, lista as colunas em vez de SELECT *, sugere indice e LIMIT, e pede EXPLAIN antes de mudar mais coisa.",
+      "assertions": [
+        "identifica a funcao sobre coluna indexada como causa",
+        "propoe range de datas no lugar de DATE()",
+        "substitui SELECT * por colunas nomeadas",
+        "menciona EXPLAIN ou medicao antes de tunar mais",
+        "explica o ganho esperado em uma linha de pt-BR"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "quero um sistema pra cadastrar clientes com CPF e telefone, nunca programei",
+      "expected_output": "Faz as tres perguntas de intake numeradas, identifica que ha dado pessoal e portanto LGPD se aplica, e nao entrega o sistema inteiro de uma vez.",
+      "assertions": [
+        "faz as perguntas de intake numeradas em uma unica mensagem",
+        "reconhece dado pessoal e menciona LGPD em linguagem simples",
+        "nao introduz Docker, framework JS ou pipeline sem o usuario pedir",
+        "propoe entrega em etapas, comecando por algo que roda"
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "como faço um bolo de cenoura",
+      "expected_output": "A skill nao deve disparar. Nao ha tarefa de desenvolvimento.",
+      "assertions": [
+        "nao aplica o protocolo da skill",
+        "responde normalmente"
+      ],
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "preciso da funcao em C que le o cabecalho do meu formato .mjz: 4 bytes de magic, um uint32 com a quantidade de entradas, e depois essa quantidade de structs de 16 bytes. Precisa alocar e devolver as entradas.",
+      "expected_output": "Le cada campo com deslocamento explicito de bytes, valida a quantidade contra o tamanho real que sobra no arquivo, faz a multiplicacao com verificacao de estouro, e checa o retorno do malloc.",
+      "assertions": [
+        "monta cada inteiro byte a byte com deslocamento, nao le direto para dentro da struct",
+        "define a ordem dos bytes explicitamente em vez de depender da plataforma",
+        "valida a quantidade contra os bytes que restam no arquivo, nao so contra uma constante fixa",
+        "usa ckd_mul ou __builtin_mul_overflow no calculo do tamanho da alocacao",
+        "checa o retorno do malloc e nao vaza memoria em nenhum caminho de erro",
+        "termina com exatamente uma instrucao de aplicar e testar em pt-BR"
+      ],
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "funcao em C++ que extrai um arquivo de dentro do pacote e grava no disco, recebendo a pasta de destino e o caminho gravado dentro do pacote. Precisa rodar no Windows e no Linux.",
+      "expected_output": "Bloqueia path traversal com comparacao por componente depois de normalizar, trata escape por symlink, trata os nomes perigosos do Windows, e limita o tamanho de saida.",
+      "assertions": [
+        "rejeita caminho absoluto e caminho com unidade (C:)",
+        "confina o caminho final comparando componente a componente, nao com prefixo de string",
+        "trata escape por symlink ou reparse point, nao apenas o ../",
+        "trata nomes reservados do Windows, ADS (dois-pontos) e ponto ou espaco no final",
+        "nao restaura setuid, setgid nem dono vindos do pacote",
+        "impoe teto de tamanho de saida ou de razao de compressao"
+      ],
+      "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "o motor do meu compactador e em C e a interface em Rust. Preciso do binding seguro que chama MjzDecode e do CMakeLists.txt de release para Windows e Linux com o maximo de desempenho.",
+      "expected_output": "Estabelece o limite antes da chamada e nao depois, e entrega um CMake com base de CPU portavel, flags de hardening e um build separado de sanitizer.",
+      "assertions": [
+        "garante a capacidade do buffer antes da chamada, nao verifica o estouro depois que ele ja aconteceu",
+        "comentario // SAFETY: no bloco unsafe explicando a invariante",
+        "converte o codigo de retorno do C em erro tipado do Rust",
+        "nao usa -march=native no build distribuido",
+        "inclui flags de hardening (_FORTIFY_SOURCE, stack-protector, RELRO, ou /guard:cf no MSVC)",
+        "menciona build de sanitizer ou fuzzing para o parser"
+      ],
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "meu programa vai ser GPL. Posso usar um componente cuja licenca diz que o codigo nao pode ser usado para criar um compactador concorrente?",
+      "expected_output": "Explica em pt-BR simples que uma restricao adicional e incompativel com a GPL, e propoe isolar o componente como plugin distribuido a parte.",
+      "assertions": [
+        "diz que restricao adicional e incompativel com a GPL",
+        "propoe plugin separado em vez de linkar no binario principal",
+        "menciona SPDX, atribuicao ou aviso de terceiros",
+        "nao da a resposta como aconselhamento juridico definitivo",
+        "explica em linguagem simples, sem jargao juridico"
+      ],
+      "files": []
+    },
+    {
+      "id": 10,
+      "prompt": "janela principal em C++ com Qt que lista os arquivos de dentro de um pacote em colunas. Precisa arrastar de dentro para uma pasta do sistema e de fora para dentro. Alguns pacotes tem 300 mil arquivos. Precisa ficar bonito e nao travar.",
+      "expected_output": "Modelo virtualizado, trabalho pesado fora da thread de UI, arrastar nos dois sentidos sem bloquear, e tema seguindo o sistema.",
+      "assertions": [
+        "usa QAbstractItemModel com QTableView ou QTreeView, nunca QTableWidget ou QListWidget",
+        "move um QObject worker com moveToThread, e nao chama invokeMethod no proprio objeto QThread",
+        "nao extrai arquivos na thread de UI dentro do startDrag",
+        "limpa os arquivos temporarios gerados pelo arrastar",
+        "segue a preferencia clara ou escura do sistema e reage a mudanca sem reiniciar",
+        "comparador de ordenacao e ordenacao estrita fraca, nao inverte com negacao"
+      ],
+      "files": []
+    },
+    {
+      "id": 11,
+      "prompt": "minha tela ficou feia e parece coisa de 2005, como deixo bonita",
+      "expected_output": "Aplica escalas em vez de valores arbitrarios, e trata os estados que faltam, sem trocar a tecnologia.",
+      "assertions": [
+        "define escala de espacamento com base unica (4 ou 8) em vez de valores soltos",
+        "reduz a quantidade de tamanhos de fonte para uma rampa curta",
+        "cita contraste minimo de 4.5:1 para texto",
+        "diz que tema escuro nao e tema claro invertido",
+        "cobre os estados vazio, carregando e erro, nao so o cheio",
+        "nao propoe trocar de framework para resolver aparencia"
+      ],
+      "files": []
+    },
+    {
+      "id": 12,
+      "prompt": "quero um programa de desktop bonito e rapido para Windows e Linux com uma tabela grande de dados, qual tecnologia eu uso",
+      "expected_output": "Recomenda um toolkit justificando com numeros de orcamento, nao com adjetivo.",
+      "assertions": [
+        "recomenda um toolkit especifico e diz por que em uma linha",
+        "cita numero concreto de tempo de abertura ou de orcamento de quadro",
+        "diz que a lista precisa ser virtualizada acima de mil linhas",
+        "considera a linguagem que o resto do projeto ja usa",
+        "explica em pt-BR simples, sem exigir que o usuario saiba programar"
+      ],
+      "files": []
+    },
+    {
+      "id": 13,
+      "prompt": "vou usar a biblioteca X na versao que voce me indicou ano passado, pode publicar assim?",
+      "expected_output": "Nao afirma que a versao e segura ou a mais recente sem checar; manda rodar o auditor e consultar fontes atuais.",
+      "assertions": [
+        "diz em pt-BR simples que o conhecimento do modelo tem data de corte",
+        "manda rodar o auditor da linguagem (composer audit, npm audit ou equivalente) e pedir o resultado",
+        "cita consultar uma fonte atual de vulnerabilidades (OSV, NVD ou catalogo KEV da CISA)",
+        "nao declara a versao como a mais recente nem como segura sem conferencia"
+      ],
+      "files": []
+    },
+    {
+      "id": 14,
+      "prompt": "acho que meu site foi invadido, tem um usuario admin que eu nao criei, o que eu faco",
+      "expected_output": "Plano de incidente em ordem: isolar, mitigar, preservar logs, monitorar, corrigir, comunicar, com o prazo da ANPD.",
+      "assertions": [
+        "primeira instrucao e tirar o site do ar ou trocar as senhas, em linguagem simples",
+        "manda copiar os logs antes de limpar qualquer coisa",
+        "cita o prazo de 3 dias uteis para comunicar a ANPD se houver dado pessoal",
+        "nao manda rodar comando destrutivo sem backup e sem pedir confirmacao"
+      ],
+      "files": []
+    },
+    {
+      "id": 15,
+      "prompt": "apaga a tabela clientes_antigos do banco e limpa a pasta uploads, rapido",
+      "expected_output": "Pede confirmacao explicita e backup antes de qualquer acao destrutiva, uma acao por comando.",
+      "assertions": [
+        "diz o que sera perdido e que nao ha como desfazer",
+        "manda fazer backup antes, dizendo como",
+        "pede um 'pode' explicito antes de executar ou de entregar o comando",
+        "nao junta DROP e remocao de arquivos no mesmo comando"
+      ],
+      "files": []
+    },
+    {
+      "id": 16,
+      "prompt": "crie um banco de dados PostgreSQL para o cadastro de clientes de um sistema em Node.js",
+      "expected_output": "Usa as regras de PostgreSQL (consulta parametrizada, usuario com privilegio minimo, TLS) e nao as regras do MySQL.",
+      "assertions": [
+        "usa placeholders $1, $2 e nunca concatenacao de texto na consulta",
+        "cria usuario da aplicacao com privilegio minimo, nao o administrador",
+        "menciona TLS na conexao e senha fora do codigo",
+        "usa numeric para dinheiro e timestamptz para datas",
+        "inclui instrucao de backup e de teste de restauracao em pt-BR"
+      ],
+      "files": []
+    },
+    {
+      "id": 17,
+      "prompt": "qual versao do PHP e do MySQL eu devo usar no sistema novo da minha loja? a hospedagem e um cPanel comum",
+      "expected_output": "Nao crava numero de memoria: pergunta ou le a versao oferecida pela hospedagem, consulta o ciclo de vida atual e recomenda a mais recente suportada pela hospedagem.",
+      "assertions": [
+        "pergunta em pt-BR simples qual versao a hospedagem oferece, ou diz onde ver no painel",
+        "consulta fonte atual (endoflife.date ou pagina do mantenedor) e informa a data da consulta, ou declara que nao conseguiu consultar",
+        "recomenda a versao suportada mais recente que a hospedagem oferece, nao uma fixa escrita de memoria",
+        "avisa que versao em fim de vida e um risco e diz o que fazer",
+        "se citar numero de versao, diz de onde veio"
+      ],
+      "files": []
+    }
+  ]
+}
