@@ -79,6 +79,8 @@ projeto/
 
 Web server document root points at `public/`. Everything else is unreachable from the browser. This single decision removes a whole class of vulnerabilities.
 
+Shared hosting where the public folder is fixed (`public_html` on cPanel): the contents of `public/` go inside `public_html`, and `src/`, `config/`, `storage/` and `.env` go one level above it, next to `public_html`, not inside. Say exactly that to the user, with the folder names they see in the file manager.
+
 ## Copy-paste ready instructions
 
 Every command block is literal. No placeholders the user has to interpret.

@@ -12,6 +12,7 @@ For MySQL and MariaDB read `mysql.md`. Everything below follows each vendor's ow
 * Migrations are versioned files in the repository, reversible, and tested first on a copy of the data. Backup before any destructive change (see the destructive-actions rule in `SKILL.md`).
 * Diagnose with the engine's plan tool before adding indexes. Slow query logging on before tuning.
 * Personal data (LGPD) isolated and encrypted at rest where the engine supports it; a deletion path designed before launch.
+* CPF, CNPJ, CEP and phone are text columns, never numeric: leading zeros are lost, and CNPJ became alphanumeric in 2026.
 
 ## PostgreSQL
 * Placeholders `$1, $2` through the driver (`psycopg`, `pg`, `pgx`, PDO `pgsql`). Never `format()` or concatenation into SQL.
@@ -20,6 +21,7 @@ For MySQL and MariaDB read `mysql.md`. Everything below follows each vendor's ow
 * Types: `text` over `varchar(n)`, `timestamptz` over `timestamp`, `numeric(12,2)` for money (never `float`), `jsonb` over `json`, `bigint generated always as identity` for keys.
 * Tuning: `EXPLAIN (ANALYZE, BUFFERS)`, the `pg_stat_statements` extension, autovacuum left on. Default isolation is `READ COMMITTED`; with `SERIALIZABLE` the app must retry on SQLSTATE `40001`.
 * Backup: `pg_dump -Fc` and `pg_restore` for logical copies; continuous WAL archiving for point-in-time recovery on important data.
+* Supabase and other hosted PostgreSQL reached straight from the browser: Row Level Security on every table, with a policy per operation, is the only access control there is. A table without RLS is public to anyone holding the anon key. The `service_role` key bypasses RLS and stays on the server, never in front-end code.
 
 ## SQLite
 * Bound parameters (`?` or named) through the driver.
@@ -46,6 +48,11 @@ For MySQL and MariaDB read `mysql.md`. Everything below follows each vendor's ow
 * Authentication enabled (`security.authorization: enabled`), roles with least privilege, never exposed to the internet (bind to a private address and firewall the port). TLS on. Server-side JavaScript off (`security.javascriptEnabled: false`) unless needed.
 * Schema validation with `$jsonSchema` on important collections. Indexes for every frequent filter and sort; check with `explain("executionStats")`.
 * Backup with `mongodump` or the platform's snapshots, and restore-test.
+
+## Firebase (Firestore, Realtime Database, Storage)
+* The security rules are the access control. Never ship `allow read, write: if true` or the "test mode" rules; every rule checks `request.auth` and that the document belongs to that user.
+* The web config (`apiKey`) is public by design and is not a secret. The Admin SDK service-account JSON is a secret: server only, never in the repository.
+* Validate type and size in the rules, and test them in the emulator before publishing.
 
 ## Redis
 * Never exposed to the internet. Keep `protected-mode yes`, bind to a private interface, firewall the port, TLS where it crosses a network.

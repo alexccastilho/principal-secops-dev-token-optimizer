@@ -30,6 +30,7 @@ Version policy: follow `versoes-e-fontes.md`. Read `engines` or `.nvmrc`, look u
 * No `child_process.exec` with user data. Use `execFile` with an argument array.
 * Prototype pollution: never merge untrusted JSON into an object with a recursive merge. Reject `__proto__`, `constructor`, `prototype` keys at the schema level.
 * Regex from user input, or a complex regex over user input, can hang the process. Bound the input length.
+* Next.js and other full-stack frameworks: every Server Action, Route Handler and API route checks the session and ownership itself; hiding the button or protecting the page is not access control. Only variables meant to be public get the `NEXT_PUBLIC_` (or `VITE_`) prefix, because the prefix ships the value to every browser. Keep the framework patched: its security releases are often critical.
 
 ## Supply chain
 * `npm audit` on every dependency change. `npm ci` in deploy so the lockfile is authoritative.

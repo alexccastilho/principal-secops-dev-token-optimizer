@@ -1,4 +1,4 @@
-# Outras linguagens — Go, C#, Ruby, Rust, mobile, shell
+# Outras linguagens — Go, C#, Ruby, Kotlin, mobile, PowerShell, shell
 
 Rule for any stack not covered by a dedicated reference: apply the security baseline, then follow the official style guide of that language's maintainers. State which guide is being followed, in one pt-BR line, only if the user asks.
 
@@ -27,12 +27,6 @@ Rule for any stack not covered by a dedicated reference: apply the security base
 * `bundle audit` on every dependency change. `Gemfile.lock` committed.
 * Never `eval`, `send` with a user-supplied method name, or `Marshal.load` on untrusted data.
 
-## Rust
-Has its own reference: `rust.md`. Read that instead.
-
-## C and C++
-Have their own reference: `c-cpp.md`. For a desktop binary or a file parser, also `native-app-security.md`.
-
 ## Mobile (Android / iOS / Flutter / React Native)
 * No secrets in the app binary. Anything shipped to a device is extractable.
 * Sensitive data in the platform keystore or keychain, never in shared preferences or plist.
@@ -58,6 +52,3 @@ Have their own reference: `c-cpp.md`. For a desktop binary or a file parser, als
 * Never build a command from unvalidated input. Never `curl ... | bash`.
 * `mktemp` for temporary files. Trap for cleanup.
 * For anything beyond about 50 lines, switch to Python. Shell error handling gets fragile fast.
-
-## SQL other than MySQL (PostgreSQL, SQL Server, SQLite, Oracle, MongoDB, Redis)
-Has its own reference: `bancos-outros.md`. The generic rules in `mysql.md` (parameterization, least privilege, indexing, `EXPLAIN` before tuning, backup before `ALTER`) still apply; the engine-specific syntax, security settings and tuning are in `bancos-outros.md`.

@@ -42,3 +42,17 @@ Each of these has shipped as a CVE in a widely used archiver. The first is well 
 * Publish checksums through a channel separate from the download.
 * Reproducible builds where the toolchain allows, so a third party can confirm the binary matches the source.
 * Ship an SBOM with each release. See `compliance-licencas.md`.
+
+## Pre-delivery checklist (native code)
+Run this on top of the gate in `SKILL.md`, for C, C++ and Rust FFI.
+
+```
+- [ ] Every length or count from the input validated against the bytes actually available
+- [ ] Every size arithmetic on input overflow-checked (ckd_mul, __builtin_mul_overflow)
+- [ ] Byte order explicit at every read and write of a multi-byte field
+- [ ] Every allocation checked, freed once, on every error path
+- [ ] Any path built from input confined to the destination, component-wise, after normalizing
+- [ ] No -march=native in a build that ships; hardening flags present
+- [ ] Bounds established before an FFI call, never checked after it
+- [ ] A build file for code that parses untrusted input carries a sanitizer configuration in it
+```

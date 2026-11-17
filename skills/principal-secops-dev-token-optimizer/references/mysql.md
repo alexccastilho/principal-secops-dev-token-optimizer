@@ -12,8 +12,8 @@ Version policy: follow `versoes-e-fontes.md`. Find out which server and version 
 
 ## Schema design
 * Engine InnoDB. Charset `utf8mb4`. Collation `utf8mb4_0900_ai_ci` on MySQL 8+; on MariaDB that collation does not exist, use `utf8mb4_unicode_ci` (a `CREATE TABLE` with the MySQL name fails there). Ask or check which server the hosting runs before writing the schema.
-* Every table: `id` primary key (`BIGINT UNSIGNED AUTO_INCREMENT`, or UUID stored as `BINARY(16)` when distributed), plus `created_at` and `updated_at` as `TIMESTAMP`.
-* Right-size types: `TINYINT(1)` for flags, `DECIMAL(10,2)` for money and never `FLOAT`, `VARCHAR` sized to reality, `ENUM` avoided for values that change (use a lookup table).
+* Every table: `id` primary key (`BIGINT UNSIGNED AUTO_INCREMENT`, or UUID stored as `BINARY(16)` when distributed), plus `created_at` and `updated_at` as `TIMESTAMP`. `TIMESTAMP` ends in January 2038: any date that can fall later (due date, contract end, birth date) is `DATE` or `DATETIME`.
+* Right-size types: `TINYINT(1)` for flags, `DECIMAL(10,2)` for money and never `FLOAT`, `VARCHAR` sized to reality, CPF, CNPJ, CEP and phone as `CHAR` or `VARCHAR` and never a number (leading zeros are lost, and CNPJ became alphanumeric in 2026), `ENUM` avoided for values that change (use a lookup table).
 * Foreign keys with explicit `ON DELETE` and `ON UPDATE`. Never orphan silently.
 * Personal data (CPF, e-mail, phone, address) isolated in its own table, so deletion requests under LGPD are one operation instead of a hunt.
 * Migrations as versioned `.sql` files in the repo. No ad-hoc `ALTER` without a record.

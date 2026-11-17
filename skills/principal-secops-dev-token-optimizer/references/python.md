@@ -13,7 +13,7 @@ Version policy: follow `versoes-e-fontes.md`. Read `requires-python` or the inte
 ## Security
 * SQL: `cursor.execute(sql, params)` with placeholders. ORMs (SQLAlchemy, Django) with bound parameters. Never an f-string in SQL, not even for a "safe" internal value.
 * Never `eval` or `exec` on user input. `subprocess.run([...])` with a list and `shell=False`.
-* `secrets` module for tokens and passwords resets, never `random`. `secrets.compare_digest` for token comparison.
+* `secrets` module for tokens and password resets, never `random`. `secrets.compare_digest` for token comparison.
 * Password hashing with `argon2-cffi` or `bcrypt`. `hashlib` alone is not password hashing.
 * `pickle` never on untrusted data. YAML through `yaml.safe_load`. XML from untrusted sources through `defusedxml`.
 * Web frameworks: framework CSRF on, template auto-escaping on, `DEBUG = False` in production, `ALLOWED_HOSTS` set, secrets from environment.

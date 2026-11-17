@@ -66,10 +66,16 @@ allow_url_include = Off
 # No directory listing.
 Options -Indexes
 
-# Block dotfiles (.env, .git) but keep /.well-known/ for security.txt and certificates.
+# Block hidden files (.env) but keep /.well-known/ for security.txt and certificates.
 <FilesMatch "^\.(?!well-known)">
     Require all denied
 </FilesMatch>
+
+# FilesMatch sees only the file name, so /.git/config would still be served.
+# This blocks any URL with a hidden folder or file in the path.
+<IfModule mod_alias.c>
+    RedirectMatch 404 "/\.(?!well-known/)"
+</IfModule>
 
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
@@ -82,3 +88,12 @@ Options -Indexes
 </IfModule>
 ```
 Add `Strict-Transport-Security` only after HTTPS works on the whole site. Keep `.env`, `vendor/`, `storage/` and `logs/` outside the public folder; the `.htaccess` block above is a second line of defense, not the first.
+
+## WordPress
+* Never edit core, a parent theme or someone else's plugin: the next update erases the change. Put it in a child theme or a small custom plugin.
+* Database: `$wpdb->prepare()` with `%d`, `%s` and `%i` (identifier, WordPress 6.2+) on every query that carries a variable; `$wpdb->insert()` and `$wpdb->update()` for writes. Table names from `$wpdb->prefix`.
+* Output escaped at echo time: `esc_html()`, `esc_attr()`, `esc_url()`, `wp_kses_post()`. Input: `wp_unslash()` then `sanitize_text_field()`, `absint()`, `sanitize_email()`.
+* Every form, AJAX action and REST route checks a nonce (`wp_nonce_field()` with `check_admin_referer()` or `check_ajax_referer()`) AND `current_user_can()`. A nonce is not a permission check. A REST route gets a real `permission_callback`, never `__return_true` on anything that writes or returns private data.
+* Uploads through `wp_handle_upload()`. A URL supplied by a user is fetched with `wp_safe_remote_get()`.
+* `wp-config.php` holds the secrets: never in Git, never pasted in the chat. Set `DISALLOW_FILE_EDIT` to true and `WP_DEBUG_DISPLAY` to false in production.
+* Most WordPress intrusions enter through an outdated or abandoned plugin. Keep core, themes and plugins updated, delete the inactive ones, and before installing one check its last update and number of active installs. For the non-programmer: update through the panel, after a backup.

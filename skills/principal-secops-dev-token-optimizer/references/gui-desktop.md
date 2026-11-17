@@ -102,3 +102,17 @@ The web rules do not transfer. These are the ones that apply.
 * One automated smoke test per OS in CI: launch, open a document, close. It catches missing libraries and packaging faults that no unit test sees.
 * Test with the pathological dataset, not the demo one. The 300 000-row case is the requirement, not an edge case.
 * Test at 200% scale, in dark mode, and with the longest locale.
+
+## Pre-delivery checklist (graphical interface)
+Run this on top of the gate in `SKILL.md`.
+
+```
+- [ ] Any list that can pass 1000 rows uses a virtualised model, not one widget per item
+- [ ] No I/O, decompression or hashing on the UI thread; long work cancellable with progress
+- [ ] Drag and drop works in both directions, and produces no work on the UI thread
+- [ ] Follows the system light or dark setting, and changes without a restart
+- [ ] Readable at 200% scale and with the longest string in the target language
+- [ ] Empty, loading and error states designed, not only the full one
+- [ ] Keyboard reaches every action, focus is visible
+- [ ] Spacing and type come from the scale, no arbitrary values
+```

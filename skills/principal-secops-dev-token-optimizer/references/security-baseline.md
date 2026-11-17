@@ -1,14 +1,12 @@
 # Security baseline — OWASP Top 10:2025, ASVS 5.0, supply chain, LGPD
 
 ## Contents
-- OWASP Top 10:2025 controls, category by category
-- Supply chain hardening
+- OWASP Top 10:2025 controls, category by category (supply chain is A03, authentication A07, logging A09, error handling A10)
 - Version and vulnerability check (knowledge cutoff)
 - Secrets handling
 - Security headers and cookies
-- Authentication and session recipes
 - File upload
-- Logging, alerting and error handling
+- Payments
 - LGPD (Brazilian personal data law)
 - Features that call an LLM
 - Incident or unpatched flaw (0-day)
@@ -25,7 +23,7 @@ Target: the current OWASP ASVS, Level 1 for any public app, Level 2 when it hand
 * Deny by default. Every protected route checks the session server-side, then checks that the logged user owns the specific record.
 * Never trust an id, role, price or quantity that arrived from the client. Re-read them from the database.
 * Object references: prefer opaque ids (UUID) over sequential ones, but never as the only defense.
-* Outbound requests built from user input: allowlist of hosts and schemes, block private ranges (127.0.0.0/8, 10/8, 172.16/12, 192.168/16, 169.254.169.254), no redirect following.
+* Outbound requests built from user input (SSRF): allowlist of hosts and schemes, no redirect following. Resolve the name once, check the resolved address, and connect to that same address, or a second DNS answer bypasses the check. Block loopback, private and link-local ranges in IPv4 and IPv6 (127.0.0.0/8, 10/8, 172.16/12, 192.168/16, 169.254.0.0/16 which holds the cloud metadata address, ::1, fc00::/7, fe80::/10).
 * CORS: explicit origin list. Never `*` together with credentials.
 
 **A02 Security Misconfiguration**
@@ -47,7 +45,7 @@ Target: the current OWASP ASVS, Level 1 for any public app, Level 2 when it hand
 
 **A04 Cryptographic Failures**
 * TLS everywhere, HSTS on, no mixed content.
-* Passwords: Argon2id (memory ≥ 19 MiB, iterations ≥ 2, parallelism 1) or bcrypt cost ≥ 12. Never MD5, SHA-1, SHA-256 alone, never homemade crypto.
+* Passwords: Argon2id (memory ≥ 19 MiB, iterations ≥ 2, parallelism 1) or bcrypt cost ≥ 12. bcrypt reads only the first 72 bytes, so cap the accepted length there or use Argon2id. Never MD5, SHA-1, SHA-256 alone, never homemade crypto.
 * Data at rest: AES-256-GCM through the platform library. Keys from the environment or a KMS, rotated, never next to the ciphertext.
 * Randomness for tokens from a cryptographic source (`random_bytes`, `secrets`, `crypto.randomBytes`, `SecureRandom`), never a plain RNG.
 * Never log, cache or put in a URL: passwords, tokens, full card numbers, CPF.
@@ -111,7 +109,7 @@ What this model knows about vulnerabilities and "latest" versions stops at its t
 
 ```
 Strict-Transport-Security: max-age=31536000; includeSubDomains
-Content-Security-Policy: default-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'
+Content-Security-Policy: default-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
 X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
 Permissions-Policy: geolocation=(), camera=(), microphone=()
@@ -126,6 +124,13 @@ CSP with `unsafe-inline` is close to useless. Move inline scripts and styles to 
 * Random filename via a cryptographic source. Never keep the user's filename in the path.
 * Store outside the webroot; serve through a script that checks permission and sets `Content-Disposition`.
 * Never allow execution in the upload directory. Images: re-encode to strip embedded payloads.
+
+## Payments
+
+* Never receive, store or log the card number, CVV or expiry date. Use the gateway's hosted checkout or its tokenizing fields (Mercado Pago, Pagar.me, PagBank, Stripe). That keeps the system out of most of PCI DSS.
+* A payment is confirmed only by the gateway's server-to-server notification (webhook) or by querying its API. Never by the return URL in the browser, a value sent by the client or a screenshot of a Pix receipt.
+* Webhooks: verify the signature with the gateway secret, reject old timestamps, process each event id only once, answer quickly and do the work afterwards.
+* Price, discount, freight and total are recomputed on the server from the database. The Pix amount and key in the QR code come from the server.
 
 ## LGPD (Lei 13.709/2018)
 
@@ -198,7 +203,7 @@ Name the standard and edition when the user asks for compliance. The editions be
 | Features that call an LLM | OWASP Top 10 for LLM Applications (2025) |
 | Weakness catalog | CWE Top 25 (MITRE, yearly list) |
 | Secure development process | NIST SP 800-218 SSDF (v1.1 final) |
-| Passwords and authentication | NIST SP 800-63B |
+| Passwords and authentication | NIST SP 800-63B-4 |
 | Payment cards | PCI DSS 4.0.1 |
 | Information security management | ISO/IEC 27001:2022 |
 | Server and database hardening | CIS Benchmarks |
