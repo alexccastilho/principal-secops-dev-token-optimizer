@@ -61,10 +61,24 @@ SKILL_COMMIT = _commit()
 
 # Both conditions may look a version up (the skill's rules require it) and run the language's
 # own quick checks; neither may install packages, so the build check stays comparable.
-ALLOWED_TOOLS = ("Read Write Edit Glob Grep Skill WebFetch WebSearch Bash(python:*) Bash(py:*) Bash(python3:*) "
-                 "Bash(curl:*) Bash(node --version) Bash(node -v) Bash(npm view:*) Bash(php -v) Bash(php -l:*) "
-                 "Bash(go version) Bash(go vet:*) Bash(dotnet --version) Bash(dotnet --list-sdks) Bash(java -version) "
-                 "Bash(javac -version)")
+# The published 2.2.0 numbers were measured at commit b723084, which also allowed
+# Bash(curl:*), unrestricted WebFetch and Bash(go vet:*). This narrower list keeps network
+# reads to version sources only, so an unattended run cannot be steered into sending data out.
+ALLOWED_TOOLS = ("Read Write Edit Glob Grep Skill WebSearch WebFetch(domain:endoflife.date) "
+                 "WebFetch(domain:registry.npmjs.org) WebFetch(domain:pypi.org) WebFetch(domain:packagist.org) "
+                 "WebFetch(domain:www.php.net) WebFetch(domain:go.dev) WebFetch(domain:learn.microsoft.com) "
+                 "WebFetch(domain:www.nuget.org) WebFetch(domain:search.maven.org) "
+                 "Bash(python:*) Bash(py:*) Bash(python3:*) Bash(node --version) Bash(node -v) Bash(npm view:*) "
+                 "Bash(php -v) Bash(php -l:*) Bash(go version) Bash(dotnet --version) Bash(dotnet --list-sdks) "
+                 "Bash(java -version) Bash(javac -version)")
+
+# Only what Claude Code and the toolchains need; tokens and keys in the caller's
+# environment are not handed to the run.
+ENV_KEEP = {"PATH", "PATHEXT", "SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "COMSPEC", "TEMP", "TMP",
+            "USERPROFILE", "USERNAME", "HOMEDRIVE", "HOMEPATH", "HOME", "APPDATA", "LOCALAPPDATA",
+            "PROGRAMFILES", "PROGRAMFILES(X86)", "PROGRAMDATA", "PROGRAMW6432", "COMMONPROGRAMFILES",
+            "JAVA_HOME", "GOPATH", "GOROOT", "DOTNET_ROOT", "LANG", "LC_ALL", "TERM", "SHELL", "OS",
+            "PROCESSOR_ARCHITECTURE", "NUMBER_OF_PROCESSORS"}
 
 
 def long_path(path):
@@ -99,7 +113,8 @@ def run_one(lang, condition, rep, args):
     # The account also syncs skills uploaded to claude.ai (an older copy of this skill among
     # them) into any config dir. Turning off non-essential traffic stops that sync, so the
     # baseline sees no copy of the skill and the skill condition sees only --plugin-dir.
-    env = dict(os.environ, CLAUDE_CONFIG_DIR=long_path(args.config_dir),
+    base_env = {k: v for k, v in os.environ.items() if k.upper() in ENV_KEEP}
+    env = dict(base_env, CLAUDE_CONFIG_DIR=long_path(args.config_dir),
                CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1")
     started = time.monotonic()
     timed_out = False
