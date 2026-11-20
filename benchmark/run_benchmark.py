@@ -26,6 +26,7 @@ import pathlib
 import shutil
 import subprocess
 import sys
+import re
 import time
 import uuid
 
@@ -64,9 +65,10 @@ TASK_PROMPTS = {
                  "comportamento. O projeto já está no Git, com a árvore limpa."),
 }
 
-# When a session ends on a question (the skill's refactor mode asks for "pode" before it
-# starts, before the plan and before deleting tests), the harness answers with this text.
-# Both conditions get the same reply under the same rule, up to MAX_REPLIES times.
+# Refactor task only: when a session ends on a question or asks for "pode" (the skill's
+# refactor mode does so before it starts, before the plan and before deleting tests), the
+# harness answers with this text. Both conditions get the same reply under the same rule,
+# up to MAX_REPLIES times.
 AUTO_REPLY = ("Pode seguir com tudo o que você propôs, sem as adições opcionais. "
               "Não precisa me perguntar mais nada; decida você.")
 MAX_REPLIES = 3
@@ -152,9 +154,14 @@ def prepare_fixture(lang, app):
         subprocess.run(["git", *ident, *step], cwd=app, check=True, capture_output=True)
 
 
+APPROVAL_ASK = re.compile(r'"pode"|\bresponda\s+\W*pode\b|\bdiga\s+\W*pode\b', re.I)
+
+
 def ends_with_question(text):
+    """The session stopped to ask the owner something: a question mark in its last
+    paragraph, or an explicit request for a "pode" (the skill's approval word)."""
     tail = (text or "").strip().split("\n\n")[-1]
-    return "?" in tail
+    return "?" in tail or bool(APPROVAL_ASK.search(tail))
 
 
 def run_one(lang, condition, rep, args, task=None):
@@ -207,7 +214,9 @@ def run_one(lang, condition, rep, args, task=None):
                 break
             out.flush()
             last = parse_transcript(transcript).get("final_answer", "")
-            if not task or replies >= MAX_REPLIES or exit_code != 0 or not ends_with_question(last):
+            # Only the refactor task may get a reply: review must not change files, and a
+            # reply to "quer que eu corrija?" would authorize exactly that.
+            if task != "refactor" or replies >= MAX_REPLIES or exit_code != 0 or not ends_with_question(last):
                 break
             replies += 1
             cmd = [c for c in cmd if c not in ("--session-id", session)]
