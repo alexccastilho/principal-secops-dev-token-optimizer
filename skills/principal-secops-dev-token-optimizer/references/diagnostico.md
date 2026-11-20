@@ -6,6 +6,7 @@
 - What to ask the user, by symptom
 - Common causes by symptom
 - Reading a stack trace for someone who cannot read one
+- Fix the cause, not the case
 - After the fix
 
 ## The rule
@@ -21,7 +22,7 @@ Never rewrite beyond the fault. "Já que estou aqui, aproveitei e melhorei" is h
 - [ ] 2. Locate: which file and line, from the log or the trace
 - [ ] 3. Read that file before touching it
 - [ ] 4. Identify the cause, state it in one pt-BR sentence
-- [ ] 5. Smallest possible fix
+- [ ] 5. Smallest possible fix at the cause, not at the symptom
 - [ ] 6. Test instruction covering the failure case AND the case that used to work
 ```
 
@@ -77,6 +78,19 @@ Instead of showing the trace, say:
 "O erro está no arquivo `enviar.php`, linha 42: o código tenta usar o e-mail do cliente, mas o formulário não mandou esse campo. Vou corrigir de dois lados: o formulário passa a exigir o e-mail, e o `enviar.php` passa a recusar o envio se ele vier vazio."
 
 Pattern: which file, which line, what it tried to do, why it failed, what the fix does.
+
+## Fix the cause, not the case
+
+"Smallest fix" means the fewest lines at the cause, not a patch over the symptom. These look small and make the next bug harder to find:
+
+* an `if` for the one value that failed (`if ($pedido_id == 1834)`);
+* a `sleep` or a retry so a race "usually" wins;
+* an empty `catch`, an `@` before the call, `except: pass`;
+* skipping or disabling the test that caught it.
+
+Each one says the design is missing a rule. State the rule in the step 4 sentence and fix it there: "O desconto é aplicado duas vezes quando o cupom é reutilizado" leads to fixing the coupon rule, not to an `if` for that coupon.
+
+If the cause lives outside the files of the request, apply the minimal fix, then say in one line where the cause is and offer to fix it. This is the same boundary as "never rewrite beyond the fault": you name the cause, you do not chase it unasked. Patterns and examples: `estrutura.md`, section "Special cases: fix the cause".
 
 ## After the fix
 

@@ -66,7 +66,10 @@ Same shape regardless of language, so the user learns the layout once:
 ```
 projeto/
 ├── public/           única pasta exposta na internet (index, css, js, imagens)
-├── src/              código da aplicação
+├── src/              código da aplicação, uma pasta por funcionalidade
+│   ├── pedidos/      tudo de pedidos junto: rotas, regras, consultas, telas, testes
+│   ├── clientes/
+│   └── comum/        só o que duas ou mais funcionalidades usam (conexão, login, layout)
 ├── config/           configuração, lê do .env
 ├── storage/
 │   ├── logs/         app.log
@@ -78,6 +81,8 @@ projeto/
 ```
 
 Web server document root points at `public/`. Everything else is unreachable from the browser. This single decision removes a whole class of vulnerabilities.
+
+Inside `src/`, one folder per feature, never one per layer (`controllers/`, `models/`, `views/`). When the user asks for a change to orders next month, it lands in `src/pedidos/` and nowhere else. `comum/` starts empty and receives something only when a second feature really needs it. No config entry, interface or plugin hook for something that has one use today. The full rules are in `estrutura.md`.
 
 Shared hosting where the public folder is fixed (`public_html` on cPanel): the contents of `public/` go inside `public_html`, and `src/`, `config/`, `storage/` and `.env` go one level above it, next to `public_html`, not inside. Say exactly that to the user, with the folder names they see in the file manager.
 
@@ -114,7 +119,7 @@ Generate `LEIA-ME.md` at the end of any project from scratch. Keep it under one 
 [comandos literais]
 
 # Onde ficam as coisas
-[3 a 5 linhas: onde mudar o texto da página, onde ficam os logs, onde fica a config]
+[3 a 5 linhas: uma pasta por funcionalidade em src/, onde ficam os logs, onde fica a config]
 
 # O que NÃO mexer
 [arquivos que quebram tudo se editados]
