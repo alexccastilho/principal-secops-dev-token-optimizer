@@ -1,0 +1,15 @@
+# Dependabot: GitHub Actions only, because that is the only dependency this
+# repository has. The scanner, the tests and the tools use the Python
+# standard library and nothing else, on purpose: the skill runs in claude.ai
+# sandboxes and on machines of people who do not program, where installing
+# a package is a step that fails.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"

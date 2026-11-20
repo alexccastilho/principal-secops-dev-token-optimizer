@@ -1,0 +1,68 @@
+name: Tests
+
+# The scanner promises Python 3.8+ with the standard library only, and the
+# people this skill serves are mostly on Windows. So the suite runs on the
+# oldest supported Python (3.8, on ubuntu-22.04, the last runner image that
+# ships it) and on the current one, on Linux and on Windows. No dependency
+# is installed: if a test ever needs one, the promise above is broken.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Python ${{ matrix.python }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-22.04, python: "3.8" }
+          - { os: ubuntu-latest, python: "3.x" }
+          - { os: windows-latest, python: "3.x" }
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Run the test suite
+        run: python -B -m unittest discover -s tests -v
+
+  package:
+    name: Build the claude.ai package
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+
+      - name: Build the ZIP
+        run: python tools/build_zip.py
+
+      # The same ZIP a release carries, attached to the run so a change can
+      # be tried in claude.ai before it is released.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: claude-ai-package
+          path: dist/*.zip
+          retention-days: 14

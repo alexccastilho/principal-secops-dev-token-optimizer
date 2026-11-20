@@ -1,0 +1,56 @@
+name: CodeQL
+
+# Code scanning, advanced setup. Two languages: the Python of the scanner,
+# the tests and the tools, and the GitHub Actions workflows themselves.
+# Nothing needs compiling, so both run with `build-mode: none`.
+#
+# The reference files under skills/*/references/ hold deliberately insecure
+# examples in fenced Markdown blocks. CodeQL does not read Markdown, so they
+# need no exclusion.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Mondays, 06:41 UTC: new queries reach code that did not change.
+    - cron: "41 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, actions]
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+          queries: security-and-quality
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"
