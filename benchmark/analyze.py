@@ -196,6 +196,8 @@ def aggregate(records):
         rows.append({
             "lang": lang, "condition": cond, "runs": len(rs),
             "timed_out": sum(1 for r in rs if r.get("timed_out")),
+            # A baseline run that called the skill is contaminated and must be reported.
+            "contaminated": sum(1 for r in rs if r["condition"] == "baseline" and r.get("skill_used")),
             "skill_used": sum(1 for r in rs if r.get("skill_used")),
             "wall_seconds": mean(r["wall_seconds"] for r in rs),
             "output_tokens": mean(r.get("output_tokens") for r in rs),

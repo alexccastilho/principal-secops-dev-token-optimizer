@@ -79,7 +79,11 @@ def run_one(lang, condition, rep, args):
     ]
     if condition == "skill":
         cmd += ["--plugin-dir", str(ROOT)]
-    env = dict(os.environ, CLAUDE_CONFIG_DIR=str(pathlib.Path(args.config_dir).resolve()))
+    # The account also syncs skills uploaded to claude.ai (an older copy of this skill among
+    # them) into any config dir. Turning off non-essential traffic stops that sync, so the
+    # baseline sees no copy of the skill and the skill condition sees only --plugin-dir.
+    env = dict(os.environ, CLAUDE_CONFIG_DIR=str(pathlib.Path(args.config_dir).resolve()),
+               CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1")
     started = time.monotonic()
     timed_out = False
     with transcript.open("w", encoding="utf-8") as out:
@@ -103,7 +107,7 @@ def run_one(lang, condition, rep, args):
 
 
 def parse_transcript(path):
-    result, skill_used, tools, init_skills = {}, False, {}, None
+    result, skill_used, tools, init_skills, skill_names = {}, False, {}, None, []
     for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
         try:
             event = json.loads(line)
@@ -115,6 +119,7 @@ def parse_transcript(path):
                     tools[block["name"]] = tools.get(block["name"], 0) + 1
                     if block["name"] == "Skill" and "principal-secops" in json.dumps(block.get("input", {})):
                         skill_used = True
+                        skill_names.append(block.get("input", {}).get("skill"))
         if event.get("type") == "system" and event.get("subtype") == "init":
             init_skills = [s for s in (event.get("skills") or []) if "secops" in str(s)]
         if event.get("type") == "result":
@@ -123,6 +128,7 @@ def parse_transcript(path):
     return {
         "skill_used": skill_used,
         "secops_skills_loaded": init_skills,
+        "skill_names_called": skill_names,
         "tool_calls": tools,
         "duration_ms": result.get("duration_ms"),
         "num_turns": result.get("num_turns"),
