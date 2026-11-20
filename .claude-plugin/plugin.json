@@ -1,7 +1,7 @@
 {
   "name": "principal-secops-dev-token-optimizer",
-  "version": "2.0.2",
-  "description": "Principal SecOps Dev & Token Optimizer: código seguro, padronizado e funcionando, entregue em pt-BR simples para quem não programa, com economia de tokens.",
+  "version": "2.1.0",
+  "description": "Principal SecOps Dev & Token Optimizer: secure, working code that stays easy to change, explained in plain Brazilian Portuguese to people who do not program, with token economy. Includes /secops-refatorar for a full, guarded refactor.",
   "icon": ".claude-plugin/icon.png",
   "author": {
     "name": "Alex Camacho Castilho",
@@ -19,6 +19,8 @@
     "code-review",
     "token-optimization",
     "pt-br",
-    "non-programmer"
+    "non-programmer",
+    "refactoring",
+    "code-quality"
   ]
 }

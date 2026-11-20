@@ -4,12 +4,12 @@
     "name": "Alex Camacho Castilho",
     "url": "https://github.com/alexccastilho"
   },
-  "description": "Skills de Alex Camacho Castilho para Claude Code e claude.ai.",
+  "description": "Skills by Alex Camacho Castilho for Claude Code and claude.ai.",
   "plugins": [
     {
       "name": "principal-secops-dev-token-optimizer",
       "source": "./",
-      "description": "Código seguro, que funciona e explicado em pt-BR para quem não programa. Segurança, integridade do sistema e economia de tokens.",
+      "description": "Secure, working code that stays easy to change, explained in plain pt-BR to people who do not program. Security, system integrity, structure and token economy.",
       "author": {
         "name": "Alex Camacho Castilho",
         "url": "https://github.com/alexccastilho"
