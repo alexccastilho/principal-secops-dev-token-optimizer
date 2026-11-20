@@ -4,6 +4,14 @@
 
 All notable changes to this project. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [SemVer](https://semver.org/).
 
+## [2.2.1] - 2026-11-20
+
+### Changed
+- The skill's description now names reviewing and fixing existing code first, with the requests owners actually write ("revise o código", "tem algum problema?", "corrija isso", "não está calculando certo"). In the [refactor benchmark](docs/BENCHMARK-REFACTOR.md), the skill was installed but never called for a review or a bug fix (0 of 12 runs), while a whole-project refactor request called it every time. To fit the 1,024-character limit, the coverage list lost "archives", "drag and drop" and "visual design", which the references still cover. Whether the new description fixes the activation has not been measured yet.
+
+### Added
+- Refactor benchmark (`benchmark/refactor/`, `benchmark/analyze_refactor.py`, `--suite refactor`): a 2,700-line practice project in Python and Node.js with planted issues, hidden tests, an answer key and an offline validator. The first run is partial and published as it is in [docs/BENCHMARK-REFACTOR.md](docs/BENCHMARK-REFACTOR.md).
+
 ## [2.2.0] - 2026-11-20
 
 Every language and database reference rewritten against current primary sources, five new references, legacy maintenance as a first-class case, and a scanner that reads 151 file types. Version-specific facts were checked against primary sources on 2026-11-20; what could not be verified was removed or written without a version. The evidence logs in [docs/research/](docs/research/) list each checked fact with its URL, and also what was carried over or written from general knowledge.

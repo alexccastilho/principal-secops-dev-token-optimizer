@@ -4,6 +4,14 @@
 
 Todos los cambios relevantes de este proyecto. El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/), y las versiones siguen [SemVer](https://semver.org/lang/es/).
 
+## [2.2.1] - 2026-11-20
+
+### Cambiado
+- La descripción de la skill ahora menciona primero la revisión y la corrección de código existente, con los pedidos que los dueños de proyectos escriben de verdad ("revise o código", "tem algum problema?", "corrija isso", "não está calculando certo"). En el [benchmark de refactorización](BENCHMARK-REFACTOR.es.md), la skill estaba instalada pero no se llamó en ninguna revisión ni corrección (0 de 12 ejecuciones), mientras que el pedido de refactorizar el proyecto entero la llamó todas las veces. Para caber en el límite de 1.024 caracteres, la lista de cobertura perdió "archives", "drag and drop" y "visual design", que las referencias siguen cubriendo. Todavía no se midió si la nueva descripción resuelve la activación.
+
+### Agregado
+- Benchmark de refactorización (`benchmark/refactor/`, `benchmark/analyze_refactor.py`, `--suite refactor`): un proyecto de práctica de 2.700 líneas en Python y Node.js, con fallas plantadas, pruebas ocultas, respuestas esperadas y un validador que corre sin costo. La primera ronda es parcial y está publicada tal como salió en [BENCHMARK-REFACTOR.es.md](BENCHMARK-REFACTOR.es.md).
+
 ## [2.2.0] - 2026-11-20
 
 Todas las referencias de lenguajes y bases de datos reescritas a partir de fuentes primarias actuales, cinco referencias nuevas, el mantenimiento de sistemas heredados como caso principal y un escáner que lee 151 tipos de archivo. Los datos que dependen de la versión se comprobaron en fuentes primarias el 2026-11-20; lo que no se pudo verificar se eliminó o se escribió sin versión. Los registros de evidencia en [docs/research/](research/) (en inglés) listan cada dato comprobado con su URL, y también lo que vino del texto anterior o del conocimiento general.

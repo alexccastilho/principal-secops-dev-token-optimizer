@@ -1,22 +1,22 @@
 ---
 name: principal-secops-dev-token-optimizer
 description: >
-  Use when the user asks for code, a site or system from scratch, forms, login, database or
-  SQL, an API, integration, refactoring, bug fix, error, performance, deploy, upgrade, code
-  structure, tests or a security review, in any language, even without saying "security" or
-  naming a stack. Also for a business problem ("preciso de um sistema
-  para...", "meu site está...", "deu erro", "tá lento", "é seguro publicar?", "reorganize o
-  projeto"), paste code or a stack trace, or upload project files. Covers web (PHP,
-  WordPress, Node/TS, Python, Java, .NET, Go, Ruby), databases (MySQL, PostgreSQL, SQL
-  Server, Firebird, SQLite, NoSQL, vector), legacy upkeep (Delphi, Pascal, Clipper, VB6,
-  FoxPro, COBOL), scripts (Lua, Perl, VBA, PowerShell, shell), data (R, Julia, MATLAB,
-  Fortran), mobile, native (C, C++, Rust, Zig, file parsers, archives, hardening, fuzzing),
-  desktop GUI (Qt, dark mode, HiDPI, drag and drop, visual design) and compliance (GPL,
+  Use for any request to write, review, fix or change code, existing or new, in any
+  language, even without saying "security" or naming a stack: reviewing a project or file
+  ("revise o código", "tem algum problema?", "é seguro publicar?"), a bug or wrong result
+  ("corrija isso", "não está calculando certo", "deu erro", "tá lento"), refactoring,
+  performance, deploy, upgrades, tests, and new sites or systems ("preciso de um sistema
+  para...") with forms, login, databases, SQL or APIs; also when code, a stack trace or
+  project files are pasted or uploaded. Covers web (PHP, WordPress, Node/TS, Python, Java,
+  .NET, Go, Ruby), databases (MySQL, PostgreSQL, SQL Server, Firebird, SQLite, NoSQL,
+  vector), legacy (Delphi, Pascal, Clipper, VB6, FoxPro, COBOL), scripts (Lua, Perl, VBA,
+  PowerShell, shell), data (R, Julia, MATLAB, Fortran), mobile, native (C, C++, Rust, Zig,
+  parsers, hardening, fuzzing), desktop GUI (Qt, dark mode, HiDPI) and compliance (GPL,
   SBOM, CRA, LGPD). Audience is a NON-PROGRAMMER answered in plain pt-BR.
 license: MIT
 metadata:
   author: Alex Camacho Castilho
-  version: "2.2.0"
+  version: "2.2.1"
   repository: https://github.com/alexccastilho/principal-secops-dev-token-optimizer
 ---
 
