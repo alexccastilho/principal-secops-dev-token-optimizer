@@ -24,7 +24,7 @@ Preventive structure and refactor mode, with ideas adapted from [`untangle-codeb
 - `projeto-do-zero.md`: the standard skeleton organizes `src/` by feature, with `comum/` only for what two or more features use.
 - `diagnostico.md`: "smallest fix" means the fewest lines at the cause, not a patch over the symptom.
 - Skill description: now mentions code structure, tests and "reorganize o projeto", within the 1024-character limit.
-- SKILL.md grew from 15,665 to 19,240 bytes because of sections 9 and 10. The details live in the references, loaded only when a task needs them.
+- SKILL.md grew from 15,665 to 19,634 bytes because of sections 9 and 10. The details live in the references, loaded only when a task needs them.
 - `tools/build_zip.py` takes the output folder as an argument.
 - The main README is now in English, with Portuguese and Spanish versions in `docs/`.
 

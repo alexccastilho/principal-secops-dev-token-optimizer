@@ -24,7 +24,7 @@ Estructura preventiva y modo refactorización, con ideas adaptadas de [`untangle
 - `projeto-do-zero.md`: el esqueleto estándar organiza `src/` por funcionalidad, con `comum/` solo para lo que usan dos o más funcionalidades.
 - `diagnostico.md`: "corrección mínima" significa menos líneas en la causa, no un parche sobre el síntoma.
 - Descripción de la skill: ahora menciona estructura de código, pruebas y "reorganize o projeto", dentro del límite de 1024 caracteres.
-- El SKILL.md creció de 15.665 a 19.240 bytes por las secciones 9 y 10. Los detalles están en las referencias, que se cargan solo cuando la tarea las necesita.
+- El SKILL.md creció de 15.665 a 19.634 bytes por las secciones 9 y 10. Los detalles están en las referencias, que se cargan solo cuando la tarea las necesita.
 - `tools/build_zip.py` acepta la carpeta de salida como argumento.
 - El README principal pasó a estar en inglés, con versiones en portugués y español en `docs/`.
 

@@ -134,7 +134,7 @@ Load ONLY what the current task touches, never all. A reference is read once per
 | New project from scratch | `references/projeto-do-zero.md` |
 | Something broke | `references/diagnostico.md` |
 | New feature, change touching 3 or more files, writing tests, deciding where code lives | `references/estrutura.md` |
-| Refactor mode (section 10), only after the user's explicit "pode" | `references/refatoracao-completa.md` |
+| Refactor mode (section 10), from the start message on | `references/refatoracao-completa.md` |
 | Any version, end-of-life date, "latest", dependency install, framework choice or upgrade | `references/versoes-e-fontes.md` |
 
 Pairing rules:
@@ -212,7 +212,7 @@ Details, examples and test-writing rules: `references/estrutura.md`, loaded per 
 A whole-project cleanup for code that is already tangled. It is the opposite of minimal scope, so it never starts on its own.
 
 * **Triggers:** the `/secops-refatorar` command of the Claude Code plugin (full name `/principal-secops-dev-token-optimizer:secops-refatorar`) or an explicit request to refactor or reorganize the whole project or a named area. "Tá bagunçado", "limpa isso" or "melhora o código" stay in normal mode: offer this mode in one line, nothing more.
-* **Before starting:** one message in pt-BR saying what the mode does, that it touches many files, that it needs Git, and asking which optional additions to run. Start only after an explicit "pode".
+* **Before starting:** load the reference and send one message in pt-BR saying what the mode does, that it touches many files, that it needs Git and a branch of its own, that contracts stay identical, and asking which of the two optional additions to run: **Comentários** (remove comments that only restate the code) and **Testes** (prune tests that would not catch a real bug; security and regression tests always stay). Change nothing before an explicit "pode".
 * **Then follow `references/refatoracao-completa.md` to the end.** Inside the authorized scope, rule 2 (minimal scope) and rule 6 (plan before multi-file changes) of section 4 are replaced by the decision log the reference defines. Every other rule stays: security baseline, contracts, destructive actions, trust rule, pre-delivery gate.
 
 Autor: Alex Camacho Castilho
