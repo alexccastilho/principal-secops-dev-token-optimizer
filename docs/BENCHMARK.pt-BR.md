@@ -33,7 +33,7 @@ Nenhuma das condições deixou falha grave: sem a skill, o modelo também usou S
 
 **Quando compensa.** Por cerca de US$ 0,38 e 2 minutos a mais por app, o resultado resiste melhor a tentativas de adivinhar senha, não vaza detalhes de erro, vem documentado para quem vai usar e está preparado para guardar dado pessoal. Vale a pena num app que vai ser usado e guarda dados de pessoas; num protótipo descartável, não.
 
-**O que não foi medido.** Revisar e refatorar código existente, manter sistemas legados e responder sem repetir, que é onde se aplicam as regras de economia de tokens da skill. Isso pede um segundo benchmark.
+**O que não foi medido.** Revisar e refatorar código existente, manter sistemas legados e responder sem repetir, que é onde se aplicam as regras de economia de tokens da skill. Isso pede um segundo benchmark; uma primeira tentativa, parcial, está em [BENCHMARK-REFACTOR.pt-BR.md](BENCHMARK-REFACTOR.pt-BR.md).
 
 ## O pedido
 

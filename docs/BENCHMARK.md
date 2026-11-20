@@ -33,7 +33,7 @@ Neither condition left a severe flaw: the model without the skill also used para
 
 **When it pays off.** For about USD 0.38 and 2 minutes more per app, the result resists password guessing better, does not leak error details, is documented for its user and is ready to hold personal data. It is worth it for an app that will be used and holds data about people; for a throwaway prototype it is not.
 
-**Not measured here.** Reviewing and refactoring existing code, maintaining legacy systems, and answering without restating, where the skill's token-saving rules apply. That needs a second benchmark.
+**Not measured here.** Reviewing and refactoring existing code, maintaining legacy systems, and answering without restating, where the skill's token-saving rules apply. That needs a second benchmark; a first, partial attempt is in [BENCHMARK-REFACTOR.md](BENCHMARK-REFACTOR.md).
 
 ## The request
 

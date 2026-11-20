@@ -33,7 +33,7 @@ Ninguna condición dejó una falla grave: sin la skill, el modelo también usó 
 
 **Cuándo conviene.** Por cerca de USD 0,38 y 2 minutos más por app, el resultado resiste mejor los intentos de adivinar contraseñas, no filtra detalles de error, viene documentado para quien lo usa y está listo para guardar datos personales. Conviene en una app que se va a usar y guarda datos de personas; en un prototipo descartable, no.
 
-**Lo que no se midió.** Revisar y refactorizar código existente, mantener sistemas heredados y responder sin repetir, que es donde aplican las reglas de ahorro de tokens de la skill. Eso pide un segundo benchmark.
+**Lo que no se midió.** Revisar y refactorizar código existente, mantener sistemas heredados y responder sin repetir, que es donde aplican las reglas de ahorro de tokens de la skill. Eso pide un segundo benchmark; un primer intento, parcial, está en [BENCHMARK-REFACTOR.es.md](BENCHMARK-REFACTOR.es.md).
 
 ## El pedido
 

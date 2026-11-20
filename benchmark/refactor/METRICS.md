@@ -36,3 +36,7 @@ Any of the three may come out false. That is a result, not a reason to rerun.
 ## Design
 
 Python and Node, 3 tasks, 2 conditions, 3 repetitions: 36 runs. Same model (`sonnet`), same isolated configuration and permissions as the first benchmark, plus the project's test commands and the git subcommands a refactor uses.
+
+## Changes after the runs
+
+- **2026-11-20, after the first full run.** The auto-reply rule now applies to the refactor task only, and also recognizes an explicit request for "pode" without a question mark. Reason: the first run stopped every skill refactor at the start message, and replying in the review task let sessions change files. Under the new rule, the 6 refactor runs without the skill would have received the same replies, so they stay valid; the 10 affected runs were excluded and not repeated. See `docs/BENCHMARK-REFACTOR.md`.
