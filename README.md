@@ -66,7 +66,7 @@ claude plugin marketplace add alexccastilho/principal-secops-dev-token-optimizer
 claude plugin install principal-secops-dev-token-optimizer@alexccastilho-skills --scope user
 ```
 
-The skill starts on its own when a request matches it. The plugin also brings the `/secops-refatorar` command for refactor mode. To update: `/plugin marketplace update alexccastilho-skills`.
+The skill starts on its own when a request matches it. The plugin also brings the `/secops-refatorar` command for refactor mode (full name `/principal-secops-dev-token-optimizer:secops-refatorar`, if another plugin uses the short one). To update: `/plugin marketplace update alexccastilho-skills`.
 
 ### Claude Code: manual copy
 

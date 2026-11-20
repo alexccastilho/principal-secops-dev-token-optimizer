@@ -48,7 +48,7 @@ A rule that looks cleaner but breaks one of these three is not cleaner.
 
 * A wrapper that only forwards to another function.
 * Config, a plugin hook or an interface for something that has one implementation and no plan for a second.
-* Code nothing calls anymore. When your change makes something unused, remove it in the same change.
+* Code nothing calls anymore. When your change makes a function or block unused, remove it in the same change. Deleting a whole file still needs the user's "pode" (SKILL.md, section 4, rule 8).
 
 ## Special cases: fix the cause
 

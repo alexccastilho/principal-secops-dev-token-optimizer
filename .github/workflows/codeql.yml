@@ -4,9 +4,9 @@ name: CodeQL
 # the tests and the tools, and the GitHub Actions workflows themselves.
 # Nothing needs compiling, so both run with `build-mode: none`.
 #
-# The reference files under skills/*/references/ hold deliberately insecure
-# examples in fenced Markdown blocks. CodeQL does not read Markdown, so they
-# need no exclusion.
+# The reference files under skills/*/references/ name insecure patterns so
+# Claude can recognize them. They are Markdown, which CodeQL does not read,
+# so they need no exclusion.
 
 on:
   push:

@@ -34,6 +34,6 @@ You will get an acknowledgement as soon as the maintainer sees the report. A con
 
 Every push and pull request runs the test suite on Linux and Windows and is scanned by CodeQL (the Python code and the GitHub Actions workflows, with the `security-and-quality` queries, plus a weekly run). Dependabot keeps the pinned actions current. The only runtime code is the scanner, which uses the Python standard library and makes no network calls.
 
-## Insecure examples in the references
+## Insecure patterns in the references
 
-Several files in `skills/principal-secops-dev-token-optimizer/references/` contain deliberately insecure code inside Markdown blocks, labeled as what not to do, so Claude can recognize the pattern. They are teaching material, not vulnerabilities. If an example labeled as safe is in fact insecure, that is a vulnerability: report it as above.
+The files in `skills/principal-secops-dev-token-optimizer/references/` name insecure patterns (`eval` on user data, SQL built from strings, MD5 for passwords and so on), and a few show a short example of what not to do, so Claude can recognize them. Naming a pattern to avoid is not a vulnerability. If a reference recommends something insecure as the right way, that is one: report it as above.

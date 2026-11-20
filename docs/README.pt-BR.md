@@ -66,7 +66,7 @@ claude plugin marketplace add alexccastilho/principal-secops-dev-token-optimizer
 claude plugin install principal-secops-dev-token-optimizer@alexccastilho-skills --scope user
 ```
 
-A skill entra em ação sozinha quando o pedido combina com ela. O plugin também traz o comando `/secops-refatorar`, do modo refatoração. Para atualizar: `/plugin marketplace update alexccastilho-skills`.
+A skill entra em ação sozinha quando o pedido combina com ela. O plugin também traz o comando `/secops-refatorar`, do modo refatoração (nome completo `/principal-secops-dev-token-optimizer:secops-refatorar`, se outro plugin usar o nome curto). Para atualizar: `/plugin marketplace update alexccastilho-skills`.
 
 ### Claude Code: cópia manual
 
