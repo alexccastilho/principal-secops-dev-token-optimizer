@@ -300,6 +300,69 @@
         "explica em pt-BR simples e trata como risco sério"
       ],
       "files": []
+    },
+    {
+      "id": 24,
+      "prompt": "preciso que o relatório de vendas mostre o valor com o frete, igual aparece no carrinho",
+      "expected_output": "Lê o carrinho e o relatório antes de editar. Em vez de copiar o cálculo de frete para o relatório, faz o relatório chamar a mesma função que o carrinho usa (ou extrai essa função para um lugar que os dois usam). Entrega só os blocos alterados e uma instrução de teste comparando o valor do relatório com o do carrinho.",
+      "files": [],
+      "assertions": [
+        "pede ou lê os arquivos do carrinho e do relatório antes de editar",
+        "não duplica a fórmula do frete no relatório",
+        "reaproveita a função existente ou cria uma única usada pelos dois",
+        "não reorganiza outras partes do projeto sem pedir",
+        "termina com um teste que compara o valor do relatório com o do carrinho"
+      ]
+    },
+    {
+      "id": 25,
+      "prompt": "o pedido 1834 sempre sai com desconto em dobro, os outros estão certos. dá um jeito nisso rapidinho",
+      "expected_output": "Diagnostica antes de corrigir: identifica a regra que faz o desconto ser aplicado duas vezes (por exemplo, cupom reaproveitado ou desconto somado no item e no total) e corrige essa regra, sem um if para o pedido 1834. Explica a causa em uma frase em pt-BR e dá um teste com o pedido 1834 e com um pedido que já funcionava.",
+      "files": [],
+      "assertions": [
+        "não cria um if, exceção ou caso especial para o pedido 1834",
+        "identifica a causa e a descreve em uma frase em pt-BR",
+        "pede o código ou os dados necessários se a causa ainda não está clara, em uma única pergunta",
+        "a instrução de teste cobre o pedido 1834 e um pedido que já funcionava"
+      ]
+    },
+    {
+      "id": 26,
+      "prompt": "esse código tá muito bagunçado, melhora aí",
+      "expected_output": "Não inicia a refatoração completa. Pergunta, em uma única pergunta, qual parte ou qual problema incomoda, ou oferece em uma linha o modo refatoração (que exige Git e mexe em muitos arquivos) sem começar.",
+      "files": [],
+      "assertions": [
+        "não começa a reorganizar o projeto inteiro",
+        "oferece o modo refatoração em no máximo uma ou duas linhas, sem iniciar",
+        "faz no máximo uma pergunta",
+        "responde em pt-BR simples, sem jargão sem tradução"
+      ]
+    },
+    {
+      "id": 27,
+      "prompt": "/secops-refatorar o módulo de pedidos",
+      "expected_output": "Envia a mensagem inicial do modo refatoração em pt-BR: explica que vai reorganizar o módulo de pedidos mexendo em vários arquivos, que precisa de Git com tudo salvo e um branch próprio, que as rotas, colunas e formatos continuam iguais, e pergunta quais extras fazer (Comentários, Testes) com a descrição de cada um. Não altera nada antes do pode.",
+      "files": [],
+      "assertions": [
+        "não altera nenhum arquivo antes de um pode explícito",
+        "diz que precisa de Git e de um branch separado",
+        "lista os extras Comentários e Testes com a descrição de cada um",
+        "diz que os contratos (rotas, colunas, formatos) continuam iguais",
+        "limita o escopo ao módulo de pedidos"
+      ]
+    },
+    {
+      "id": 28,
+      "prompt": "escreve um teste para a função que calcula o desconto de 20% no preço",
+      "expected_output": "Escreve um teste com valores esperados literais (por exemplo 100 com 20% vira 80), sem repetir a fórmula da função no teste, testando só o resultado público. Inclui um caso de borda (preço zero ou desconto de 0%). Explica como rodar o teste em pt-BR.",
+      "files": [],
+      "assertions": [
+        "o valor esperado é literal, não calculado com a mesma fórmula do código",
+        "testa o resultado da função, não variáveis internas",
+        "não usa mock da própria função testada",
+        "inclui ao menos um caso de borda",
+        "diz em pt-BR como rodar o teste"
+      ]
     }
   ]
 }
