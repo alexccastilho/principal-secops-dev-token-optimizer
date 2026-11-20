@@ -63,12 +63,15 @@ SKILL_COMMIT = _commit()
 # own quick checks; neither may install packages, so the build check stays comparable.
 # The published 2.2.0 numbers were measured at commit b723084, which also allowed
 # Bash(curl:*), unrestricted WebFetch and Bash(go vet:*). This narrower list keeps network
-# reads to version sources only, so an unattended run cannot be steered into sending data out.
+# fetches to version sources. It narrows, but does not enforce, outbound traffic: the
+# interpreters stay allowed (the generated apps are tested with them) and can open
+# connections. Run unattended benchmarks in a sandbox or VM with egress limited to the
+# Anthropic API and these hosts, holding no credentials other than the benchmark login.
 ALLOWED_TOOLS = ("Read Write Edit Glob Grep Skill WebSearch WebFetch(domain:endoflife.date) "
                  "WebFetch(domain:registry.npmjs.org) WebFetch(domain:pypi.org) WebFetch(domain:packagist.org) "
                  "WebFetch(domain:www.php.net) WebFetch(domain:go.dev) WebFetch(domain:learn.microsoft.com) "
                  "WebFetch(domain:www.nuget.org) WebFetch(domain:search.maven.org) "
-                 "Bash(python:*) Bash(py:*) Bash(python3:*) Bash(node --version) Bash(node -v) Bash(npm view:*) "
+                 "Bash(python:*) Bash(py:*) Bash(python3:*) Bash(node --version) Bash(node -v) "
                  "Bash(php -v) Bash(php -l:*) Bash(go version) Bash(dotnet --version) Bash(dotnet --list-sdks) "
                  "Bash(java -version) Bash(javac -version)")
 
