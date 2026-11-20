@@ -161,9 +161,9 @@ def ok(result):
     return bool(result) and result[1] == 0 and result[0] > 0
 
 
-def mean(values):
+def mean(values, digits=1):
     values = [v for v in values if v is not None]
-    return round(statistics.mean(values), 1) if values else None
+    return round(statistics.mean(values), digits) if values else None
 
 
 def aggregate(records):
@@ -182,7 +182,7 @@ def aggregate(records):
             "output_tokens": mean(r.get("output_tokens") for r in rs),
             "input_tokens_total": mean(sum((r.get(k) or 0) for k in ("input_tokens", "cache_creation_input_tokens",
                                                                      "cache_read_input_tokens")) for r in rs),
-            "cost_usd": mean(r.get("cost_usd") for r in rs),
+            "cost_usd": mean((r.get("cost_usd") for r in rs), 3),
             "num_turns": mean(r.get("num_turns") for r in rs),
             "auto_replies": mean(r.get("auto_replies") for r in rs),
             "project_chars_read": mean(r["read_chars"]["project"] for r in rs),
@@ -214,6 +214,7 @@ def review_packets(records, out):
             path = out / "review_packets" / f"{label}.md"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("\n\n".join(r.get("answers") or []), encoding="utf-8")
+    out.mkdir(parents=True, exist_ok=True)
     (out / "review_key.json").write_text(json.dumps(key, indent=1), encoding="utf-8")
 
 
