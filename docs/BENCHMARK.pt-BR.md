@@ -12,6 +12,29 @@ Medido em 20/11/2026 com a versão 2.2.0 da skill, Claude Code 2.1.329, modelo `
 
 Para um app pequeno feito do zero, a skill troca tokens e tempo por um resultado mais seguro e mais bem documentado. A economia de tokens do nome da skill vem das regras de leitura, resposta e refatoração: não repetir, não colar arquivos inteiros, ler uma seção em vez do arquivo todo. Este benchmark não mede essa economia; ele mede um app completo por execução.
 
+## O que a skill acrescenta
+
+Nenhuma das condições deixou falha grave: sem a skill, o modelo também usou SQL parametrizado e hash de senha forte em todos os apps. O que a skill acrescentou, segundo a revisão às cegas e as checagens de entrega:
+
+**Uma segunda camada de proteção.**
+
+| Ponto | Sem skill | Com skill |
+|---|---|---|
+| Bloqueio após erros de login | Em Java, C# e Python some ao reiniciar o programa, o que permite tentativas sem limite | Gravado no banco; continua valendo depois de reiniciar |
+| Custo do hash de senha | Python e Node.js usaram scrypt abaixo do custo da OWASP | Argon2id, ou scrypt e PBKDF2 no custo atual |
+| Tamanho mínimo da senha | 8 caracteres | 12 a 15 caracteres (orientação atual do NIST) |
+| Mensagens de erro | O PHP mostrava detalhes internos (o LEIA-ME manda usar o php.ini de desenvolvimento); o C# quebrava exibindo o erro inteiro; o Java mostrava o texto da exceção | Mensagem genérica para o usuário, detalhes num arquivo de log |
+| Sessão de login | Token guardado como veio | Token guardado como hash; em Go, trocar a senha derruba todas as sessões |
+| Dependências | Sem verificação | Java confere o SHA-256 da biblioteca; C# trava as versões e roda a auditoria do NuGet |
+
+**Um app que um leigo consegue rodar e manter.** Instruções de uso em 18 de 18 apps, contra 6 de 18; `.gitignore`, que impede o banco com dados pessoais de ir parar no Git, em 17 de 18, contra nenhum; testes automatizados em 3 de 18, contra nenhum. Os apps com skill também vieram com atalho de início, criação do primeiro usuário e passos de backup e recuperação de senha. Sem a skill, o app em C# veio só com dois arquivos de código, sem forma de um leigo rodar, e o app em Python não trazia instruções.
+
+**Cuidado com dado pessoal.** Os dados ficam em `%LOCALAPPDATA%` (ou fora da pasta web, no PHP), e os logs registram identificadores, nunca nomes ou e-mails.
+
+**Quando compensa.** Por cerca de US$ 0,38 e 2 minutos a mais por app, o resultado resiste melhor a tentativas de adivinhar senha, não vaza detalhes de erro, vem documentado para quem vai usar e está preparado para guardar dado pessoal. Vale a pena num app que vai ser usado e guarda dados de pessoas; num protótipo descartável, não.
+
+**O que não foi medido.** Revisar e refatorar código existente, manter sistemas legados e responder sem repetir, que é onde se aplicam as regras de economia de tokens da skill. Isso pede um segundo benchmark.
+
 ## O pedido
 
 O mesmo texto em todas as execuções. `{lang}` foi PHP, Python, JavaScript com Node.js, Java, C# com .NET ou Go:

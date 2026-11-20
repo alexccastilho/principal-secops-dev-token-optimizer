@@ -12,6 +12,29 @@ Measured on 2026-11-20 with skill version 2.2.0, Claude Code 2.1.329, the `sonne
 
 For a small app built from scratch, the skill trades tokens and time for a safer, better-documented result. The token savings in the skill's name come from its rules on reading, answering and refactoring: no restating, no pasting whole files, reading a section rather than a whole file. This benchmark does not measure those savings; it measures one full app per run.
 
+## What the skill adds
+
+Neither condition left a severe flaw: the model without the skill also used parameterized SQL and a strong password hash in every app. What the skill added, in the blind review and the delivery checks:
+
+**A second layer of protection.**
+
+| Point | Without skill | With skill |
+|---|---|---|
+| Login lockout | In Java, C# and Python it resets when the program restarts, so guessing is unlimited | Stored in the database; survives a restart |
+| Password hash cost | Python and Node.js used scrypt below the OWASP cost | Argon2id, or scrypt and PBKDF2 at current cost |
+| Minimum password length | 8 characters | 12 to 15 characters (current NIST guidance) |
+| Error messages | PHP showed internal details (its README points to the development php.ini); C# crashed with the full error; Java showed the exception text | Generic message for the user, details in a log file |
+| Login session | Token stored as issued | Token stored as a hash; in Go, changing the password ends every session |
+| Dependencies | Not checked | Java verifies the library's SHA-256; C# locks versions and runs NuGet audit |
+
+**An app a non-programmer can run and keep.** Run instructions in 18 of 18 apps, against 6 of 18; a `.gitignore` that keeps the database with personal data out of Git in 17 of 18, against none; automated tests in 3 of 18, against none. The skill's apps also came with a launcher, first-user setup, and backup and password-recovery steps. Without the skill, the C# app was two source files with no way for a non-programmer to run it, and the Python app had no instructions.
+
+**Care with personal data.** Data kept in `%LOCALAPPDATA%` (or outside the web folder, in PHP), and logs that record identifiers, not names or e-mail addresses.
+
+**When it pays off.** For about USD 0.38 and 2 minutes more per app, the result resists password guessing better, does not leak error details, is documented for its user and is ready to hold personal data. It is worth it for an app that will be used and holds data about people; for a throwaway prototype it is not.
+
+**Not measured here.** Reviewing and refactoring existing code, maintaining legacy systems, and answering without restating, where the skill's token-saving rules apply. That needs a second benchmark.
+
 ## The request
 
 The same text, in Portuguese, for every run. `{lang}` was PHP, Python, JavaScript com Node.js, Java, C# with .NET or Go:

@@ -12,6 +12,29 @@ Medido el 20/11/2026 con la versión 2.2.0 de la skill, Claude Code 2.1.329, el 
 
 Para una app pequeña hecha desde cero, la skill cambia tokens y tiempo por un resultado más seguro y mejor documentado. El ahorro de tokens del nombre de la skill viene de sus reglas de lectura, respuesta y refactorización: no repetir, no pegar archivos enteros, leer una sección en lugar del archivo completo. Este benchmark no mide ese ahorro; mide una app completa por ejecución.
 
+## Lo que agrega la skill
+
+Ninguna condición dejó una falla grave: sin la skill, el modelo también usó SQL parametrizado y hash de contraseña fuerte en todas las apps. Lo que agregó la skill, según la revisión a ciegas y los chequeos de entrega:
+
+**Una segunda capa de protección.**
+
+| Punto | Sin skill | Con skill |
+|---|---|---|
+| Bloqueo tras errores de login | En Java, C# y Python se reinicia al reabrir el programa, lo que permite intentos sin límite | Guardado en la base; sigue vigente después de reiniciar |
+| Costo del hash de contraseña | Python y Node.js usaron scrypt por debajo del costo de OWASP | Argon2id, o scrypt y PBKDF2 al costo actual |
+| Largo mínimo de contraseña | 8 caracteres | 12 a 15 caracteres (guía actual del NIST) |
+| Mensajes de error | PHP mostraba detalles internos (su README indica usar el php.ini de desarrollo); C# se caía mostrando el error completo; Java mostraba el texto de la excepción | Mensaje genérico para el usuario, detalles en un archivo de log |
+| Sesión de login | Token guardado tal cual | Token guardado como hash; en Go, cambiar la contraseña cierra todas las sesiones |
+| Dependencias | Sin verificación | Java verifica el SHA-256 de la biblioteca; C# fija las versiones y ejecuta la auditoría de NuGet |
+
+**Una app que alguien que no programa puede ejecutar y mantener.** Instrucciones de uso en 18 de 18 apps, contra 6 de 18; `.gitignore`, que evita que la base con datos personales termine en Git, en 17 de 18, contra ninguna; pruebas automatizadas en 3 de 18, contra ninguna. Las apps con la skill también trajeron lanzador, creación del primer usuario y pasos de copia de seguridad y recuperación de contraseña. Sin la skill, la app en C# eran dos archivos de código sin forma de ejecutarla para quien no programa, y la app en Python no traía instrucciones.
+
+**Cuidado con los datos personales.** Los datos quedan en `%LOCALAPPDATA%` (o fuera de la carpeta web, en PHP), y los logs registran identificadores, nunca nombres ni correos.
+
+**Cuándo conviene.** Por cerca de USD 0,38 y 2 minutos más por app, el resultado resiste mejor los intentos de adivinar contraseñas, no filtra detalles de error, viene documentado para quien lo usa y está listo para guardar datos personales. Conviene en una app que se va a usar y guarda datos de personas; en un prototipo descartable, no.
+
+**Lo que no se midió.** Revisar y refactorizar código existente, mantener sistemas heredados y responder sin repetir, que es donde aplican las reglas de ahorro de tokens de la skill. Eso pide un segundo benchmark.
+
 ## El pedido
 
 El mismo texto, en portugués, en todas las ejecuciones. `{lang}` fue PHP, Python, JavaScript con Node.js, Java, C# con .NET o Go:
