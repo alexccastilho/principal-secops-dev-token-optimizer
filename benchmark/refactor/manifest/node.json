@@ -1,0 +1,415 @@
+[
+  {
+    "id": "S1",
+    "kind": "security",
+    "files": [
+      {
+        "path": "src/clientes.js",
+        "lines": [
+          125,
+          133
+        ]
+      }
+    ],
+    "scanner_detectable": true,
+    "description": "Customer search by name builds the SQL LIKE clause by string concatenation (SQL injection).",
+    "accept": [
+      "SQL injection",
+      "string concatenation in SQL",
+      "buscarClientesPorNome",
+      "use parameterized query / placeholder",
+      "injeção de SQL",
+      "SQL concatenado",
+      "consulta parametrizada"
+    ]
+  },
+  {
+    "id": "S2",
+    "kind": "security",
+    "files": [
+      {
+        "path": "src/relatorios.js",
+        "lines": [
+          74,
+          92
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "relatorioPedidos puts the caller-supplied sort column into ORDER BY without an allow-list.",
+    "accept": [
+      "ORDER BY injection",
+      "unchecked sort column",
+      "allow-list / whitelist the column",
+      "relatorioPedidos",
+      "ordenarPor",
+      "injeção no ORDER BY",
+      "coluna de ordenação sem validação",
+      "lista de colunas permitidas"
+    ]
+  },
+  {
+    "id": "S3",
+    "kind": "security",
+    "files": [
+      {
+        "path": "src/usuarios.js",
+        "lines": [
+          13,
+          15
+        ]
+      },
+      {
+        "path": "src/usuarios.js",
+        "lines": [
+          17,
+          19
+        ]
+      }
+    ],
+    "scanner_detectable": true,
+    "description": "Passwords are stored as unsalted MD5 hashes.",
+    "accept": [
+      "MD5",
+      "unsalted hash",
+      "weak password hashing",
+      "use bcrypt / scrypt / argon2 / pbkdf2",
+      "hash sem salt",
+      "hash fraco de senha",
+      "senha com MD5"
+    ]
+  },
+  {
+    "id": "S4",
+    "kind": "security",
+    "files": [
+      {
+        "path": "src/autenticacao.js",
+        "lines": [
+          11,
+          11
+        ]
+      },
+      {
+        "path": "src/autenticacao.js",
+        "lines": [
+          39,
+          41
+        ]
+      }
+    ],
+    "scanner_detectable": true,
+    "description": "The HMAC secret that signs session tokens is hard-coded in the source ('loja-bairro-2019').",
+    "accept": [
+      "hard-coded secret",
+      "SEGREDO_TOKEN",
+      "loja-bairro-2019",
+      "secret in source code",
+      "move to environment variable",
+      "segredo fixo no código",
+      "chave hardcoded",
+      "variável de ambiente"
+    ]
+  },
+  {
+    "id": "S5",
+    "kind": "security",
+    "files": [
+      {
+        "path": "src/autenticacao.js",
+        "lines": [
+          43,
+          51
+        ]
+      }
+    ],
+    "scanner_detectable": true,
+    "description": "Session tokens use Math.random(), a non-cryptographic, predictable generator.",
+    "accept": [
+      "Math.random",
+      "predictable token",
+      "non-cryptographic random",
+      "use crypto.randomBytes",
+      "token previsível",
+      "aleatório não criptográfico",
+      "randomBytes"
+    ]
+  },
+  {
+    "id": "S6",
+    "kind": "security",
+    "files": [
+      {
+        "path": "src/pedidos.js",
+        "lines": [
+          189,
+          201
+        ]
+      },
+      {
+        "path": "src/pedidos.js",
+        "lines": [
+          243,
+          264
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "buscarPedido and cancelarPedido take the user but never check ownership or role, so a seller can read or cancel any order (README: sellers only see their own orders).",
+    "accept": [
+      "missing authorization",
+      "ownership check",
+      "IDOR",
+      "broken access control",
+      "seller can cancel any order",
+      "vendedor vê pedido de outro",
+      "falta checagem de dono",
+      "controle de acesso",
+      "autorização",
+      "registrarPagamento has no user check",
+      "qualquer um paga/cancela qualquer pedido"
+    ]
+  },
+  {
+    "id": "S7",
+    "kind": "security",
+    "files": [
+      {
+        "path": "src/util/csv.js",
+        "lines": [
+          9,
+          23
+        ]
+      },
+      {
+        "path": "src/relatorios.js",
+        "lines": [
+          94,
+          111
+        ]
+      },
+      {
+        "path": "src/relatorios.js",
+        "lines": [
+          119,
+          153
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "CSV exports write customer-supplied text as is, so values starting with = + - @ become spreadsheet formulas (CSV/formula injection).",
+    "accept": [
+      "CSV injection",
+      "formula injection",
+      "spreadsheet formula",
+      "exportarClientesCSV",
+      "campoCSV",
+      "injeção de fórmula",
+      "injeção em CSV",
+      "fórmula no Excel"
+    ]
+  },
+  {
+    "id": "S8",
+    "kind": "security",
+    "files": [
+      {
+        "path": "src/estoque.js",
+        "lines": [
+          11,
+          30
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "atualizarEstoque catches the database error (e.g. the stock CHECK constraint), only logs it and still returns ok: true, so callers report success.",
+    "accept": [
+      "swallowed exception",
+      "error swallowed",
+      "silent failure",
+      "catch and log",
+      "returns ok after error",
+      "erro engolido",
+      "falha silenciosa",
+      "catch que ignora o erro",
+      "atualizarEstoque"
+    ]
+  },
+  {
+    "id": "Q1",
+    "kind": "quality",
+    "files": [
+      {
+        "path": "src/util/documentos.js",
+        "lines": [
+          13,
+          38
+        ]
+      },
+      {
+        "path": "src/util/documentos.js",
+        "lines": [
+          66,
+          74
+        ]
+      },
+      {
+        "path": "src/clientes.js",
+        "lines": [
+          13,
+          27
+        ]
+      },
+      {
+        "path": "src/clientes.js",
+        "lines": [
+          29,
+          31
+        ]
+      },
+      {
+        "path": "src/pedidos.js",
+        "lines": [
+          88,
+          119
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "CPF and e-mail validation is duplicated in three places (util/documentos.js, clientes.js, inside criarPedido) with small differences (repeated-digit CPFs, e-mail regex).",
+    "accept": [
+      "duplicated validation",
+      "CPF validation copied",
+      "e-mail regex duplicated",
+      "centralize validation",
+      "DRY",
+      "validação duplicada",
+      "validação de CPF repetida",
+      "três cópias",
+      "centralizar validação"
+    ]
+  },
+  {
+    "id": "Q2",
+    "kind": "quality",
+    "files": [
+      {
+        "path": "src/util/dinheiro.js",
+        "lines": [
+          68,
+          74
+        ]
+      },
+      {
+        "path": "src/clientes.js",
+        "lines": [
+          178,
+          196
+        ]
+      },
+      {
+        "path": "src/util/planilha.js",
+        "lines": [
+          1,
+          134
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "Dead code: arredondarCincoCentavos, mesclarClientes and the whole util/planilha.js module are never called.",
+    "accept": [
+      "dead code",
+      "unused function",
+      "unused module",
+      "planilha.js",
+      "mesclarClientes",
+      "arredondarCincoCentavos",
+      "código morto",
+      "função não usada",
+      "módulo sem uso"
+    ]
+  },
+  {
+    "id": "Q3",
+    "kind": "quality",
+    "files": [
+      {
+        "path": "src/pedidos.js",
+        "lines": [
+          14,
+          177
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "criarPedido is a single 150-line function doing validation, pricing, coupons, stock and persistence.",
+    "accept": [
+      "long function",
+      "god function",
+      "criarPedido too long",
+      "split the function",
+      "single responsibility",
+      "função longa",
+      "função gigante",
+      "quebrar criarPedido",
+      "responsabilidade única"
+    ]
+  },
+  {
+    "id": "Q4",
+    "kind": "quality",
+    "files": [
+      {
+        "path": "src/pedidos.js",
+        "lines": [
+          134,
+          156
+        ]
+      },
+      {
+        "path": "src/orcamento.js",
+        "lines": [
+          43,
+          59
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "Coupon percentages are magic numbers written in two places that disagree: PRIMEIRA is 15% in criarPedido and 20% in calcularOrcamento.",
+    "accept": [
+      "magic numbers",
+      "duplicated discount rules",
+      "PRIMEIRA 15% vs 20%",
+      "coupon rules disagree",
+      "calcularOrcamento",
+      "números mágicos",
+      "regras de desconto duplicadas",
+      "cupom diverge",
+      "orçamento diferente do pedido"
+    ]
+  },
+  {
+    "id": "B1",
+    "kind": "bug",
+    "files": [
+      {
+        "path": "src/precos.js",
+        "lines": [
+          11,
+          11
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "descontoPorValor uses subtotal > 50000, so an order of exactly R$ 500,00 gets no discount although the README says 'a partir de R$ 500,00'.",
+    "accept": [
+      ">= 50000",
+      "greater than instead of greater or equal",
+      "off-by-one at R$ 500,00",
+      "descontoPorValor",
+      "maior ou igual",
+      "pedido de exatamente 500 sem desconto",
+      "a partir de R$ 500,00"
+    ]
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "name": "loja-do-bairro",
+  "version": "2.3.0",
+  "private": true,
+  "description": "Retaguarda da Loja do Bairro: clientes, estoque, pedidos e relatorios",
+  "main": "index.js",
+  "bin": {
+    "loja": "cli.js"
+  },
+  "scripts": {
+    "test": "node --test tests/",
+    "cli": "node cli.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  }
+}

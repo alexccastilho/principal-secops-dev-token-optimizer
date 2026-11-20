@@ -7,6 +7,11 @@ name: CodeQL
 # The reference files under skills/*/references/ name insecure patterns so
 # Claude can recognize them. They are Markdown, which CodeQL does not read,
 # so they need no exclusion.
+#
+# benchmark/refactor/{fixtures,reference,hidden} hold a practice project with
+# insecure code planted on purpose (the refactor benchmark measures whether an
+# agent finds and fixes it). It never runs outside the benchmark, so it is
+# excluded from code scanning.
 
 on:
   push:
@@ -49,6 +54,11 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: none
           queries: security-and-quality
+          config: |
+            paths-ignore:
+              - benchmark/refactor/fixtures
+              - benchmark/refactor/reference
+              - benchmark/refactor/hidden
 
       - name: Analyze
         uses: github/codeql-action/analyze@v4

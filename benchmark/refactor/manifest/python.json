@@ -1,0 +1,409 @@
+[
+  {
+    "id": "S1",
+    "kind": "security",
+    "files": [
+      {
+        "path": "loja/clientes.py",
+        "lines": [
+          132,
+          138
+        ]
+      }
+    ],
+    "scanner_detectable": true,
+    "description": "Customer search by name builds the SQL LIKE clause by concatenating the caller's search term (SQL injection).",
+    "accept": [
+      "SQL injection",
+      "string concatenation in SQL",
+      "buscar_clientes_por_nome",
+      "parameterized query",
+      "injeção de SQL",
+      "SQL montado por concatenação",
+      "consulta parametrizada"
+    ]
+  },
+  {
+    "id": "S2",
+    "kind": "security",
+    "files": [
+      {
+        "path": "loja/relatorios.py",
+        "lines": [
+          126,
+          141
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "relatorio_pedidos appends the caller-supplied ordenar_por column to ORDER BY without an allow-list (SQL injection).",
+    "accept": [
+      "ORDER BY injection",
+      "unvalidated sort column",
+      "allow-list of columns",
+      "relatorio_pedidos",
+      "ordenar_por",
+      "injeção no ORDER BY",
+      "coluna de ordenação sem validação",
+      "lista de colunas permitidas"
+    ]
+  },
+  {
+    "id": "S3",
+    "kind": "security",
+    "files": [
+      {
+        "path": "loja/usuarios.py",
+        "lines": [
+          19,
+          20
+        ]
+      }
+    ],
+    "scanner_detectable": true,
+    "description": "Passwords are stored as unsalted MD5 hashes.",
+    "accept": [
+      "MD5",
+      "unsalted hash",
+      "weak password hashing",
+      "use bcrypt/scrypt/pbkdf2/argon2",
+      "hash fraco",
+      "senha sem sal",
+      "hash de senha com MD5"
+    ]
+  },
+  {
+    "id": "S4",
+    "kind": "security",
+    "files": [
+      {
+        "path": "loja/config.py",
+        "lines": [
+          15,
+          16
+        ]
+      },
+      {
+        "path": "loja/autenticacao.py",
+        "lines": [
+          22,
+          24
+        ]
+      }
+    ],
+    "scanner_detectable": true,
+    "description": "The session-token signing secret is a hard-coded constant (\"loja-bairro-2019\") in config.py.",
+    "accept": [
+      "hard-coded secret",
+      "hardcoded signing key",
+      "SEGREDO_TOKEN",
+      "secret in source code",
+      "move to environment variable",
+      "segredo fixo no código",
+      "chave escrita no código",
+      "variável de ambiente"
+    ]
+  },
+  {
+    "id": "S5",
+    "kind": "security",
+    "files": [
+      {
+        "path": "loja/autenticacao.py",
+        "lines": [
+          27,
+          29
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "Session tokens are generated with the non-cryptographic random module (random.choice) instead of secrets.",
+    "accept": [
+      "random.choice",
+      "predictable token",
+      "non-cryptographic random",
+      "use secrets module",
+      "secrets.token_urlsafe",
+      "token previsível",
+      "aleatório não criptográfico",
+      "módulo secrets"
+    ]
+  },
+  {
+    "id": "S6",
+    "kind": "security",
+    "files": [
+      {
+        "path": "loja/pedidos.py",
+        "lines": [
+          187,
+          193
+        ]
+      },
+      {
+        "path": "loja/pedidos.py",
+        "lines": [
+          213,
+          233
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "buscar_pedido and cancelar_pedido ignore the user: a vendedor can read or cancel any order, although sellers should only see their own.",
+    "accept": [
+      "missing authorization",
+      "missing ownership check",
+      "IDOR",
+      "broken access control",
+      "seller can cancel any order",
+      "vendedor vê pedido de outro",
+      "falta checagem de dono",
+      "controle de acesso",
+      "usuario ignorado"
+    ]
+  },
+  {
+    "id": "S7",
+    "kind": "security",
+    "files": [
+      {
+        "path": "loja/relatorios.py",
+        "lines": [
+          159,
+          178
+        ]
+      },
+      {
+        "path": "loja/relatorios.py",
+        "lines": [
+          181,
+          204
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "CSV exports write customer-supplied text verbatim, allowing spreadsheet formula injection (=, +, -, @).",
+    "accept": [
+      "CSV injection",
+      "formula injection",
+      "spreadsheet injection",
+      "escape leading = + - @",
+      "injeção de fórmula",
+      "injeção em CSV",
+      "planilha executa fórmula"
+    ]
+  },
+  {
+    "id": "S8",
+    "kind": "security",
+    "files": [
+      {
+        "path": "loja/estoque.py",
+        "lines": [
+          59,
+          76
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "atualizar_estoque catches sqlite3.Error, only logs it and still returns True, reporting success on a failed stock update.",
+    "accept": [
+      "swallowed exception",
+      "error swallowed",
+      "returns True on failure",
+      "silent failure",
+      "atualizar_estoque",
+      "erro engolido",
+      "retorna sucesso mesmo com erro",
+      "falha silenciosa"
+    ]
+  },
+  {
+    "id": "Q1",
+    "kind": "quality",
+    "files": [
+      {
+        "path": "loja/util.py",
+        "lines": [
+          136,
+          152
+        ]
+      },
+      {
+        "path": "loja/util.py",
+        "lines": [
+          178,
+          184
+        ]
+      },
+      {
+        "path": "loja/clientes.py",
+        "lines": [
+          14,
+          30
+        ]
+      },
+      {
+        "path": "loja/clientes.py",
+        "lines": [
+          33,
+          36
+        ]
+      },
+      {
+        "path": "loja/importacao.py",
+        "lines": [
+          18,
+          35
+        ]
+      },
+      {
+        "path": "loja/importacao.py",
+        "lines": [
+          38,
+          42
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "CPF and e-mail validation are duplicated in util.py, clientes.py and importacao.py with diverging rules (repeated-digit CPFs, '+' in e-mail).",
+    "accept": [
+      "duplicated validation",
+      "copy-paste validation",
+      "CPF validation in three places",
+      "centralize validation",
+      "validação duplicada",
+      "validação de CPF copiada",
+      "centralizar validação"
+    ]
+  },
+  {
+    "id": "Q2",
+    "kind": "quality",
+    "files": [
+      {
+        "path": "loja/nota_fiscal.py",
+        "lines": [
+          1,
+          156
+        ]
+      },
+      {
+        "path": "loja/clientes.py",
+        "lines": [
+          195,
+          223
+        ]
+      },
+      {
+        "path": "loja/util.py",
+        "lines": [
+          100,
+          115
+        ]
+      },
+      {
+        "path": "loja/relatorios.py",
+        "lines": [
+          144,
+          156
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "Dead code: module nota_fiscal.py and functions mesclar_clientes, dias_uteis_entre and ticket_medio_por_vendedor are never imported or called.",
+    "accept": [
+      "dead code",
+      "unused module",
+      "nota_fiscal",
+      "mesclar_clientes",
+      "dias_uteis_entre",
+      "ticket_medio_por_vendedor",
+      "código morto",
+      "módulo não usado",
+      "função nunca chamada"
+    ]
+  },
+  {
+    "id": "Q3",
+    "kind": "quality",
+    "files": [
+      {
+        "path": "loja/pedidos.py",
+        "lines": [
+          15,
+          155
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "criar_pedido is a 140-line function mixing validation, pricing, coupon rules, stock checks and persistence.",
+    "accept": [
+      "long function",
+      "god function",
+      "criar_pedido too long",
+      "split criar_pedido",
+      "single responsibility",
+      "função longa",
+      "função faz tudo",
+      "quebrar criar_pedido",
+      "responsabilidade única"
+    ]
+  },
+  {
+    "id": "Q4",
+    "kind": "quality",
+    "files": [
+      {
+        "path": "loja/descontos.py",
+        "lines": [
+          17,
+          34
+        ]
+      },
+      {
+        "path": "loja/pedidos.py",
+        "lines": [
+          95,
+          115
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "Coupon discounts are hard-coded magic numbers in two places that disagree (FRETEGRATIS is 1500 in descontos.py but 1000 in criar_pedido; upper-casing and the first-purchase rule also differ).",
+    "accept": [
+      "magic numbers",
+      "duplicated discount rules",
+      "coupon values disagree",
+      "FRETEGRATIS 1500 vs 1000",
+      "números mágicos",
+      "regra de cupom duplicada",
+      "cupom com valores diferentes"
+    ]
+  },
+  {
+    "id": "B1",
+    "kind": "bug",
+    "files": [
+      {
+        "path": "loja/descontos.py",
+        "lines": [
+          12,
+          13
+        ]
+      }
+    ],
+    "scanner_detectable": false,
+    "description": "The 10% discount uses subtotal > 50000, so an order of exactly R$ 500,00 gets no discount; the README says 'a partir de R$ 500,00' (>=).",
+    "accept": [
+      "off-by-one",
+      "> should be >=",
+      "exactly R$ 500 gets no discount",
+      "boundary",
+      "desconto_progressivo",
+      "maior ou igual",
+      "a partir de R$ 500,00",
+      "limite de 500"
+    ]
+  }
+]
