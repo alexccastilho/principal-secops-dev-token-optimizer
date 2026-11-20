@@ -61,7 +61,7 @@ jobs:
 
       # The same ZIP a release carries, attached to the run so a change can
       # be tried in claude.ai before it is released.
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: claude-ai-package
           path: dist/*.zip
