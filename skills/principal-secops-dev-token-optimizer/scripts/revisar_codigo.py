@@ -665,6 +665,7 @@ def _utf8_streams() -> None:
         try:
             stream.reconfigure(encoding="utf-8", errors="replace")  # type: ignore[union-attr]
         except (AttributeError, ValueError, OSError):
+            # Saida redirecionada ou stream sem reconfigure: segue com a codificacao atual.
             pass
 
 
