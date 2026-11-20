@@ -4,6 +4,34 @@
 
 All notable changes to this project. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [SemVer](https://semver.org/).
 
+## [2.2.0] - 2026-11-20
+
+Every language and database reference rewritten against current primary sources, five new references, legacy maintenance as a first-class case, and a scanner that reads 151 file types. Version-specific facts were checked against primary sources on 2026-11-20; what could not be verified was removed or written without a version. The evidence logs in [docs/research/](docs/research/) list each checked fact with its URL, and also what was carried over or written from general knowledge.
+
+### Added
+- `references/legado.md`: Delphi, Free Pascal/Lazarus, Pascal, Clipper/Harbour/xBase, Visual FoxPro, VB6, COBOL, RPG, OpenEdge, PowerBuilder and ABAP. The rule is "never rewrite a working legacy system": back up, make it safe where it stands, migrate in stages.
+- `references/scripts-e-automacao.md`: Lua (5.5 and Luau sandboxing), Perl, VBA and Office/Access macros, Google Apps Script, PowerShell 7 and 5.1, Bash/shell, `.bat`/`.cmd`, AutoHotkey and Tcl, plus a shared section on running scripts safely on Windows.
+- `references/dados-e-ciencia.md`: R, Julia, MATLAB/Octave, Fortran, SAS, Jupyter, pandas/Polars, CSV/Excel formula injection and LGPD in datasets.
+- `references/sistemas-outros.md`: Zig, Ada/SPARK, Assembly, Objective-C, D and Nim.
+- `references/bancos-nosql.md`: MongoDB, Redis/Valkey, Firebase, DynamoDB, Cassandra/ScyllaDB, Elasticsearch/OpenSearch, Neo4j, ClickHouse, InfluxDB/TimescaleDB and vector databases with RAG (OWASP LLM01 and LLM08).
+- `references/outras-linguagens.md` now covers Swift, Dart/Flutter, Scala, Elixir/Erlang, Clojure, Haskell, OCaml, Groovy/Jenkins, Crystal, F# and VB.NET besides Go, .NET, Ruby, Kotlin and mobile (OWASP MASVS).
+- `references/bancos-outros.md` now covers Firebird, Db2, DuckDB, CockroachDB, Access and DBF/Paradox besides PostgreSQL, SQLite, SQL Server and Oracle.
+- Scanner: 25 new rules (52 to 77) and 80 new file types (71 to 151), each rule tested on an insecure line and on the safe line next to it. New: SQL built with `&`, `..`, `||`, interpolation or `Sprintf`/`format!`/`paste`; EF Core `FromSqlRaw`; Rails interpolation; dynamic SQL in COBOL/ABAP; MongoDB filter taken from `req.body`; shell commands built from data in 20 languages; `Invoke-Expression`, `curl | bash`, `eval "$x"`; Lua `load`, Clipper `&()`, Clojure `read-string`, Groovy `Eval.me`; BEAM atoms and `binary_to_term`; .NET `BinaryFormatter`; Perl two-argument `open`; Tcl `expr` without braces; Apps Script `<?!=`; PostgreSQL `trust` over the network; open Firebase rules; disabled TLS checks in a dozen stacks; Supabase `sb_secret_` keys; Zig/Ada safety checks turned off. Comment syntax is respected per language (`--`, `'`, `!`, `;`, `rem`, `&&`).
+- `tests/test_scanner_languages.py`: 83 insecure/safe pairs and 8 commented-out cases.
+- Evals: from 28 to 35 scenarios (Delphi with Firebird, Clipper on a network share, Lua mods, VBA with the pt-BR decimal comma, CSV for Excel, Redis and MongoDB on a VPS, PowerShell `irm | iex`).
+- `benchmark/`: scripts that run the same app request through Claude Code with and without the skill, in a clean configuration, and measure tokens, time, cost, lines of code, build result and security findings (see [docs/BENCHMARK.md](docs/BENCHMARK.md)).
+
+### Changed
+- All web references updated: PER Coding Style, PHP 8.5/8.6 gates, Composer advisory blocking, Laravel and Symfony; Node permission model, type stripping, npm 12 install-script approval, Express 5, Next.js 16; Python 3.14/3.15 gates, `pip lock`, Django 6 CSP; Java 25, Spring Boot 4 and Spring Security 7; Trusted Types, strict CSP, WCAG 2.2 and the European Accessibility Act.
+- `mysql.md`: LTS and Innovation tracks, MySQL 8.0 end of life (2026-04-30), `mysql_native_password` removed in 9.0, 8.4 removals that break scripts, MariaDB `unix_socket` and PARSEC.
+- `security-baseline.md`: passwords follow NIST SP 800-63B-4 (15 characters when the password is the only factor, no composition rules, blocklist); OWASP Top 10 for Agentic Applications and CWE Top 25 2025 in the standards map; bcrypt cost 12 by default.
+- `versoes-e-fontes.md`: 36 new rows in the sources table, each with its endoflife.date slug or the vendor page when there is none.
+- `compliance-licencas.md`: CRA dates (11 June 2026, 11 September 2026, 11 December 2027) and the 24 h / 72 h / one month reporting chain.
+- `qt.md`: open source Qt gets fixes only until the next minor release; the long LTS is commercial. QProcess rules rewritten for Qt 6.
+- `gui-desktop.md`, `gui-outros.md`: GTK 4.10 deprecations, Tauri 2 capabilities, Electron defaults by version, Avalonia 12 drag and drop, egui accessibility.
+- `c-cpp.md` and `rust.md` rewritten with current hardening flags, sanitizers and supply-chain tools.
+- SKILL.md: routing for the new references, legacy and NoSQL pairing rules, and a description that names the new stacks (still under 1024 characters). The style test now covers SKILL.md and every reference.
+
 ## [2.1.0] - 2026-11-20
 
 Preventive structure and refactor mode, with ideas adapted from [`untangle-codebase` and `prune-tests`](https://github.com/caldoai/skills) (MIT, © 2026 Maze). The repository now has automated tests, CI and documentation in English, Portuguese and Spanish.

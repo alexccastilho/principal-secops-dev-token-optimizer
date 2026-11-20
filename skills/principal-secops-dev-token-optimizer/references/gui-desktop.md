@@ -1,4 +1,6 @@
-# Desktop GUI — choosing a toolkit, and the rules that outlive the choice
+# Desktop GUI: choosing a toolkit, and the rules that outlive the choice
+
+Version policy: follow `versoes-e-fontes.md`. Toolkit versions, licences and start-up figures named here are examples (the comparison table was not re-checked in 2.2.0); read the version the project pins before using a feature gated "(X.Y+)".
 
 Toolkit specifics live in `qt.md` and `gui-outros.md`. Visual decisions live in `gui-design.md`. This file is what applies whatever you pick.
 
@@ -7,7 +9,7 @@ Toolkit specifics live in `qt.md` and `gui-outros.md`. Visual decisions live in 
 | Toolkit | Language | Cold start | Huge lists | Native feel Win + Linux | Licence |
 |---|---|---|---|---|---|
 | Qt 6 | C++, QML optional | ~40 ms | Model/view, proven at millions of rows | Both | LGPLv3 / GPLv3 |
-| Slint | Rust, C++ | ~20 ms | Good, fewer ready-made primitives | Both, own look | GPLv3 or commercial |
+| Slint | Rust, C++ | ~20 ms | Good, fewer ready-made primitives | Both, own look | GPLv3, royalty-free (not embedded) or commercial |
 | Avalonia | C# | ~300 ms | Good | Both, own look | MIT |
 | GTK4 + libadwaita | C, Rust, Python | ~80 ms | GtkColumnView is strong | Excellent Linux, alien on Windows | LGPL |
 | Flutter | Dart | ~200 ms | Good | Neither, its own look everywhere | BSD |
@@ -37,7 +39,7 @@ The most common desktop performance failure is one widget per data item. It work
 
 * **Qt:** `QAbstractItemModel` with `QTreeView` or `QTableView`. Not `QTableWidget`, `QListWidget` or `QTreeWidget`, which allocate an object per cell.
 * **Avalonia and WPF:** `ItemsControl` over a `VirtualizingStackPanel`. Check that a wrapping `ScrollViewer` or `WrapPanel` has not silently disabled virtualisation.
-* **GTK4:** `GtkColumnView` or `GtkListView` over a `GListModel`. Not `GtkListBox`, and not a `GtkTreeView` preloaded into a `GtkListStore`.
+* **GTK4:** `GtkColumnView` or `GtkListView` over a `GListModel`. Not `GtkListBox`, and not a `GtkTreeView` preloaded into a `GtkListStore` (both deprecated since GTK 4.10).
 * **Slint:** `ListView` bound to a `Model`, never a loop over a materialised array.
 * **Web, Electron, Tauri:** a windowing library such as TanStack Virtual. DOM nodes proportional to the viewport, never to the data.
 
@@ -90,7 +92,7 @@ The web rules do not transfer. These are the ones that apply.
 * Clipboard content is readable by every process on the machine. Keep secrets out of it, and clear it after use where the platform allows.
 * Never build a shell command from a filename. Use the process API with separate arguments.
 * Verify a signature before applying an update, without exception.
-* **Embedded webview:** context isolation on, node integration off, navigation restricted to an allowlist, web security never disabled, and no user content rendered through `innerHTML`.
+* **Embedded webview:** context isolation on, node integration off, sandbox on, navigation restricted to an allowlist, web security never disabled, and no user content rendered through `innerHTML`.
 
 ## Packaging
 * Windows: MSI, Inno Setup or NSIS, code signed. Prefer a per-user install so it does not demand administrator rights.

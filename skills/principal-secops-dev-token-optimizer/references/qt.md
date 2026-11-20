@@ -1,6 +1,6 @@
-# Qt 6 — C++ and QML
+# Qt 6: C++ and QML
 
-Version policy: follow `versoes-e-fontes.md`. Use the newest Qt 6 LTS, or the LTS already installed on the project, and confirm the current LTS and its support dates at qt.io/blog before recommending one. Qt 5 no longer receives open source support. Read `gui-desktop.md` first for the rules that are not Qt-specific, and `gui-design.md` for the visual side.
+Version policy: follow `versoes-e-fontes.md`. Confirm support dates at qt.io/blog or endoflife.date (`qt`) before recommending a release. Under the open source licence each minor release gets fixes only until the next one ships (about six months), so open source users track the newest minor release; the multi-year LTS maintenance of 6.8 and 6.12 is a commercial service (checked 2026-11-20). A project on a commercial licence may stay on its LTS. Qt 5.15: open source support ended in 2020 and standard commercial support in May 2025 (KDE keeps a patch collection for open source users). A Qt 5 project is a finding with a staged port, not a rewrite. Read `gui-desktop.md` first for the rules that are not Qt-specific, and `gui-design.md` for the visual side.
 
 Licensing: the open source build is LGPLv3 or GPLv3. Under LGPL you must let the user relink, which means dynamic linking. Under GPLv3, when your own application is GPLv3, you may link Qt statically and ship a single binary.
 
@@ -39,14 +39,14 @@ Licensing: the open source build is LGPLv3 or GPLv3. Under LGPL you must let the
 
 ## Appearance
 * Qt Style Sheets for theming. Scope the selectors to the classes you mean; a stylesheet applied to everything is slow and breaks native behaviour.
-* Follow the system light or dark setting through `QGuiApplication::styleHints()->colorScheme()`, and connect to its change signal so the app switches without a restart.
+* Follow the system light or dark setting through `QGuiApplication::styleHints()->colorScheme()` (6.5+), and connect to `colorSchemeChanged` so the app switches without a restart.
 * HiDPI scaling is automatic in Qt 6. Ship SVG icons, and on Linux respect the icon theme through `QIcon::fromTheme` with a bundled fallback.
 * Take the UI font from `QFontDatabase::systemFont(QFontDatabase::GeneralFont)` rather than naming a family.
 * Size from `QFontMetrics` and layout spacing, not hardcoded pixels, or the interface breaks at 150% scale.
 
 ## Security
 * Qt carries a large parsing surface: image formats, SVG, network, and every plugin present at run time. In a static or trimmed build, include only the plugins you use.
-* `QProcess` with `setProgram` and `setArguments`. Never the single-string overload, which goes through a shell on some platforms.
+* `QProcess` with `setProgram` and `setArguments`, or `start(program, arguments)`. QProcess never invokes a shell by itself. Never build a single string from untrusted parts for `startCommand` (6.0+): its own tokenizer allows argument injection. On Windows, never pass untrusted arguments to a `.bat`, `.cmd` or `cmd.exe`; cmd.exe re-parses them, so `&calc.exe` runs a second command even when passed as a separate argument.
 * `QSqlQuery` with `prepare` and `bindValue`. String-built SQL is injection in Qt exactly as anywhere else.
 * `QNetworkAccessManager` verifies TLS by default. Never call `ignoreSslErrors`.
 * `QSettings` is configuration, not a secret store. It is plain text or the registry.
@@ -55,7 +55,7 @@ Licensing: the open source build is LGPLv3 or GPLv3. Under LGPL you must let the
 
 ## Build and deployment
 * CMake with `qt_standard_project_setup`, `qt_add_executable` and `qt_add_qml_module`. `qmake` is legacy for new work.
-* `windeployqt` on Windows and `linuxdeployqt` or CQtDeployer on Linux gather the runtime. Flatpak and AppImage are the friendlier Linux paths.
+* `windeployqt` on Windows and `linuxdeployqt` or CQtDeployer on Linux gather the runtime; `qt_generate_deploy_app_script` (6.3+) drives deployment from CMake. Flatpak and AppImage are the friendlier Linux paths.
 * Set `QT_DISABLE_DEPRECATED_UP_TO` so deprecated API fails the build rather than rotting quietly.
 * A static Qt under GPLv3 gives one file and the fastest cold start, at the cost of building Qt from source once.
 

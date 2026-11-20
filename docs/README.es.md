@@ -20,7 +20,8 @@ Skill para **Claude Code** y **claude.ai** que hace que Claude trabaje como un d
 - **Habla el idioma de quien no programa.** Las respuestas llegan en pt-BR claro: dónde va el archivo, qué comando ejecutar y cómo probar el caso correcto y el caso de error.
 - **Ahorra tokens.** Envía solo los bloques que cambiaron, carga sus referencias bajo demanda y respeta un límite de archivos por tarea.
 - **Consulta las versiones en vez de adivinar.** Lee la versión que usa el proyecto y verifica el estado de soporte actual, en lugar de confiar en la memoria del modelo.
-- **Verifica antes de entregar.** Incluye el escáner `scripts/revisar_codigo.py` (Python 3.8+, solo biblioteca estándar), que busca secretos en el código, SQL concatenado, hash débil, salida sin escapar, `eval`/`exec`, llamadas al shell y trampas de memoria en C, C++ y Rust.
+- **Verifica antes de entregar.** Incluye el escáner `scripts/revisar_codigo.py` (Python 3.8+, solo biblioteca estándar, 77 reglas sobre 151 tipos de archivo), que busca secretos en el código, SQL armado con texto, hash débil, salida sin escapar, `eval`/`exec`, comandos del sistema armados con datos, verificación TLS desactivada y trampas de memoria en C, C++ y Rust.
+- **Mantiene sistemas heredados en lugar de reescribirlos.** Delphi, Clipper/Harbour, VB6, FoxPro, COBOL, VBA: primero la copia de seguridad, seguridad donde está, migración por etapas. Novedad de la 2.2.0.
 
 ## Dos modos
 
@@ -36,17 +37,32 @@ Skill para **Claude Code** y **claude.ai** que hace que Claude trabaje como un d
 
 Extras opcionales, elegidos al inicio: quitar comentarios que solo repiten el código y podar pruebas que no detectarían un error real (las pruebas de seguridad y de regresión se quedan siempre).
 
+## Qué no hace
+
+- **No es una prueba de penetración ni una auditoría profesional.** El escáner lee el código línea por línea con patrones; no sigue los datos entre archivos ni ejecuta o ataca el sistema. Un análisis limpio no prueba nada por sí solo.
+- **No reescribe ni reorganiza lo que no pediste.** En modo normal toca solo lo que el pedido necesita. La refactorización completa solo ocurre en modo refactorización, con pedido explícito, en una rama propia de Git.
+- **No actualiza dependencias ni versiones por su cuenta,** y nunca afirma una versión, una fecha de fin de soporte o "la más reciente" de memoria: consulta la fuente oficial antes y dice cuándo la consultó.
+- **No publica, no hace push, no borra datos ni ejecuta comandos destructivos** sin preguntar antes.
+- **No es asesoría legal.** Para LGPD, GPL o CRA aplica las reglas publicadas y señala la fuente; los casos límite los decide un abogado.
+- **No responde en otros idiomas.** La conversación es en portugués de Brasil; los identificadores y comentarios del código quedan en inglés.
+- **Límites del escáner:** los archivos de más de 1 MB y los binarios se omiten; las líneas de más de 500 caracteres solo reciben las reglas de secretos; los notebooks de Jupyter se leen como texto JSON, así que solo se les aplican las reglas que valen para cualquier lenguaje.
+- **Nunca imprime ni guarda un secreto.** Un secreto encontrado en el código se informa con la línea oculta.
+
 ## Cobertura
 
 | Área | Referencias |
 |---|---|
-| Web | PHP y WordPress, Java, Node.js y JavaScript, Python, HTML y CSS |
-| Bases de datos | MySQL y MariaDB, PostgreSQL y Supabase, SQLite, SQL Server, Oracle, MongoDB, Redis, Firebase |
-| Código nativo | C, C++, Rust, CMake, flags de hardening, sanitizers, fuzzing |
+| Web | PHP (WordPress, Laravel, Symfony), Node.js y TypeScript (Express, Fastify, NestJS, Next.js, Deno, Bun), Python (Django, FastAPI, Flask), Java (Spring Boot, Jakarta EE, Quarkus), HTML, CSS, accesibilidad, CSP |
+| Bases de datos relacionales | MySQL y MariaDB, PostgreSQL y Supabase, SQLite, SQL Server, Oracle, Firebird, Db2, DuckDB, CockroachDB, Access, DBF/Paradox |
+| NoSQL y vectoriales | MongoDB, Redis/Valkey, Firebase, DynamoDB, Cassandra/ScyllaDB, Elasticsearch/OpenSearch, Neo4j, ClickHouse, InfluxDB, bases vectoriales y RAG |
+| Heredados y sistemas de gestión | Delphi, Free Pascal/Lazarus, Pascal, Clipper/Harbour, Visual FoxPro, VB6, COBOL, RPG, OpenEdge, PowerBuilder, ABAP |
+| Scripts y automatización | Lua, Perl, VBA y macros de Office/Access, Google Apps Script, PowerShell, Bash/shell, .bat/.cmd, AutoHotkey, Tcl |
+| Datos y ciencia | R, Julia, MATLAB/Octave, Fortran, SAS, Jupyter, pandas/Polars, exportación CSV/Excel, LGPD en conjuntos de datos |
+| Otros lenguajes y móvil | Go, C#/F#/VB.NET, Ruby/Rails, Kotlin, Swift, Dart/Flutter, Scala, Elixir/Erlang, Clojure, Haskell, OCaml, Groovy/Jenkins, Crystal, Android, iOS, React Native |
+| Nativo y sistemas | C, C++, Rust, Zig, Ada/SPARK, Assembly, Objective-C, D, Nim, CMake, flags de hardening, sanitizers, fuzzing |
 | Escritorio y GUI | elección del toolkit, Qt 6, Slint, Avalonia, GTK, Flutter, Tauri, Electron, diseño visual |
 | Estructura | dónde vive el código, acoplamiento, casos especiales, pruebas que protegen el comportamiento, refactorización completa |
 | Proceso | proyecto desde cero, diagnóstico de errores, versiones y fuentes, cumplimiento (GPL, SBOM, CRA) |
-| Otros lenguajes | Go, C#, Ruby, Kotlin, móvil, PowerShell, shell script |
 
 ## Instalación
 
@@ -115,6 +131,10 @@ python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --
 
 El código de salida 0 significa ningún hallazgo HIGH, 1 significa al menos un HIGH, y 2 significa ruta equivocada o nada legible, lo que no es una aprobación. Nunca imprime el valor de un secreto: el fragmento se oculta en toda la línea. Un análisis limpio no prueba nada por sí solo; la lista de comprobación de la skill sigue vigente.
 
+## Benchmark
+
+La misma app pequeña (contactos con login y SQLite) se pidió a Claude Code con y sin la skill, en PHP, Python, Node.js, Java, C# y Go, en una configuración limpia, sin otros plugins. Tokens, tiempo, costo, líneas de código, compilación y hallazgos de seguridad se comparan en [BENCHMARK.es.md](BENCHMARK.es.md), junto con el método y cómo reproducirlo.
+
 ## Estructura del repositorio
 
 ```
@@ -133,7 +153,9 @@ skills/principal-secops-dev-token-optimizer/
 tests/                     # suite de pruebas (unittest de la biblioteca estándar)
 tools/build_zip.py         # genera el ZIP para claude.ai
 tools/make_icon.py         # dibuja el icono del plugin (necesita Pillow)
-docs/                      # traducciones y el informe de revisión de la v2.0.0 (en portugués)
+benchmark/                 # benchmark con y sin la skill (run_benchmark.py, analyze.py, results/)
+docs/                      # traducciones, BENCHMARK y el informe de revisión de la v2.0.0 (en portugués)
+docs/research/             # registros de evidencia de la 2.2.0: un dato verificado por línea, con URL y fecha (en inglés)
 ```
 
 ## Desarrollo

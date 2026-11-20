@@ -1,4 +1,4 @@
-# Native desktop apps and file parsers — threat model
+# Native desktop apps and file parsers: threat model
 
 The web baseline does not apply here. There is no CSRF, no cookie, no webroot. The attack surface is a file the user received from someone else, plus the process boundary on the user's own machine.
 

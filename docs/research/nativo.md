@@ -1,0 +1,115 @@
+# Research log: nativo (c-cpp.md, rust.md, sistemas-outros.md)
+
+## Verified facts
+- C: C23 is ISO/IEC 9899:2024, published 2024-10-31; `__STDC_VERSION__` 202311L; adds `<stdckdint.h>`, `memset_explicit`, `nullptr`, `#embed`, removes K&R definitions (https://en.cppreference.com/w/c/23, checked 2026-11-20)
+- GCC: `-std=c23` (alias `c2x` deprecated), `-std=c2y` experimental; default C is `gnu23`, default C++ is `gnu++20` (https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html, checked 2026-11-20)
+- GCC: recent releases 16.2 (2026-08-07), 16.1 (2026-04-30), 15.3, 14.4, 13.5 (https://gcc.gnu.org/releases.html, checked 2026-11-20)
+- C++: C++23 is ISO/IEC 14882:2024, edition 7, published 2024-10 (https://www.iso.org/standard/83626.html, checked 2026-11-20)
+- C++: C++26 technical work complete at March 2026 Croydon meeting; DIS ballot and ISO publication pending; uninitialized local reads no longer UB; standard library hardening and contracts in; profiles not in C++26, targeted for C++29 (https://herbsutter.com/2026/03/, checked 2026-11-20)
+- C++: compiler support for C++26 contracts (GCC 16), erroneous behavior (GCC 16), hardened library (GCC 15 partial, MSVC partial), C++26 still labeled draft (https://en.cppreference.com/w/cpp/compiler_support, checked 2026-11-20)
+- MSVC: `/std:c++20` stable, `/std:c++23preview` (VS 2022 17.13+) and `/std:c++latest` preview; C modes `/std:c11`, `/std:c17`, `/std:clatest`; `__cplusplus` needs `/Zc:__cplusplus` (https://learn.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version, checked 2026-11-20)
+- OpenSSF: Compiler Options Hardening Guide updated 2026-08-20; baseline flag set incl. `_FORTIFY_SOURCE=3`, `_GLIBCXX_ASSERTIONS`, `_LIBCPP_HARDENING_MODE_FAST`, `-fstrict-flex-arrays=3`, `-Wl,-z,nodlopen`, production flags, `-Werror` development only, `_FORTIFY_SOURCE` incompatible with ASan, `_GLIBCXX_DEBUG` changes ABI (https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html, checked 2026-11-20)
+- GCC: `-fhardened` contents, GNU/Linux only, does not override explicit options; `-fcf-protection` x86 only (https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html, checked 2026-11-20)
+- GCC: `-march=x86-64-v2/v3/v4` exist; `-march=native` output may not run elsewhere (https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html, checked 2026-11-20)
+- libc++: hardening modes none/fast/extensive/debug; fast recommended for production; debug not for production (https://libcxx.llvm.org/Hardening.html, checked 2026-11-20)
+- Clang: UBSan minimal runtime and `-fsanitize-trap=all` suitable for production; full runtime not (https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html, checked 2026-11-20)
+- libFuzzer: `-fsanitize=fuzzer`; original authors stopped active work, bug fixes only (https://llvm.org/docs/LibFuzzer.html, checked 2026-11-20)
+- MSVC: `/guard:ehcont` VS 2019 16.7+, 64-bit only, compiler and linker (https://learn.microsoft.com/en-us/cpp/build/reference/guard-enable-eh-continuation-metadata, checked 2026-11-20)
+- MSVC: `/sdl` warnings-as-errors list and strict `/GS` (https://learn.microsoft.com/en-us/cpp/build/reference/sdl-enable-additional-security-checks, checked 2026-11-20)
+- MSVC: ASan since VS 2019 16.9, x86/x64, incompatible with `/RTC`, `/ZI`, incremental linking; no UBSan (listed as future) (https://learn.microsoft.com/en-us/cpp/sanitizers/asan, checked 2026-11-20)
+- CMake: CXX_STANDARD 23 since 3.20, 26 since 3.25; docs at 4.5.1 (https://cmake.org/cmake/help/latest/prop_tgt/CXX_STANDARD.html, checked 2026-11-20)
+- CMake: C_STANDARD 23 since 3.21 (https://cmake.org/cmake/help/latest/prop_tgt/C_STANDARD.html, checked 2026-11-20)
+- CMake: CXX_EXTENSIONS ON by default (https://cmake.org/cmake/help/latest/prop_tgt/CXX_EXTENSIONS.html, checked 2026-11-20)
+- CMake: COMPILE_WARNING_AS_ERROR since 3.24 (https://cmake.org/cmake/help/latest/variable/CMAKE_COMPILE_WARNING_AS_ERROR.html, checked 2026-11-20)
+- CMake: 4.0 errors below 3.5, 3.31 warns below 3.10, `...<max>` syntax (https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html, checked 2026-11-20)
+- CMake: PIE link needs CMP0083 and CheckPIESupported (https://cmake.org/cmake/help/latest/prop_tgt/POSITION_INDEPENDENT_CODE.html, checked 2026-11-20)
+- vcpkg: `builtin-baseline`, `version>=`, `overrides` (https://learn.microsoft.com/en-us/vcpkg/users/versioning, checked 2026-11-20)
+- Conan 2: `conan lock create`, `conan.lock`, `--lockfile` (https://docs.conan.io/2/tutorial/versioning/lockfiles.html, checked 2026-11-20)
+- libsodium: `crypto_pwhash` default Argon2id since 1.0.15 (https://doc.libsodium.org/password_hashing/default_phf, checked 2026-11-20)
+- POSIX: `O_NOFOLLOW` only for trailing component; `openat` relative to dirfd (https://man7.org/linux/man-pages/man2/open.2.html, checked 2026-11-20)
+- CISA/FBI: Product Security Bad Practices v2.0 (2025-01-17): memory-safety roadmap by end of 2025, exempt if support ends before 2030-01-01 (https://www.cisa.gov/resources-tools/resources/product-security-bad-practices, checked 2026-11-20)
+- CISA/NSA: "Memory Safe Languages: Reducing Vulnerabilities in Modern Software Development", 2025-06-24; no full rewrite required (https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/4223298/, https://cisa.gov/resources-tools/resources/memory-safe-languages-reducing-vulnerabilities-modern-software-development, checked 2026-11-20)
+- Rust: current stable 1.100.0, next 1.101.0 on 2026-12-24 (https://releases.rs/, checked 2026-11-20)
+- Rust: edition 2024 stable in 1.85.0 (https://doc.rust-lang.org/edition-guide/rust-2024/index.html, checked 2026-11-20)
+- Rust: `unsafe extern` required in 2024, allowed in all editions since 1.82, `safe` items (https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-extern.html, checked 2026-11-20)
+- Rust: unsafe attributes `no_mangle`, `export_name`, `link_section` (https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-attributes.html, checked 2026-11-20)
+- Rust: `set_var`, `remove_var`, `before_exec` unsafe in 2024 (https://doc.rust-lang.org/edition-guide/rust-2024/newly-unsafe-functions.html, checked 2026-11-20)
+- Rust: 1.81 aborts on unwind out of `extern "C"`; `C-unwind`; CVE-2024-43402 batch escaping fix (https://blog.rust-lang.org/2024/09/05/Rust-1.81.0/, checked 2026-11-20)
+- Rust: CVE-2024-24576, Windows batch file argument injection, fixed 1.77.2 (https://blog.rust-lang.org/2024/04/09/cve-2024-24576/, checked 2026-11-20)
+- Rust: release profile `overflow-checks = false`, `panic = 'unwind'`, `codegen-units = 16` by default (https://doc.rust-lang.org/cargo/reference/profiles.html, checked 2026-11-20)
+- Rust: `Path::join` with absolute path replaces base (https://doc.rust-lang.org/std/path/struct.Path.html, checked 2026-11-20)
+- Rust: sanitizers nightly-only via `-Zsanitizer` (https://doc.rust-lang.org/beta/unstable-book/compiler-flags/sanitizer.html, checked 2026-11-20)
+- Rust: `cargo build --locked` fails if lockfile missing or would change (https://doc.rust-lang.org/cargo/commands/cargo-build.html, checked 2026-11-20)
+- Clippy: `undocumented_unsafe_blocks` and `multiple_unsafe_ops_per_block` restriction group; `cast_possible_truncation` pedantic; `arithmetic_side_effects` restriction (https://clippy.rust-lang.org/master/index.html, https://rust.googlesource.com/rust-clippy/+/refs/heads/beta/clippy_lints/src/undocumented_unsafe_blocks.rs, checked 2026-11-20)
+- sqlx: `.bind()` server-side substitution; `format!` shown as injection (https://docs.rs/sqlx/latest/sqlx/fn.query.html, checked 2026-11-20)
+- argon2 (RustCrypto): Argon2id default (https://docs.rs/argon2/latest/argon2/, checked 2026-11-20)
+- reqwest: `danger_accept_invalid_certs`/`hostnames` deprecated for `tls_danger_*` (https://docs.rs/reqwest/latest/reqwest/struct.ClientBuilder.html, checked 2026-11-20)
+- serde: `deny_unknown_fields` (https://serde.rs/container-attrs.html, checked 2026-11-20)
+- zeroize, secrecy, subtle crates purposes (https://docs.rs/zeroize, https://docs.rs/secrecy, https://docs.rs/subtle, checked 2026-11-20)
+- cbindgen generates C/C++ headers from Rust (https://github.com/mozilla/cbindgen, checked 2026-11-20)
+- cargo-deny checks advisories, bans, licenses, sources (https://embarkstudios.github.io/cargo-deny/, checked 2026-11-20)
+- cargo-auditable embeds dep list; read by cargo audit bin, trivy, grype, syft (https://github.com/rust-secure-code/cargo-auditable, checked 2026-11-20)
+- crates.io trusted publishing: GitHub Actions July 2025; GitLab.com and "Trusted Publishing Only" January 2026 (https://blog.rust-lang.org/2025/07/11/crates-io-development-update-2025-07, https://blog.rust-lang.org/2026/01/21/crates-io-development-update, checked 2026-11-20)
+- crates.io: supply chain attack on arrayref, August 2026 (https://blog.rust-lang.org/2026/08/20/supply-chain-attack-on-arrayref/, checked 2026-11-20)
+- Zig: stable 0.17.1 (2026-11-02), still 0.x (https://ziglang.org/download/, checked 2026-11-20)
+- Zig: optimize modes debug/safe keep safety checks, fast/small disable; `@setRuntimeSafety`; `@addWithOverflow`/`@mulWithOverflow` (https://ziglang.org/documentation/master/, checked 2026-11-20)
+- Zig: `@cImport`, `export`, `zig cc`, no hidden allocations (https://ziglang.org/learn/overview/, checked 2026-11-20)
+- Zig: `build.zig.zon` fields; `minimum_zig_version` advisory; url plus hash, hash is source of truth (https://codeberg.org/ziglang/zig/raw/branch/master/doc/build.zig.zon.md, checked 2026-11-20)
+- Zig: GeneralPurposeAllocator renamed DebugAllocator in 0.14 (https://ziglang.org/download/0.14.0/release-notes.html, checked 2026-11-20)
+- Ada: ISO/IEC 8652:2023 published May 2023 (https://www.iso.org/standard/83621.html via catalog listings, checked 2026-11-20)
+- SPARK: absence of runtime errors, functional correctness (https://www.adacore.com/about-spark, checked 2026-11-20); levels Stone to Platinum (https://docs.adacore.com/spark2014-docs/html/ug/en/source/gold_level.html, checked 2026-11-20)
+- GNAT: checks on by default; `-gnatp` suppresses all (https://gcc.gnu.org/onlinedocs/gnat_ugn/Run-Time-Checks.html, checked 2026-11-20); `-gnaty` style checks (https://gcc.gnu.org/onlinedocs/gnat_ugn/Style-Checking.html, checked 2026-11-20)
+- Alire: `alr build`, `alr with`, `alr update`, `alr toolchain --select`, `alire.toml` (https://alire.ada.dev/docs/, checked 2026-11-20)
+- Assembly: Microsoft x64 convention registers, shadow space, nonvolatile set, unwind data (https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention, checked 2026-11-20)
+- Assembly: SysV AMD64 arg registers, 128-byte red zone, 16-byte alignment (https://docs.oracle.com/cd/E53394_01/html/E61689/fcowb.html, checked 2026-11-20)
+- Assembly: AAPCS64 registers, x18 platform register, SP alignment (https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst, checked 2026-11-20)
+- Assembly: missing `.note.GNU-stack` warning since binutils 2.39 (https://www.redhat.com/en/blog/linkers-warnings-about-executable-stacks-and-segments, checked 2026-11-20)
+- Assembly: `-z cet-report`, `-z ibt`, `-z shstk` (https://sourceware.org/binutils/docs/ld/Options.html, checked 2026-11-20)
+- Assembly: `paciasp` valid BTI landing pad; `-mbranch-protection=standard` (https://developer.arm.com/community/arm-community-blogs/b/architectures-and-processors-blog/posts/p2-enabling-pac-and-bti-on-aarch64, checked 2026-11-20)
+- Objective-C: ARC `-fobjc-arc`, forbidden retain/release, bridged casts, `__weak` (https://clang.llvm.org/docs/AutomaticReferenceCounting.html, checked 2026-11-20)
+- Objective-C: `unarchivedObjectOfClass:fromData:error:` macOS 10.13+, iOS 11+ (https://developer.apple.com/documentation/foundation/nskeyedunarchiver/unarchivedobject(ofclass:from:), checked 2026-11-20)
+- Objective-C: `unarchiveObjectWithData:` deprecated iOS 12 / macOS 10.14 (https://developer.apple.com/forums/thread/734157, checked 2026-11-20)
+- Objective-C: `NSAllowsArbitraryLoads` default NO, needs App Store justification (https://developer.apple.com/documentation/bundleresources/information-property-list/nsapptransportsecurity/nsallowsarbitraryloads, checked 2026-11-20)
+- Objective-C: `NSTask` `executableURL` and `arguments` (https://developer.apple.com/documentation/foundation/process/executableurl, checked 2026-11-20)
+- Objective-C: Keychain Services (https://developer.apple.com/documentation/security/keychain-services, checked 2026-11-20)
+- SQLite: `sqlite3_bind_*` with `sqlite3_prepare_v2` (https://sqlite.org/c3ref/bind_blob.html, checked 2026-11-20)
+- D: latest DMD 2.114.0 (2026-11-01) (https://dlang.org/changelog/index.html, checked 2026-11-20)
+- D: `@safe`, `@trusted`, `@system`; DIP1000 scope checks only for `@safe` (https://dlang.org/spec/memory-safe-d.html, checked 2026-11-20)
+- D: `-release` and `-boundscheck=on|safeonly|off`, `-check` (https://dlang.org/dmd-linux.html, checked 2026-11-20)
+- D: `execute`/`spawnProcess` vs `executeShell`/`spawnShell`, `escapeShellCommand` (https://dlang.org/phobos/std_process.html, checked 2026-11-20)
+- D: ImportC (https://dlang.org/spec/importc.html, checked 2026-11-20)
+- D: commit `dub.selections.json` (https://github.com/dlang/dub/wiki/Version-management, checked 2026-11-20)
+- Nim: 2.4.2 listed on install page (https://nim-lang.org/install.html, checked 2026-11-20)
+- Nim: `-d:danger` turns off all runtime checks; default mm ORC (https://nim-lang.org/docs/nimc.html, checked 2026-11-20)
+- Nim: `execProcess` uses `poEvalCommand` by default; `poEvalCommand` only for trusted input (https://nim-lang.org/docs/osproc.html, checked 2026-11-20)
+- Nim: `db_connector` package, `import db_connector/db_sqlite` (https://nim-lang.org/docs/db_sqlite.html, checked 2026-11-20)
+- Nim: `nimble lock` writes `nimble.lock` (https://nim-lang.github.io/nimble/workflow.html, checked 2026-11-20)
+- V: latest 0.5.2 (2026-07-12), no stable/1.0 (https://github.com/vlang/v/releases, checked 2026-11-20)
+- Odin: monthly `dev-YYYY-MM` releases only (https://github.com/odin-lang/Odin/releases, checked 2026-11-20)
+
+## Changed from the previous text
+- c-cpp.md: title and version policy reformatted (em dash removed); added Contents.
+- c-cpp.md: new "Standards status" section: C23, C++23 identifiers, C++26 complete but unpublished, profiles not in C++26 (target C++29), GCC defaults, MSVC modes and `__cplusplus`.
+- c-cpp.md: hardening flags replaced by the OpenSSF baseline (added `-U_FORTIFY_SOURCE`, `_LIBCPP_HARDENING_MODE_FAST`, `-fstrict-flex-arrays=3`, `-Wl,-z,nodlopen`, `--as-needed`, production flags); dropped `-flto -fno-omit-frame-pointer` from the hardening block; `-ftrivial-auto-var-init=zero` moved to the production group; added `-fhardened`.
+- c-cpp.md: MSVC release flags: removed `/GL` and `/LTCG` from hardening (optimization, not security), added `/sdl` explanation and `/guard:ehcont` constraints.
+- c-cpp.md: `-Werror` now CI only; added C obsolete-construct errors.
+- c-cpp.md: new CMake guidance (minimum version policy, extensions OFF, PIE check, COMPILE_WARNING_AS_ERROR).
+- c-cpp.md: sanitizer CMake snippet now has an MSVC branch; MSVC ASan limits; `_FORTIFY_SOURCE` vs ASan; UBSan production rule; libFuzzer maintenance status.
+- c-cpp.md: added security bullets for commands, format strings, paths, secrets, crypto, TLS; `memset_explicit` (C23).
+- c-cpp.md: new sections Supply chain (vcpkg baseline, Conan lock, FetchContent hash), Traps and fixes, Legacy and memory-safety roadmap (CISA/FBI and CISA/NSA).
+- rust.md: version policy rewritten (edition 2024 needs 1.85+); new Edition 2024 safety section; new Security section (SQL, Command CVEs, Path::join, secrets, passwords, TLS, deserialization, integer overflow in release); panic across `extern "C"` aborts since 1.81; sanitizers nightly-only; `--locked`, cargo-auditable, malicious crates, trusted publishing; Traps and fixes; adding Rust to C/C++ codebases; folded the Documentation section into style.
+- sistemas-outros.md: new file.
+
+## Not verified
+- C2y publication timeline (only "experimental" in GCC docs).
+- Exact ISO publication date of C++26 (pending at check date).
+- MSVC C23 support (no `/std:c23` documented; written as "no C23 mode was documented").
+- Whether the CISA January 2026 roadmap date was enforced or changed after v2.0 (only v2.0 text used).
+- Clang support for `-fhardened` (not listed by OpenSSF; not claimed).
+- `-fzero-call-used-regs=used-gpr` (in OpenSSF conditional list; omitted to keep the block short).
+- Alire lockfile name (not found; omitted).
+- Clippy groups for `unwrap_used` and `indexing_slicing` (named as lints only, no group claimed).
+- GNAT `-gnatwa` description (removed).
+- `nimpretty` (removed).
+- Rust 1.100.0 release date (not shown on releases.rs; not written in the reference).
+- Carried over from the old text without a new primary check: clang-tidy check groups, Google Benchmark, perf/VTune/WPA, PGO flags, `criterion`, `proptest`, `cargo fuzz`, `cargo vet`, `cargo audit`, `rayon`, `thiserror`/`anyhow`, `bindgen`, `explicit_bzero`/`SecureZeroMemory`, `execve`/`posix_spawn`/`CreateProcessW`, `__builtin_cpu_supports`, `__builtin_*_overflow`.

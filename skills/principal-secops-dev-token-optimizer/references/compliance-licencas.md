@@ -1,4 +1,6 @@
-# Compliance for distributed software — licensing, SBOM, CRA
+# Compliance for distributed software: licensing, SBOM, CRA
+
+Version policy: follow `versoes-e-fontes.md`. Dates and licence terms here were checked on 2026-11-20; confirm a licence on the project's own LICENSE file and a legal date on EUR-Lex or the official gazette before relying on it.
 
 For anything shipped as a downloadable binary or reusing third-party source. Personal data and LGPD stay in `security-baseline.md`; this file is about the product itself.
 
@@ -30,8 +32,8 @@ For anything shipped as a downloadable binary or reusing third-party source. Per
 ## EU Cyber Resilience Act (Regulation 2024/2847)
 Applies to products with digital elements placed on the EU market, including software given away when there is a commercial dimension. Purely non-commercial open source development is out of scope, but donations, paid support or a commercial edition can pull a project in. Check the current scope rather than assuming a free project is exempt.
 
-* In force since 10 December 2024. The vulnerability and incident **reporting obligations have applied since 11 September 2026**; the **full obligations and CE marking apply from 11 December 2027**.
-* Reporting an actively exploited vulnerability: early warning within 24 hours, notification within 72 hours, final report within 14 days of a fix being available.
+* In force since 10 December 2024. Rules on conformity assessment bodies apply from 11 June 2026. The vulnerability and incident **reporting obligations (Art. 14) have applied since 11 September 2026**; the **full obligations and CE marking apply from 11 December 2027** (Art. 71).
+* Reporting an actively exploited vulnerability: early warning within 24 hours, notification within 72 hours, final report within 14 days of a corrective measure being available. A severe incident: 24 hours, 72 hours, final report within one month.
 * What to build in from the start rather than retrofit: secure-by-default configuration, no known exploitable vulnerabilities at release, an SBOM, a documented vulnerability handling process, a security contact with a coordinated disclosure policy, security updates over a stated support period, and integrity verification of updates.
 * A `SECURITY.md` carrying a contact address and a response commitment is the minimum entry point.
 

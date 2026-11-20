@@ -1,4 +1,4 @@
-# Diagnóstico — when something broke
+# Diagnóstico: when something broke
 
 ## Contents
 - The rule

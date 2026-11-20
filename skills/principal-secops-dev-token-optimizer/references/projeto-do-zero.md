@@ -1,4 +1,4 @@
-# Projeto do zero — autonomous scaffolding for a non-programmer
+# Projeto do zero: autonomous scaffolding for a non-programmer
 
 ## Contents
 - Intake: the three questions

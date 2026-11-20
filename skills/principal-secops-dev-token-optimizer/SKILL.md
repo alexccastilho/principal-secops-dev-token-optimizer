@@ -1,22 +1,22 @@
 ---
 name: principal-secops-dev-token-optimizer
 description: >
-  Use when the user asks for code, a site or system from scratch, forms, login or auth,
-  database or SQL, an API, integration, refactoring, bug fix, error message, performance,
-  deploy, dependency or version upgrade, code structure, tests or a security review, in any
-  language, even if they never say "security" or name a stack. Also use when they describe a
-  business problem needing a technical solution ("preciso de um sistema para...", "meu site
-  está...", "deu erro", "tá lento", "é seguro publicar?", "reorganize o projeto"), paste code
-  or a stack trace, or upload project files. Covers web (PHP, WordPress, Java, Node, Python,
-  JS, HTML/CSS, MySQL and other databases), native code (C, C++, Rust, CMake, hardening,
-  cross-compiling Win/Linux, file parsers, archives, memory safety, sanitizers, fuzzing),
-  desktop GUI (toolkit choice, Qt, drag and drop, dark mode, HiDPI, visual design, modern
-  look) and release compliance: licensing, GPL, SBOM, CRA, LGPD. Audience is a
-  NON-PROGRAMMER answered in plain pt-BR.
+  Use when the user asks for code, a site or system from scratch, forms, login, database or
+  SQL, an API, integration, refactoring, bug fix, error, performance, deploy, upgrade, code
+  structure, tests or a security review, in any language, even without saying "security" or
+  naming a stack. Also for a business problem ("preciso de um sistema
+  para...", "meu site está...", "deu erro", "tá lento", "é seguro publicar?", "reorganize o
+  projeto"), paste code or a stack trace, or upload project files. Covers web (PHP,
+  WordPress, Node/TS, Python, Java, .NET, Go, Ruby), databases (MySQL, PostgreSQL, SQL
+  Server, Firebird, SQLite, NoSQL, vector), legacy upkeep (Delphi, Pascal, Clipper, VB6,
+  FoxPro, COBOL), scripts (Lua, Perl, VBA, PowerShell, shell), data (R, Julia, MATLAB,
+  Fortran), mobile, native (C, C++, Rust, Zig, file parsers, archives, hardening, fuzzing),
+  desktop GUI (Qt, dark mode, HiDPI, drag and drop, visual design) and compliance (GPL,
+  SBOM, CRA, LGPD). Audience is a NON-PROGRAMMER answered in plain pt-BR.
 license: MIT
 metadata:
   author: Alex Camacho Castilho
-  version: "2.1.0"
+  version: "2.2.0"
   repository: https://github.com/alexccastilho/principal-secops-dev-token-optimizer
 ---
 
@@ -33,7 +33,7 @@ metadata:
 * Chat interface: send only the changed blocks with ~3 lines of context, naming file and location ("No arquivo `login.php`, substitua o bloco por volta da linha 40:"). Full files only for new files or on explicit request.
 * Agentic environment (file tools available): edit files directly with minimal scope, then report in 1-2 lines what changed and how to test.
 * No greetings, no closing summaries, no lectures, no apologies, no emoji.
-* pt-BR writing: short sentences, period instead of travessão (—), no "vale ressaltar", "é importante notar", "em última análise", "robusto", "crucial".
+* pt-BR writing: short sentences, period instead of travessão (U+2014), no "vale ressaltar", "é importante notar", "em última análise", "robusto", "crucial".
 
 ## 2. Mandatory workflow
 
@@ -110,26 +110,31 @@ Load ONLY what the current task touches, never all. A reference is read once per
 2. The language or toolkit file. It carries the API traps no general file can state.
 3. The database file, when the code touches a database.
 4. Anything the user asked for by name. "Precisa ficar bonito" is an explicit requirement, so `gui-design.md` ranks here.
-5. The general file (`gui-desktop.md`, `outras-linguagens.md`).
+5. The general file (`gui-desktop.md`, `outras-linguagens.md`, `sistemas-outros.md`).
 
 | Stack in task | Read |
 |---|---|
-| PHP, WordPress | `references/php.md` |
+| PHP, WordPress, Laravel, Symfony | `references/php.md` |
 | MySQL / MariaDB (any query, schema or tuning) | `references/mysql.md` |
-| PostgreSQL (incl. Supabase), SQLite, SQL Server, Oracle, MongoDB, Redis, Firebase | `references/bancos-outros.md` |
-| Node.js / JavaScript (backend or frontend) | `references/node-js.md` |
-| Java | `references/java.md` |
-| Python | `references/python.md` |
+| PostgreSQL (incl. Supabase), SQLite, SQL Server, Oracle, Firebird, Db2, DuckDB, CockroachDB, Access, DBF/Paradox | `references/bancos-outros.md` |
+| MongoDB, Redis/Valkey, Firebase, DynamoDB, Cassandra/ScyllaDB, Elasticsearch/OpenSearch, Neo4j, ClickHouse, InfluxDB, vector databases and RAG | `references/bancos-nosql.md` |
+| Node.js, TypeScript, Deno, Bun (backend or frontend) | `references/node-js.md` |
+| Java, Spring, Jakarta EE, Quarkus | `references/java.md` |
+| Python, Django, FastAPI, Flask | `references/python.md` |
 | HTML / CSS | `references/frontend.md` |
 | C or C++ (engine, parser, CLI, native library) | `references/c-cpp.md` |
 | Rust | `references/rust.md` |
+| Zig, Ada/SPARK, Assembly, Objective-C, D, Nim | `references/sistemas-outros.md` |
+| Delphi, Free Pascal/Lazarus, Pascal, Clipper/Harbour, xBase, Visual FoxPro, VB6, COBOL, RPG, OpenEdge, PowerBuilder, ABAP | `references/legado.md` |
+| R, Julia, MATLAB/Octave, Fortran, SAS, Jupyter, pandas, CSV/Excel export, data science | `references/dados-e-ciencia.md` |
+| Lua, Perl, VBA and Office/Access macros, Google Apps Script, PowerShell, Bash/shell, .bat/.cmd, AutoHotkey, Tcl | `references/scripts-e-automacao.md` |
 | Desktop binary, file parser, archive, extraction, installer, updater | `references/native-app-security.md` |
 | Licensing, GPL compatibility, third-party code, SBOM, release compliance | `references/compliance-licencas.md` |
 | Desktop app with a graphical interface, any toolkit | `references/gui-desktop.md` |
 | Qt 6, Widgets or QML, PySide | `references/qt.md` |
 | Slint, Avalonia, GTK, Flutter, Tauri, Electron, wxWidgets, WinUI, SwiftUI | `references/gui-outros.md` |
 | Anything about looking good: layout, typography, colour, spacing, dark mode, motion | `references/gui-design.md` |
-| Go, C#, Ruby, Kotlin, mobile, PowerShell, shell script | `references/outras-linguagens.md` |
+| Go, .NET (C#, F#, VB.NET), Ruby/Rails, Kotlin, Swift, Dart/Flutter, Scala, Elixir/Erlang, Clojure, Haskell, OCaml, Groovy/Jenkins, Crystal, mobile (Android, iOS, React Native) | `references/outras-linguagens.md` |
 | Auth, payments, personal data, upload, deploy, audit, dependency update, intrusion or unpatched flaw (0-day) | `references/security-baseline.md` |
 | New project from scratch | `references/projeto-do-zero.md` |
 | Something broke | `references/diagnostico.md` |
@@ -139,7 +144,8 @@ Load ONLY what the current task touches, never all. A reference is read once per
 
 Pairing rules:
 
-* **Database:** code that touches a database, even one query inside a PHP task, also loads the database file (`mysql.md` or `bancos-outros.md`).
+* **Database:** code that touches a database, even one query inside a PHP task, also loads the database file (`mysql.md`, `bancos-outros.md` for other relational engines, or `bancos-nosql.md`). Pick the engine in use. pgvector or RAG on PostgreSQL loads both database files, counted together as the one database slot.
+* **Legacy:** a legacy system is maintained, not rewritten. `legado.md` decides the staged path; pair it with the database it uses (Delphi with Firebird is the common case).
 * **Native:** code that parses a file it did not create, or builds a filesystem path out of data, also loads `native-app-security.md`. The language file alone does not cover it.
 * **GUI:** the toolkit file (`qt.md` or `gui-outros.md`) is required, not optional: a Qt task without `qt.md` misses the thread-affinity and model traps that cost a day each. Add `gui-desktop.md` for the engineering, and `gui-design.md` whenever the user asks for beautiful, modern or fluid.
 * **Versions:** numbers inside the reference files are examples frozen at writing time. They never override what the lookup in `versoes-e-fontes.md` returns.

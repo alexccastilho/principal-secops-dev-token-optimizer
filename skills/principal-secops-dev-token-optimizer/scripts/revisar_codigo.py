@@ -48,6 +48,51 @@ TEMPLATES = frozenset({".twig", ".html", ".htm", ".jinja", ".j2", ".njk", ".erb"
                        ".rb", ".py", ".php", ".phtml", ".liquid"})
 CONFIG = frozenset({".properties", ".ini", ".conf", ".yml", ".yaml", ".toml", ".env"})
 QT = C_FAMILY | PY | frozenset({".qml", ".ui"})
+# Linguagens cobertas a partir da 2.2.0. Cada grupo so recebe as regras que
+# significam a mesma coisa nele.
+PASCAL = frozenset({".pas", ".dpr", ".dpk", ".pp", ".lpr", ".dfm", ".lfm"})
+XBASE = frozenset({".prg", ".ch"})
+VB = frozenset({".bas", ".cls", ".frm", ".vb", ".vbs"})
+COBOL_RPG = frozenset({".cob", ".cbl", ".cpy", ".rpgle", ".sqlrpgle", ".srw", ".sru", ".srd"})
+ABAP = frozenset({".abap"})
+OPENEDGE = frozenset({".p", ".w"})
+LUA = frozenset({".lua"})
+PERL = frozenset({".pl", ".pm", ".t", ".cgi"})
+TCL = frozenset({".tcl"})
+AHK = frozenset({".ahk"})
+GAS = frozenset({".gs"})
+BATCH = frozenset({".bat", ".cmd"})
+PS = frozenset({".ps1", ".psm1", ".psd1"})
+SH = frozenset({".sh", ".bash"})
+R_LANG = frozenset({".r", ".rmd", ".qmd"})
+JULIA = frozenset({".jl"})
+FORTRAN = frozenset({".f90", ".f95", ".f03", ".f08", ".f18", ".f", ".for", ".f77"})
+SAS = frozenset({".sas"})
+GO = frozenset({".go"})
+CS = frozenset({".cs", ".cshtml", ".razor"})
+RUBY = frozenset({".rb", ".rake", ".erb", ".gemspec"})
+KOTLIN = frozenset({".kt", ".kts"})
+SWIFT = frozenset({".swift"})
+DART = frozenset({".dart"})
+SCALA = frozenset({".scala", ".sc", ".sbt"})
+BEAM = frozenset({".ex", ".exs", ".erl", ".hrl"})
+CLOJURE = frozenset({".clj", ".cljs", ".cljc"})
+HASKELL = frozenset({".hs", ".lhs"})
+OCAML = frozenset({".ml", ".mli"})
+GROOVY = frozenset({".groovy", ".gvy", ".jenkinsfile"})
+CRYSTAL = frozenset({".cr"})
+RUST = frozenset({".rs"})
+ZIG = frozenset({".zig"})
+ADA = frozenset({".adb", ".ads", ".gpr"})
+DLANG = frozenset({".d"})
+NIM = frozenset({".nim"})
+FSHARP = frozenset({".fs", ".fsi", ".fsx"})
+JAVA = frozenset({".java", ".jsp"})
+NEW_LANGS = (PASCAL | XBASE | VB | COBOL_RPG | ABAP | OPENEDGE | LUA | PERL | TCL | AHK | GAS
+             | R_LANG | JULIA | FORTRAN | SAS | BEAM | CLOJURE | HASKELL | OCAML | CRYSTAL
+             | ZIG | ADA | DLANG | NIM | FSHARP | RUBY | KOTLIN | SWIFT | DART | SCALA
+             | GO | CS | RUST | JAVA | PS | SH | BATCH
+             | frozenset({".mts", ".cts", ".ipynb", ".rules", ".dockerfile"}))
 
 # Extensoes analisadas ao varrer uma pasta. Um arquivo passado pelo nome e
 # analisado seja qual for a extensao.
@@ -56,24 +101,33 @@ CODE_SUFFIXES = C_FAMILY | PHP | PY | JS | TEMPLATES | CONFIG | frozenset({
     ".rs", ".swift", ".dart", ".sql", ".sh", ".bash", ".ps1", ".psm1",
     ".bat", ".cmd", ".json", ".xml", ".tf", ".cmake", ".qml", ".slint",
     ".xaml", ".axaml", ".ui", ".pem", ".key", ".htaccess",
-})
+}) | NEW_LANGS
 
 # Arquivos sem extensao util, pelo nome. O valor e o tipo usado nas regras.
 CODE_NAMES = {
     "CMakeLists.txt": ".cmake", "Makefile": ".mk", "makefile": ".mk",
     "GNUmakefile": ".mk", "Dockerfile": ".dockerfile", ".htaccess": ".htaccess",
     "id_rsa": ".key", "id_dsa": ".key", "id_ecdsa": ".key", "id_ed25519": ".key",
+    "Jenkinsfile": ".jenkinsfile", "Gemfile": ".rb", "Rakefile": ".rb",
 }
 
 # Linguagens em que "#" abre comentario. Em C e diretiva (#define com segredo
 # existe) e em JavaScript e campo privado de classe.
 HASH_COMMENT = PY | PHP | CONFIG | frozenset({
     ".sh", ".bash", ".rb", ".ps1", ".psm1", ".cmake", ".mk", ".dockerfile",
-    ".tf", ".htaccess",
-})
+    ".tf", ".htaccess", ".psd1", ".jenkinsfile",
+}) | PERL | TCL | R_LANG | JULIA | NIM | BEAM - frozenset({".erl", ".hrl"}) | CRYSTAL | RUBY
 # "--" so e comentario em SQL. Fora dele, "-----BEGIN PRIVATE KEY-----"
 # comeca com "--" e nao pode ser pulado.
-DASH_COMMENT = frozenset({".sql"})
+DASH_COMMENT = frozenset({".sql"}) | LUA | HASKELL | ADA
+# Outros marcadores de comentario de linha, por tipo de arquivo.
+EXTRA_COMMENT = {k: ("'", "rem ") for k in VB}
+EXTRA_COMMENT.update({k: ("rem ", "::", "@rem ") for k in BATCH})
+EXTRA_COMMENT.update({k: (";",) for k in AHK})
+EXTRA_COMMENT.update({k: ("!",) for k in FORTRAN})
+EXTRA_COMMENT.update({k: ("%",) for k in (".erl", ".hrl")})
+EXTRA_COMMENT.update({k: (";",) for k in CLOJURE})
+EXTRA_COMMENT.update({k: ("&&", "*") for k in XBASE})
 # "*" sozinho nao entra: em C, "*out = malloc(n * size);" e codigo.
 COMMENT_PREFIXES = ("//", "/*", "* ", "*/", "<!--")
 
@@ -101,6 +155,7 @@ class Rule:
     only: Optional[FrozenSet[str]] = None  # tipos de arquivo; None = todos
     secret: bool = False                   # a linha casada contem um segredo
     precise: bool = False                  # formato inconfundivel: roda tambem em comentario e linha longa
+    skip: Optional[FrozenSet[str]] = None  # tipos onde o padrao significa outra coisa
 
 
 def _rx(p: str, case: bool = False) -> "re.Pattern[str]":
@@ -121,10 +176,14 @@ _KEYWORDS = (r"(?:senha|password|passwd|pwd|(?<![a-z])pass|dbpass|secret|token|"
              r"api[_-]?key|apikey|access[_-]?key|client[_-]?secret|private[_-]?key|"
              r"secret[_-]?key|app[_-]?key|encryption[_-]?key)")
 
+# Fim de uma chamada de comando: texto juntado com variavel, ou interpolado.
+_SHELL_TAIL = r"""[^\n;]{0,200}?(?:["']\s*(?:\+|&|\.\.|\+\+|\^|~|//)\s*[\w$(]|["']\s*\.\s*\$|"[^"\n]*\$[A-Za-z_{]|#\{|\bpaste0?\s*\()"""
+_SQL_CLAUSE = r"\b(?:where|values|set|and|or|like|in|limit|offset|having|by)\b"
+
 RULES: List[Rule] = [
     # --- Segredos no codigo (OWASP A02/A04) ---
     Rule("secret-atribuido", "HIGH",
-         _rx(_KEYWORDS + r"""["']?\s*\]?\s*(?:=>|[:=])\s*["'](?P<v>[^"'{}$\s<|]{6,})["']"""
+         _rx(_KEYWORDS + r"""["']?\s*\]?\s*(?:=>|:=|[:=])\s*["'](?P<v>[^"'{}$\s<|]{6,})["']"""
              r"""|\bdefine\s*\(\s*["']\w*(?:PASS|SENHA|SECRET|TOKEN|KEY|SALT)\w*["']\s*,\s*["'](?P<w>[^"'\s]{6,})["']"""
              r"""|#\s*define\s+\w*(?:PASS|SENHA|SECRET|TOKEN|KEY)\w*\s+"(?P<u>[^"\s]{6,})\""""),
          "Segredo escrito direto no codigo.",
@@ -148,8 +207,8 @@ RULES: List[Rule] = [
     Rule("token-de-servico", "HIGH",
          _rx(r"\b(?:ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{22,}|glpat-[A-Za-z0-9_-]{20,}|"
              r"[sr]k_live_[A-Za-z0-9]{16,}|xox[baprs]-[A-Za-z0-9-]{10,}|AIza[0-9A-Za-z_-]{35}|"
-             r"APP_USR-[0-9a-f-]{20,}|sk-ant-[A-Za-z0-9_-]{20,}|sk-proj-[A-Za-z0-9_-]{20,})", case=True),
-         "Chave de servico externo (GitHub, Stripe, Google, Mercado Pago, Slack ou IA) exposta.",
+             r"APP_USR-[0-9a-f-]{20,}|sk-ant-[A-Za-z0-9_-]{20,}|sk-proj-[A-Za-z0-9_-]{20,}|sb_secret_[A-Za-z0-9_-]{16,})", case=True),
+         "Chave de servico externo (GitHub, Stripe, Google, Mercado Pago, Slack, Supabase ou IA) exposta.",
          "Revogue a chave no painel do servico agora, gere outra e leia de variavel de ambiente.",
          secret=True, precise=True),
     Rule("conexao-com-senha", "HIGH",
@@ -158,10 +217,10 @@ RULES: List[Rule] = [
          "Monte a conexao a partir de variaveis de ambiente.",
          secret=True, precise=True),
     Rule("segredo-em-config", "MEDIUM",
-         _rx(r"""^\s*(?:(?:export|ENV|ARG)\s+)?["']?[\w.\-]*(?:password|passwd|pwd|senha|secret|token|api[_-]?key|access[_-]?key|private[_-]?key)[\w.\-]*["']?\s*[:=]\s*(?P<v>[^\s"'#${<%*!\[][^\s"'#]{5,})\s*(?:#.*)?$"""),
+         _rx(r"""^\s*(?:(?:export|ENV|ARG|@?set)\s+"?)?["']?[\w.\-]*(?:password|passwd|pwd|senha|secret|token|api[_-]?key|access[_-]?key|private[_-]?key)[\w.\-]*["']?\s*[:=]\s*(?P<v>[^\s"'#${<%*!\[][^\s"'#]{5,})\s*(?:#.*)?$"""),
          "Possivel segredo em arquivo de configuracao.",
          "Se o arquivo vai para o Git, deixe o valor vazio aqui e ponha o valor real no .env, que fica fora do Git.",
-         only=CONFIG | frozenset({".sh", ".bash", ".dockerfile"}), secret=True),
+         only=CONFIG | BATCH | frozenset({".sh", ".bash", ".dockerfile"}), secret=True),
 
     # --- SQL montado por concatenacao (OWASP A05) ---
     Rule("sql-concat-php", "HIGH",
@@ -230,7 +289,8 @@ RULES: List[Rule] = [
     Rule("eval-js-py", "MEDIUM",
          _rx(r"\beval\s*\(|\bnew\s+Function\s*\("),
          "Uso de eval.",
-         "Substitua por logica explicita ou JSON.parse."),
+         "Substitua por logica explicita ou JSON.parse.",
+         skip=XBASE),
 
     # --- Hash e criptografia fraca (OWASP A04) ---
     Rule("hash-fraco-senha", "HIGH",
@@ -246,7 +306,13 @@ RULES: List[Rule] = [
          "Numero aleatorio previsivel usado onde pode virar token.",
          "Para token ou senha use random_bytes, secrets ou crypto.randomBytes."),
     Rule("tls-desligado", "HIGH",
-         _rx(r"""\bverify\s*=\s*False\b|rejectUnauthorized\s*:\s*false|CURLOPT_SSL_VERIFY(?:PEER|HOST)\s*,\s*(?:false|0)\b|InsecureSkipVerify\s*:\s*true|NODE_TLS_REJECT_UNAUTHORIZED["'\]\s]*=\s*["']?0"""),
+         _rx(r"""\bverify\s*=\s*False\b|rejectUnauthorized\s*:\s*false|CURLOPT_SSL_VERIFY(?:PEER|HOST)\s*,\s*(?:false|0)\b|InsecureSkipVerify\s*:\s*true|NODE_TLS_REJECT_UNAUTHORIZED["'\]\s]*=\s*["']?0"""
+             r"""|danger_accept_invalid_(?:certs|hostnames)\s*\(\s*true|ServerCertificateCustomValidationCallback\s*=[^;\n]*=>\s*true\b"""
+             r"""|badCertificateCallback\s*=[^;\n]*=>\s*true\b|hostnameVerifier\s*\{\s*\w+\s*,\s*\w+\s*->\s*true"""
+             r"""|setHostnameVerifier\s*\(\s*\(?\s*\w+\s*,\s*\w+\s*\)?\s*->\s*true|NoopHostnameVerifier|ALLOW_ALL_HOSTNAME_VERIFIER"""
+             r"""|TrustServerCertificate\s*=\s*(?:true|yes)\b|VerifyMode\s*:=\s*\[\s*\]|\{\s*verify\s*,\s*verify_none\s*\}"""
+             r"""|SSL_VERIFY_NONE\b|usesCleartextTraffic\s*=\s*.true|cleartextTrafficPermitted\s*=\s*.true"""
+             r"""|\bcurl\b[^\n|]*\s(?:-[a-zA-Z]*k[a-zA-Z]*|--insecure)\b|\bwget\b[^\n|]*--no-check-certificate"""),
          "Verificacao do certificado HTTPS desligada.",
          "Nunca desligue em producao. Corrija o certificado."),
 
@@ -394,6 +460,169 @@ RULES: List[Rule] = [
          _rx(r"processEvents\s*\(|\bDoEvents\s*\(|\bdo_events\s*\("),
          "Loop de eventos rodado a mao para a janela nao congelar.",
          "Isso reentra nos seus proprios tratadores e gera bug intermitente. Mova o trabalho pesado para uma thread."),
+    # --- Linguagens cobertas na 2.2.0: SQL montado (OWASP A05) ---
+    Rule("sql-concat-outros", "HIGH",
+         # & (VB, VBA, Nim), .. (Lua), || e // (SAS, Fortran), ++ ^ ~ <> (Haskell, OCaml, D, Elixir).
+         # Exige uma clausula SQL antes da juncao: "selecione um item da lista: " & x nao e SQL.
+         _rx(_sql_head(r";\n") + r"[^\n]{0,200}?" + _SQL_CLAUSE
+             + r"""[^\n]{0,120}?["']\s*(?:&|\.\.|\|\||//|\+\+|\^|~|<>)\s*[A-Za-z_(]"""),
+         "SQL montado juntando texto com variavel.",
+         "Use consulta parametrizada: o valor vai separado, nunca dentro do texto do SQL.",
+         only=VB | NIM | LUA | SAS | FORTRAN | HASKELL | OCAML | DLANG | BEAM),
+    Rule("sql-interpolado", "HIGH",
+         # "$x", "${x}", "#{x}" e "\(x)" num SQL com aspas duplas, depois de uma clausula
+         # (where, values, set...). fr"..." (doobie) e sql"..." sao parametrizados pela biblioteca.
+         _rx(r'(?<!fr)(?<!sql)(?<!")"[^"\n]*?' + _sql_head(r'"\n') + r'[^"\n]*?' + _SQL_CLAUSE
+             + r'[^"\n]*?(?:\$\{?[A-Za-z_]|#\{|\\\()'),
+         "SQL montado com interpolacao de variavel dentro do texto.",
+         "Use consulta parametrizada (? ou :nome) e passe o valor separado.",
+         only=PERL | TCL | RUBY | CRYSTAL | BEAM | KOTLIN | DART | SCALA | JULIA | PS | SH | SWIFT),
+    Rule("sql-format", "HIGH",
+         _rx(r"""\b(?:Sprintf|format!|String\.format|Printf\.sprintf|paste0?|sprintf|glue)\s*\(\s*&?["']""" + _sql_head(r"\"'\n")
+             + r"[^\n]*?" + _SQL_CLAUSE + r"""[^\n]*?(?:%[sdvq]|\{[\w:]*\}|["']\s*,)"""),
+         "SQL montado com funcao de formatacao de texto.",
+         "Use consulta parametrizada: o valor vai separado, nunca dentro do texto do SQL.",
+         only=GO | RUST | OCAML | JAVA | KOTLIN | SCALA | HASKELL | R_LANG),
+    Rule("sql-raw-dotnet", "HIGH",
+         # FromSql($"...{x}") e FromSqlInterpolated sao parametrizados; os "Raw" nao.
+         _rx(r"""\b(?:FromSqlRaw|ExecuteSqlRaw(?:Async)?|SqlQueryRaw)\s*\(\s*(?:\$@?"|@\$"|"[^"\n]*"\s*\+)"""),
+         "SQL cru do Entity Framework montado com interpolacao ou concatenacao.",
+         "Troque por FromSql($\"... {valor}\") ou ExecuteSql, que viram parametros.",
+         only=CS),
+    Rule("sql-rails-interp", "HIGH",
+         _rx(r"""\b(?:where|find_by_sql|order|having|joins|group|exec_query|select_all|pluck)\s*\(\s*"[^"\n]*#\{"""),
+         "Consulta do Rails montada com interpolacao.",
+         "Use where(\"nome = ?\", valor) ou where(nome: valor).",
+         only=RUBY),
+    Rule("sql-fragment-const", "HIGH",
+         _rx(r"""\bFragment\.const0?\s*\(\s*s\""""),
+         "Fragmento SQL do doobie montado com interpolacao de texto.",
+         "Use fr\"... $valor\", que vira parametro.",
+         only=SCALA),
+    Rule("sql-dinamico-legado", "MEDIUM",
+         _rx(r"""\bEXEC\s+SQL\s+(?:PREPARE\b[^\n]*\bFROM\s+:|EXECUTE\s+IMMEDIATE\s+:)|\b(?:WHERE|FROM)\s+\(\s*\w+\s*\)"""),
+         "SQL dinamico em COBOL, RPG ou ABAP.",
+         "Prefira SQL estatico com variaveis de host. Se for dinamico, valide contra lista permitida (ABAP: cl_abap_dyn_prg).",
+         only=COBOL_RPG | ABAP),
+    Rule("mongo-filtro-cru", "HIGH",
+         _rx(r"""\.(?:find|findOne|findOneAndUpdate|updateOne|updateMany|deleteOne|deleteMany|countDocuments)\(\s*req\.(?:body|query|params)\s*[,)]"""),
+         "Objeto da requisicao usado direto como filtro do MongoDB (injecao de operador).",
+         "Monte o filtro campo a campo, convertendo cada valor: { email: String(req.body.email) }.",
+         only=JS),
+
+    # --- Linguagens cobertas na 2.2.0: comando de sistema montado (OWASP A05) ---
+    Rule("shell-montado", "HIGH",
+         # Nome exato (maiusculas contam) em forma de chamada: "System.out.println" e "Shell: " em texto nao sao comando.
+         _rx(r"""(?:(?<!["'\w.])(?:os\.execute|io\.popen|system2?|exec|qx|spawn|IO\.popen|Shell|ShellExecute(?:Ex)?[AW]?|WinExec"""
+             r"""|CreateProcess[AW]?|shell|execute_command_line|callCommand|spawnCommand|Sys\.command|Unix\.system"""
+             r"""|Unix\.open_process(?:_in)?|executeShell|spawnShell|execCmd|execShellCmd|execCmdEx)\s*[(\s]"""
+             r"""|:os\.cmd\s*\(|Runtime\.getRuntime\(\)\.exec\s*\(|\bcall\s+system\s*\(|\.Run\s*\(?\s*")""" + _SHELL_TAIL, case=True),
+         "Comando de sistema montado com dado variavel.",
+         "Chame o programa com os argumentos separados, sem shell, e valide o valor contra uma lista permitida.",
+         only=LUA | PERL | VB | PASCAL | R_LANG | FORTRAN | HASKELL | OCAML | DLANG | NIM | BEAM
+         | JAVA | KOTLIN | SCALA | GROOVY | RUBY | CRYSTAL),
+    Rule("shell-montado", "HIGH",
+         # Clipper/Harbour: RUN e um comando no inicio da linha.
+         _rx(r"""(?:^\s*RUN\b|\b__Run\s*\(|\bhb_processRun\s*\()""" + _SHELL_TAIL),
+         "Comando de sistema montado com dado variavel.",
+         "Chame o programa com os argumentos separados (hb_processRun com lista) e valide o valor contra uma lista permitida.",
+         only=XBASE),
+    Rule("shell-crase", "HIGH",
+         _rx(r"""`[^`\n]*(?:#\{|\$[A-Za-z_{])"""),
+         "Comando de sistema entre crases com variavel dentro.",
+         "Use system(\"programa\", arg1, arg2), que nao passa pelo shell.",
+         only=RUBY | CRYSTAL | PERL),
+    Rule("shell-c-montado", "HIGH",
+         _rx(r"""\bexec\.Command(?:Context)?\s*\([^\n]*"(?:sh|bash|cmd(?:\.exe)?|powershell)"\s*,\s*"(?:-c|/c|-Command)"[^\n]*(?:"\s*\+|\+\s*"|Sprintf)"""
+             r"""|\brun\s*\(\s*`(?:sh|bash)\s+-c\b|\bProcess\.run\s*\(\s*['"](?:sh|bash)['"]\s*,\s*\[\s*['"]-c['"]"""
+             r"""|\bSeq\s*\(\s*"(?:sh|bash)"\s*,\s*"-c"|\bRun(?:Wait)?\s*,?\s*\(?\s*A_ComSpec\b[^\n]*['"]\s+[A-Za-z_%]"""),
+         "Comando montado e passado para o shell (sh -c, cmd /c).",
+         "Chame o programa direto, com os argumentos em lista, sem shell.",
+         only=GO | JULIA | DART | SCALA | AHK),
+    Rule("jenkins-sh-interpolado", "HIGH",
+         _rx(r"""\bsh\s*\(?\s*(?:script\s*:\s*)?"[^"\n]*\$\{?\s*(?:params|env)\."""),
+         "Parametro do Jenkins interpolado pelo Groovy dentro de um comando sh.",
+         "Use aspas simples e deixe o shell ler a variavel: sh 'deploy \"$BRANCH\"'.",
+         only=GROOVY),
+    Rule("powershell-iex", "HIGH",
+         _rx(r"""\b(?:Invoke-Expression|iex)\b\s*(?:\(|"[^"\n]*\$|\$)|\|\s*(?:iex|Invoke-Expression)\b"""),
+         "Invoke-Expression executa texto montado ou baixado como codigo.",
+         "Chame o comando direto (& comando -Parametro $valor). Para script baixado, salve, leia e so depois rode.",
+         only=PS),
+    Rule("shell-baixa-e-executa", "HIGH",
+         _rx(r"""\b(?:curl|wget|irm|iwr|Invoke-RestMethod|Invoke-WebRequest)\b[^|\n]*\|\s*(?:sudo\s+)?(?:ba|z|da)?sh\b"""),
+         "Script baixado da internet e executado direto, sem leitura.",
+         "Baixe para um arquivo, confira o conteudo (e o hash, se publicado) e so depois execute.",
+         only=SH | PS | frozenset({".dockerfile", ".yml", ".yaml"})),
+    Rule("shell-eval", "HIGH",
+         # eval "$(ssh-agent -s)" e uso comum de ferramenta conhecida; o risco e eval de variavel.
+         _rx(r"""^\s*eval\s+"?\$(?!\()"""),
+         "eval em shell executa o conteudo de uma variavel como comando.",
+         "Use um array: cmd=(prog --opcao \"$valor\"); \"${cmd[@]}\".",
+         only=SH),
+    Rule("securestring-literal", "HIGH",
+         _rx(r"""ConvertTo-SecureString\s+(?:-String\s+)?["'][^"'$]{4,}["'][^\n]*-AsPlainText"""),
+         "Senha escrita no script e convertida com -AsPlainText.",
+         "Peca a senha com Read-Host -AsSecureString ou use o Gerenciador de Credenciais do Windows.",
+         only=PS, secret=True),
+
+    # --- Linguagens cobertas na 2.2.0: codigo carregado em tempo de execucao ---
+    Rule("codigo-dinamico", "HIGH",
+         _rx(r"""\bloadstring\s*\(|\bload\s*\(\s*[^,()"']+\)"""),
+         "Texto carregado e executado como codigo (Lua).",
+         "Use load(texto, nome, \"t\", ambiente_restrito) e nunca entregue os, io ou require ao script.",
+         only=LUA),
+    Rule("codigo-dinamico", "HIGH",
+         _rx(r"""&\(\s*\w"""),
+         "Macro do Clipper/Harbour executa texto como codigo.",
+         "Troque a macro por um bloco de codigo fixo ou por uma lista de opcoes permitidas.",
+         only=XBASE),
+    Rule("codigo-dinamico", "HIGH",
+         _rx(r"""(?<![\w/."-])(?:read-string|load-string)\b|\(eval\s|\bEval\.(?:me|x|xy|xyz)\s*\(|GroovyShell\s*\([^)]*\)\s*\.evaluate|\beval\s*\(\s*parse\s*\("""),
+         "Texto carregado e executado como codigo.",
+         "Nao execute texto vindo de fora. Use um parser de dados (JSON, EDN, numero) ou uma lista de opcoes.",
+         only=CLOJURE | GROOVY | R_LANG),
+    Rule("beam-atomo-e-termo", "HIGH",
+         _rx(r"""\b(?:String\.to_atom|List\.to_atom|binary_to_atom|list_to_atom)\s*\(|(?<![\w.])(?::erlang\.)?binary_to_term\s*\((?![^)\n]*:?safe)"""),
+         "Atomo criado a partir de entrada (esgota a memoria da VM) ou termo desserializado sem :safe.",
+         "Mapeie a entrada para atomos fixos e use binary_to_term(bin, [:safe]) ou Plug.Crypto.non_executable_binary_to_term.",
+         only=BEAM),
+    Rule("desserializacao-dotnet", "HIGH",
+         _rx(r"""\bnew\s+(?:BinaryFormatter|SoapFormatter|NetDataContractSerializer|LosFormatter|ObjectStateFormatter)\b"""
+             r"""|TypeNameHandling\s*=\s*TypeNameHandling\.(?:All|Objects|Auto|Arrays)"""),
+         "Desserializador .NET que executa tipos escolhidos pelo dado.",
+         "Use System.Text.Json com tipos fixos. BinaryFormatter lanca excecao a partir do .NET 9.",
+         only=CS | FSHARP | VB),
+    Rule("perl-open-2-args", "MEDIUM",
+         _rx(r"""\bopen\s*\(?\s*(?:my\s+)?[$\w]+\s*,\s*\$\w+\s*\)"""),
+         "open com dois argumentos: o nome do arquivo pode virar comando (\"| rm -rf\").",
+         "Use a forma de tres argumentos: open(my $fh, '<', $caminho).",
+         only=PERL),
+    Rule("tcl-expr-sem-chaves", "MEDIUM",
+         _rx(r"""\bexpr\s+(?!\{)[^\]\n]*\$"""),
+         "expr sem chaves avalia o valor da variavel de novo (injecao de codigo).",
+         "Sempre use chaves: expr {$a + $b}.",
+         only=TCL),
+    Rule("apps-script-sem-escape", "MEDIUM",
+         _rx(r"""<\?!=\s*(?!include\b)"""),
+         "<?!= imprime sem escape no HtmlService (Apps Script).",
+         "Use <?= valor ?>, que escapa. Deixe <?!= so para include de arquivo seu.",
+         only=GAS | frozenset({".html"})),
+    Rule("pg-hba-trust", "HIGH",
+         _rx(r"""^\s*host(?:ssl|nossl)?\s+\S+\s+\S+\s+(?!127\.0\.0\.1/32\b|::1/128\b|samehost\b)\S+\s+trust\b"""),
+         "PostgreSQL aceita conexao de rede sem senha (trust).",
+         "Troque trust por scram-sha-256 nas linhas host.",
+         only=CONFIG),
+    Rule("firebase-regra-aberta", "HIGH",
+         _rx(r"""allow\s+(?:read\s*,\s*)?write(?:\s*,\s*read)?\s*:\s*if\s+true\s*;"""),
+         "Regra do Firebase deixa qualquer pessoa gravar.",
+         "Exija login e dono: allow write: if request.auth != null && request.auth.uid == userId;",
+         only=frozenset({".rules"})),
+    Rule("seguranca-desligada-nativo", "MEDIUM",
+         _rx(r"""@setRuntimeSafety\s*\(\s*false|\bpragma\s+Suppress\s*\(\s*All_Checks|-gnatp\b"""),
+         "Verificacoes de seguranca do compilador desligadas (Zig ou Ada).",
+         "Desligue so no trecho medido como gargalo, com comentario explicando, nunca no projeto inteiro.",
+         only=ZIG | ADA | frozenset({".gpr"})),
 ]
 
 # Quando a regra da esquerda casa numa linha, a da direita e redundante.
@@ -405,6 +634,9 @@ SUPERSEDES = {
     "token-de-servico": "segredo-em-config",
     "sql-concat-java": "sql-concat",
     "c-alloca": "c-alloc-multiplicacao",
+    "sql-raw-dotnet": "sql-concat",
+    "codigo-dinamico": "eval-js-py",
+    "shell-montado": "c-comando-shell",
 }
 
 SECRET_RULES = [r for r in RULES if r.secret]
@@ -541,7 +773,10 @@ def _is_comment(stripped: str, kind: str) -> bool:
         return True
     if kind in HASH_COMMENT and stripped.startswith("#"):
         return True
-    return kind in DASH_COMMENT and stripped.startswith("--")
+    if kind in DASH_COMMENT and stripped.startswith("--"):
+        return True
+    extra = EXTRA_COMMENT.get(kind)
+    return bool(extra) and stripped.lower().startswith(extra)
 
 
 def scan_file(path: Path, notes: Dict[str, int]) -> List[Finding]:
@@ -577,6 +812,8 @@ def scan_file(path: Path, notes: Dict[str, int]) -> List[Finding]:
             if precise_only and not rule.precise:
                 continue
             if rule.only is not None and kind not in rule.only:
+                continue
+            if rule.skip is not None and kind in rule.skip:
                 continue
             if rule.secret and secret_home:
                 continue

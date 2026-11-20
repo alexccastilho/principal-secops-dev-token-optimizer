@@ -20,7 +20,8 @@ Skill para **Claude Code** e **claude.ai** que faz o Claude trabalhar como um de
 - **Fala a língua de quem não programa.** As respostas vêm em pt-BR claro: onde colocar o arquivo, qual comando rodar e como testar o caso certo e o caso de erro.
 - **Economiza tokens.** Manda só os trechos que mudaram, carrega as referências por demanda e respeita um limite de arquivos por tarefa.
 - **Pesquisa versões em vez de chutar.** Lê a versão que o projeto usa e consulta o status de suporte atual, em vez de confiar na memória do modelo.
-- **Verifica antes de entregar.** Traz o scanner `scripts/revisar_codigo.py` (Python 3.8+, só biblioteca padrão), que procura segredos no código, SQL concatenado, hash fraco, saída sem escape, `eval`/`exec`, chamadas de shell e armadilhas de memória em C, C++ e Rust.
+- **Verifica antes de entregar.** Traz o scanner `scripts/revisar_codigo.py` (Python 3.8+, só biblioteca padrão, 77 regras em 151 tipos de arquivo), que procura segredos no código, SQL montado com texto, hash fraco, saída sem escape, `eval`/`exec`, comandos de sistema montados com dado, verificação TLS desligada e armadilhas de memória em C, C++ e Rust.
+- **Mantém sistema legado em vez de reescrever.** Delphi, Clipper/Harbour, VB6, FoxPro, COBOL, VBA: backup primeiro, segurança onde ele está, migração em etapas. Novidade da 2.2.0.
 
 ## Dois modos
 
@@ -36,17 +37,32 @@ Skill para **Claude Code** e **claude.ai** que faz o Claude trabalhar como um de
 
 Extras opcionais, escolhidos no início: remover comentários que só repetem o código e podar testes que não pegariam um bug real (testes de segurança e de bugs já corrigidos ficam sempre).
 
+## O que a skill não faz
+
+- **Não é teste de invasão nem auditoria profissional.** O scanner lê o código linha por linha com padrões; não segue o dado entre arquivos, não roda nem ataca o sistema. Uma varredura limpa não prova nada sozinha.
+- **Não reescreve nem reorganiza o que você não pediu.** No modo normal mexe só no que o pedido precisa. Refatoração completa só no modo refatoração, com pedido explícito, num branch próprio do Git.
+- **Não atualiza dependências nem versões por conta própria,** e nunca afirma versão, fim de suporte ou "a mais recente" de memória: consulta a fonte oficial antes e diz quando consultou.
+- **Não publica, não faz push, não apaga dados e não roda comandos destrutivos** sem perguntar antes.
+- **Não é consultoria jurídica.** Para LGPD, GPL ou CRA aplica as regras publicadas e aponta a fonte; os casos de fronteira são com um advogado.
+- **Não responde em outros idiomas.** A conversa é em português do Brasil; identificadores e comentários de código ficam em inglês.
+- **Limites do scanner:** arquivos acima de 1 MB e binários ficam de fora; linhas acima de 500 caracteres recebem só as regras de segredo; notebooks Jupyter são lidos como texto JSON, então só as regras que valem para qualquer linguagem se aplicam a eles.
+- **Nunca imprime nem guarda um segredo.** Segredo achado no código é relatado com a linha escondida.
+
 ## Cobertura
 
 | Área | Referências |
 |---|---|
-| Web | PHP e WordPress, Java, Node.js e JavaScript, Python, HTML e CSS |
-| Bancos de dados | MySQL e MariaDB, PostgreSQL e Supabase, SQLite, SQL Server, Oracle, MongoDB, Redis, Firebase |
-| Código nativo | C, C++, Rust, CMake, flags de hardening, sanitizers, fuzzing |
+| Web | PHP (WordPress, Laravel, Symfony), Node.js e TypeScript (Express, Fastify, NestJS, Next.js, Deno, Bun), Python (Django, FastAPI, Flask), Java (Spring Boot, Jakarta EE, Quarkus), HTML, CSS, acessibilidade, CSP |
+| Bancos relacionais | MySQL e MariaDB, PostgreSQL e Supabase, SQLite, SQL Server, Oracle, Firebird, Db2, DuckDB, CockroachDB, Access, DBF/Paradox |
+| NoSQL e vetoriais | MongoDB, Redis/Valkey, Firebase, DynamoDB, Cassandra/ScyllaDB, Elasticsearch/OpenSearch, Neo4j, ClickHouse, InfluxDB, bancos vetoriais e RAG |
+| Legado e sistemas comerciais | Delphi, Free Pascal/Lazarus, Pascal, Clipper/Harbour, Visual FoxPro, VB6, COBOL, RPG, OpenEdge, PowerBuilder, ABAP |
+| Scripts e automação | Lua, Perl, VBA e macros do Office/Access, Google Apps Script, PowerShell, Bash/shell, .bat/.cmd, AutoHotkey, Tcl |
+| Dados e ciência | R, Julia, MATLAB/Octave, Fortran, SAS, Jupyter, pandas/Polars, exportação CSV/Excel, LGPD em bases de dados |
+| Outras linguagens e mobile | Go, C#/F#/VB.NET, Ruby/Rails, Kotlin, Swift, Dart/Flutter, Scala, Elixir/Erlang, Clojure, Haskell, OCaml, Groovy/Jenkins, Crystal, Android, iOS, React Native |
+| Nativo e sistemas | C, C++, Rust, Zig, Ada/SPARK, Assembly, Objective-C, D, Nim, CMake, flags de hardening, sanitizers, fuzzing |
 | Desktop e GUI | escolha do toolkit, Qt 6, Slint, Avalonia, GTK, Flutter, Tauri, Electron, design visual |
 | Estrutura | onde o código mora, acoplamento, casos especiais, testes que protegem comportamento, refatoração completa |
 | Processo | projeto do zero, diagnóstico de erros, versões e fontes, conformidade (GPL, SBOM, CRA) |
-| Outras linguagens | Go, C#, Ruby, Kotlin, mobile, PowerShell, shell script |
 
 ## Instalação
 
@@ -115,6 +131,10 @@ python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --
 
 Código de saída 0 quer dizer nenhum achado HIGH, 1 quer dizer pelo menos um HIGH, e 2 quer dizer caminho errado ou nada legível, o que não é aprovação. Ele nunca imprime o valor de um segredo: o trecho some na linha inteira. Uma varredura limpa não prova nada sozinha; o checklist da skill continua valendo.
 
+## Benchmark
+
+O mesmo app pequeno (contatos com login e SQLite) foi pedido ao Claude Code com e sem a skill, em PHP, Python, Node.js, Java, C# e Go, numa configuração limpa, sem outros plugins. Tokens, tempo, custo, linhas de código, compilação e achados de segurança estão comparados em [BENCHMARK.pt-BR.md](BENCHMARK.pt-BR.md), junto com o método e como reproduzir.
+
 ## Estrutura do repositório
 
 ```
@@ -133,7 +153,9 @@ skills/principal-secops-dev-token-optimizer/
 tests/                     # suíte de testes (unittest da biblioteca padrão)
 tools/build_zip.py         # gera o ZIP para o claude.ai
 tools/make_icon.py         # desenha o ícone do plugin (precisa do Pillow)
-docs/                      # traduções e o relatório de revisão da v2.0.0
+benchmark/                 # benchmark com e sem a skill (run_benchmark.py, analyze.py, results/)
+docs/                      # traduções, BENCHMARK e o relatório de revisão da v2.0.0
+docs/research/             # registros de evidência da 2.2.0: um fato verificado por linha, com URL e data (em inglês)
 ```
 
 ## Desenvolvimento

@@ -24,10 +24,9 @@ LANG_DOCS = {
 STYLE_CHECKED = [p for trio in LANG_DOCS.values() for p in trio] + [
     ROOT / "SECURITY.md",
     SKILL_DIR / "THIRD_PARTY_NOTICES.md",
-    SKILL_DIR / "references" / "estrutura.md",
-    SKILL_DIR / "references" / "refatoracao-completa.md",
+    SKILL_DIR / "SKILL.md",
     ROOT / "commands" / "secops-refatorar.md",
-]
+] + sorted((SKILL_DIR / "references").glob("*.md"))
 
 
 def read(path):

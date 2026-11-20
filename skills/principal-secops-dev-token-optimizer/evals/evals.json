@@ -363,6 +363,90 @@
         "inclui ao menos um caso de borda",
         "diz em pt-BR como rodar o teste"
       ]
+    },
+    {
+      "id": 29,
+      "prompt": "meu sistema de vendas é em Delphi 7 com Firebird, a busca de cliente pelo CPF tá assim: Query1.SQL.Text := 'SELECT * FROM CLIENTES WHERE CPF = ''' + Edit1.Text + ''''; dá pra arrumar?",
+      "expected_output": "Corrige só a busca usando parâmetro (:cpf com ParamByName) sem reescrever o sistema nem migrar o Delphi. Explica em pt-BR por que a versão antiga é perigosa e como testar.",
+      "files": [],
+      "assertions": [
+        "troca a concatenação por parâmetro :nome e ParamByName",
+        "não propõe reescrever o sistema nem trocar de linguagem",
+        "não altera nada além da consulta pedida",
+        "explica em pt-BR como testar a busca"
+      ]
+    },
+    {
+      "id": 30,
+      "prompt": "tenho um sistema em Clipper que roda numa pasta compartilhada da rede com arquivos DBF, quero modernizar sem parar a loja",
+      "expected_output": "Recomenda manter o sistema rodando e migrar em etapas (Harbour, depois dados para um SQL), com backup antes de qualquer mudança e permissões da pasta compartilhada restritas. Não propõe reescrita total.",
+      "files": [],
+      "assertions": [
+        "exige backup antes de qualquer mudança",
+        "propõe migração em etapas, não reescrita",
+        "aponta o risco da pasta compartilhada sem controle de acesso",
+        "responde em pt-BR simples"
+      ]
+    },
+    {
+      "id": 31,
+      "prompt": "faz um script em Lua para o meu jogo carregar as fases que os jogadores mandam",
+      "expected_output": "Carrega a fase como dado em sandbox: load com modo \"t\" e ambiente restrito, sem dofile direto e sem acesso a os/io. Explica em pt-BR o risco de rodar arquivo de terceiro.",
+      "files": [],
+      "assertions": [
+        "usa load com modo \"t\" e um ambiente restrito",
+        "não usa dofile nem loadstring direto no arquivo do jogador",
+        "não expõe os.execute nem io ao script carregado",
+        "explica o risco em pt-BR"
+      ]
+    },
+    {
+      "id": 32,
+      "prompt": "minha planilha do Excel tem uma macro VBA que grava no Access: CurrentDb.Execute \"INSERT INTO Vendas VALUES (\" & Range(\"A2\") & \", \" & Range(\"B2\") & \")\" e às vezes dá erro com valor decimal",
+      "expected_output": "Explica que o erro vem da vírgula decimal do Windows em pt-BR e corrige com consulta parametrizada (QueryDef com Parameters ou ADO Command), o que também evita injeção.",
+      "files": [],
+      "assertions": [
+        "identifica a vírgula decimal do pt-BR como causa",
+        "corrige com parâmetros, não com Replace de vírgula por ponto",
+        "usa Execute com dbFailOnError ou tratamento de erro equivalente",
+        "explica em pt-BR"
+      ]
+    },
+    {
+      "id": 33,
+      "prompt": "preciso exportar a lista de clientes do meu app Python pra CSV para abrir no Excel",
+      "expected_output": "Gera o CSV neutralizando células que começam com =, +, -, @ (injeção de fórmula), mantém CPF e CEP como texto e usa codificação que o Excel em pt-BR abre certo.",
+      "files": [],
+      "assertions": [
+        "neutraliza valores que começam com = + - @",
+        "mantém CPF ou CEP como texto, sem perder zeros à esquerda",
+        "escolhe codificação e separador que o Excel em pt-BR abre corretamente",
+        "explica em pt-BR"
+      ]
+    },
+    {
+      "id": 34,
+      "prompt": "subi um Redis e um MongoDB numa VPS pro meu app, o que preciso conferir de segurança?",
+      "expected_output": "Lista as configurações que vêm abertas por padrão: Mongo com authorization desligado e Redis com usuário default sem senha, bind só em interface privada, firewall, TLS e usuários por aplicação.",
+      "files": [],
+      "assertions": [
+        "aponta que o MongoDB vem com authorization desligado",
+        "aponta que o usuário default do Redis não tem senha",
+        "manda ligar só em interface privada e fechar a porta no firewall",
+        "responde em pt-BR por ordem de gravidade"
+      ]
+    },
+    {
+      "id": 35,
+      "prompt": "tenho um script PowerShell que a TI mandou rodar com Set-ExecutionPolicy Bypass e ele baixa outro script com irm | iex, tá certo?",
+      "expected_output": "Explica que execution policy não é barreira de segurança e que baixar e executar direto é arriscado; propõe baixar para arquivo, ler, conferir o hash e só depois rodar, com escopo CurrentUser em vez de Bypass global.",
+      "files": [],
+      "assertions": [
+        "aponta o risco de irm | iex",
+        "propõe baixar, ler e só depois executar",
+        "não recomenda Bypass permanente na máquina inteira",
+        "explica em pt-BR"
+      ]
     }
   ]
 }

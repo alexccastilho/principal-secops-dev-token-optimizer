@@ -20,7 +20,8 @@ A skill for **Claude Code** and **claude.ai** that makes Claude work as a senior
 - **Talks to people who do not program.** Answers come in clear pt-BR: where the file goes, which command to run, and how to test both the success case and the failure case.
 - **Saves tokens.** It sends only the changed blocks, loads its references on demand and respects a per-task file budget.
 - **Looks versions up instead of guessing.** It reads the version the project uses and checks the current support status, instead of trusting the model's memory.
-- **Checks before delivering.** It ships with `scripts/revisar_codigo.py` (Python 3.8+, standard library only), which looks for secrets in code, concatenated SQL, weak hashing, unescaped output, `eval`/`exec`, shell calls and memory traps in C, C++ and Rust.
+- **Checks before delivering.** It ships with `scripts/revisar_codigo.py` (Python 3.8+, standard library only, 77 rules over 151 file types), which looks for secrets in code, SQL built from text, weak hashing, unescaped output, `eval`/`exec`, shell commands built from data, disabled TLS checks and memory traps in C, C++ and Rust.
+- **Maintains legacy systems instead of rewriting them.** Delphi, Clipper/Harbour, VB6, FoxPro, COBOL, VBA: back up first, make it safe where it stands, migrate in stages. New in 2.2.0.
 
 ## Two modes
 
@@ -36,17 +37,32 @@ A skill for **Claude Code** and **claude.ai** that makes Claude work as a senior
 
 Optional additions, chosen at the start: remove comments that only restate the code, and prune tests that would not catch a real bug (security tests and regression tests always stay).
 
+## What it does not do
+
+- **It is not a penetration test or a professional audit.** The scanner reads code line by line with patterns; it does not follow data across files, run the app or attack it. A clean scan proves nothing by itself.
+- **It does not rewrite or reorganize what you did not ask for.** In normal mode it touches only what the request needs. A full refactor runs only in refactor mode, on explicit request, on its own Git branch.
+- **It does not upgrade dependencies or language versions on its own,** and never states a version, end-of-life date or "latest" from memory: it checks the official source first and says when it checked.
+- **It does not deploy, push, delete data or run destructive commands** without asking first.
+- **It is not legal advice.** For LGPD, GPL or CRA it applies the published rules and points to the source; a lawyer decides the edge cases.
+- **It does not answer in other languages.** Conversation is in Brazilian Portuguese; code identifiers and comments stay in English.
+- **Scanner limits:** files over 1 MB and binaries are skipped; lines over 500 characters get only the secret rules; Jupyter notebooks are read as JSON text, so only the language-neutral rules apply to them.
+- **It never prints or stores a secret.** A secret found in code is reported with the line hidden.
+
 ## Coverage
 
 | Area | References |
 |---|---|
-| Web | PHP and WordPress, Java, Node.js and JavaScript, Python, HTML and CSS |
-| Databases | MySQL and MariaDB, PostgreSQL and Supabase, SQLite, SQL Server, Oracle, MongoDB, Redis, Firebase |
-| Native code | C, C++, Rust, CMake, hardening flags, sanitizers, fuzzing |
+| Web | PHP (WordPress, Laravel, Symfony), Node.js and TypeScript (Express, Fastify, NestJS, Next.js, Deno, Bun), Python (Django, FastAPI, Flask), Java (Spring Boot, Jakarta EE, Quarkus), HTML, CSS, accessibility, CSP |
+| Relational databases | MySQL and MariaDB, PostgreSQL and Supabase, SQLite, SQL Server, Oracle, Firebird, Db2, DuckDB, CockroachDB, Access, DBF/Paradox |
+| NoSQL and vector | MongoDB, Redis/Valkey, Firebase, DynamoDB, Cassandra/ScyllaDB, Elasticsearch/OpenSearch, Neo4j, ClickHouse, InfluxDB, vector databases and RAG |
+| Legacy and business | Delphi, Free Pascal/Lazarus, Pascal, Clipper/Harbour, Visual FoxPro, VB6, COBOL, RPG, OpenEdge, PowerBuilder, ABAP |
+| Scripts and automation | Lua, Perl, VBA and Office/Access macros, Google Apps Script, PowerShell, Bash/shell, .bat/.cmd, AutoHotkey, Tcl |
+| Data and science | R, Julia, MATLAB/Octave, Fortran, SAS, Jupyter, pandas/Polars, CSV/Excel export, LGPD in datasets |
+| Other languages and mobile | Go, C#/F#/VB.NET, Ruby/Rails, Kotlin, Swift, Dart/Flutter, Scala, Elixir/Erlang, Clojure, Haskell, OCaml, Groovy/Jenkins, Crystal, Android, iOS, React Native |
+| Native and systems | C, C++, Rust, Zig, Ada/SPARK, Assembly, Objective-C, D, Nim, CMake, hardening flags, sanitizers, fuzzing |
 | Desktop and GUI | toolkit choice, Qt 6, Slint, Avalonia, GTK, Flutter, Tauri, Electron, visual design |
 | Structure | where code lives, coupling, special cases, tests that guard behavior, full refactor |
 | Process | project from scratch, diagnosing errors, versions and sources, compliance (GPL, SBOM, CRA) |
-| Other languages | Go, C#, Ruby, Kotlin, mobile, PowerShell, shell script |
 
 ## Installation
 
@@ -115,6 +131,10 @@ python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --
 
 Exit code 0 means no HIGH finding, 1 means at least one HIGH, and 2 means the path was wrong or nothing was readable, which is not a pass. It never prints a secret value: the excerpt is hidden for the whole line. A clean scan proves nothing by itself; the skill's checklist still applies.
 
+## Benchmark
+
+The same small app (contacts with login and SQLite) was requested through Claude Code with and without the skill, in PHP, Python, Node.js, Java, C# and Go, in a clean configuration with no other plugins. Tokens, time, cost, lines of code, build result and security findings are compared in [docs/BENCHMARK.md](docs/BENCHMARK.md), together with the method and how to reproduce it.
+
 ## Repository layout
 
 ```
@@ -133,7 +153,9 @@ skills/principal-secops-dev-token-optimizer/
 tests/                     # test suite (standard library unittest)
 tools/build_zip.py         # builds the claude.ai ZIP
 tools/make_icon.py         # draws the plugin icon (needs Pillow)
-docs/                      # translations and the v2.0.0 review report (in Portuguese)
+benchmark/                 # with/without-skill benchmark (run_benchmark.py, analyze.py, results/)
+docs/                      # translations, BENCHMARK and the v2.0.0 review report (in Portuguese)
+docs/research/             # evidence logs for 2.2.0: one line per verified fact, with URL and date
 ```
 
 ## Development

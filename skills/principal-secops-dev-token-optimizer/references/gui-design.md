@@ -1,4 +1,4 @@
-# Visual design — making an interface look deliberate
+# Visual design: making an interface look deliberate
 
 Applies to desktop and web. This is what separates an interface that looks designed from one that looks assembled. Almost none of it requires talent; all of it requires consistency.
 

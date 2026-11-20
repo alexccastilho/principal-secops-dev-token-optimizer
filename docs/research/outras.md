@@ -1,0 +1,125 @@
+# Evidence log: outras-linguagens.md (writer "outras")
+
+## Verified facts
+- Go: each major release supported until two newer majors; newest major listed 1.27 (2026-08-19), minor 1.27.4 (2026-11-10) (https://go.dev/doc/devel/release, checked 2026-11-20)
+- Go: os.Root / os.OpenRoot, crypto/rand.Text and the go.mod `tool` directive are new in 1.24 (https://go.dev/doc/go1.24, checked 2026-11-20)
+- Go: OpenInRoot errors when a name references outside dir; Root.FS prevents symlink escapes (https://pkg.go.dev/os#Root, checked 2026-11-20)
+- Go: govulncheck installed with `go install golang.org/x/vuln/cmd/govulncheck@latest`, run `govulncheck ./...` (https://go.dev/doc/security/vuln/, checked 2026-11-20)
+- Go: html/template escaping is contextual; template.HTML content is included verbatim (https://pkg.go.dev/html/template, checked 2026-11-20)
+- Go: go.sum holds expected checksums; -mod=readonly is the default since 1.16 (https://go.dev/ref/mod, checked 2026-11-20)
+- Go: Staticcheck is a Go linter (https://staticcheck.dev/, checked 2026-11-20)
+- .NET: LTS 3 years (even), STS 2 years (odd); .NET 10 LTS and .NET 11 STS supported to 2028-11-14; .NET 8 and 9 ended 2026-11-10 (https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core, checked 2026-11-20)
+- .NET: BinaryFormatter throws on use from .NET 9; SoapFormatter, NetDataContractSerializer, LosFormatter, ObjectStateFormatter equally dangerous; System.Text.Json recommended (https://learn.microsoft.com/en-us/dotnet/standard/serialization/binaryformatter-security-guide, checked 2026-11-20)
+- .NET: NuGetAudit on restore since .NET 8 SDK; NuGetAuditMode default `all` for net10.0+, else `direct`; `dotnet list package --vulnerable` needs `--include-transitive`; `dotnet package update --vulnerable` in .NET 10 SDK (https://learn.microsoft.com/en-us/nuget/concepts/auditing-packages, checked 2026-11-20)
+- .NET: packages.lock.json via RestorePackagesWithLockFile; `dotnet restore --locked-mode` for CI (https://learn.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files, checked 2026-11-20)
+- .NET: analyzers on by default for .NET 5+; AnalysisMode values incl. Recommended; EnforceCodeStyleInBuild (https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview, checked 2026-11-20)
+- .NET: FromSql, FromSqlInterpolated, ExecuteSql are parameterized; FromSqlRaw / ExecuteSqlRaw with interpolated or concatenated strings are injection (https://learn.microsoft.com/ef/core/querying/sql-queries, checked 2026-11-20)
+- .NET: Secret Manager stores unencrypted JSON in user profile, dev only; never secrets in appsettings.json; Key Vault for production (https://learn.microsoft.com/aspnet/core/security/app-secrets, checked 2026-11-20)
+- .NET: AutoValidateAntiforgeryToken recommended for non-API; minimal APIs with form data validate antiforgery by default; DisableAntiforgery opts out (https://learn.microsoft.com/aspnet/core/security/anti-request-forgery, checked 2026-11-20)
+- .NET: CA2326 flags TypeNameHandling other than None; fix with None or restricting ISerializationBinder (https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2326, checked 2026-11-20)
+- VB.NET: Option Strict On blocks implicit narrowing, late binding, implicit Object; IDE default is Off (https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/statements/option-strict-statement, checked 2026-11-20)
+- F#: Fantomas is the F# formatter (https://github.com/fsprojects/fantomas, checked 2026-11-20)
+- Ruby: 4.0 and 3.4 normal maintenance; 3.3 legacy maintenance to 2027-03-31; 3.2 EOL 2026-04-01; "legacy maintenance" replaced "security maintenance" (https://www.ruby-lang.org/en/downloads/branches/, checked 2026-11-20)
+- Rails: guides v8.1 show `params.expect(user: [...])`; warn about `permit!` (https://guides.rubyonrails.org/action_controller_overview.html, checked 2026-11-20)
+- Rails: placeholders, named placeholders, hash conditions, sanitize_sql; credentials.yml.enc; bin/rails secret (https://guides.rubyonrails.org/security.html, checked 2026-11-20)
+- Ruby: Kernel#open subprocess creation deprecated in 3.3 (https://docs.ruby-lang.org/en/master/NEWS/NEWS-3_3_0_md.html, checked 2026-11-20)
+- Ruby: YAML safe_load for untrusted data (https://docs.ruby-lang.org/en/master/Psych.html, checked 2026-11-20)
+- Ruby: Brakeman is a Rails security scanner (https://brakemanscanner.org/, checked 2026-11-20)
+- Ruby: bundler-audit, `bundle-audit check --update` (https://github.com/rubysec/bundler-audit, checked 2026-11-20)
+- Kotlin: 2.4 maintained (2026-06-03); 2.3 EOL when 2.4 shipped (https://endoflife.date/api/v1/products/kotlin/, checked 2026-11-20)
+- Kotlin: ktlint linter/formatter (https://github.com/pinterest/ktlint, checked 2026-11-20); detekt static analysis (https://detekt.dev/, checked 2026-11-20)
+- Gradle: `--write-verification-metadata sha256` writes gradle/verification-metadata.xml (web search over docs.gradle.org, https://docs.gradle.org/7.4/userguide/dependency_verification.html, checked 2026-11-20)
+- Swift: current release 6.4.2 (https://www.swift.org/install/, checked 2026-11-20)
+- Swift: swift-format bundled in Swift 6 toolchain, run as `swift format` (web search summary of the swift-format README mirror, https://sources.debian.org/src/swiftlang/6.1.3-1/swift-format/README.md, checked 2026-11-20)
+- Swift: Swift 6 mode enables full data-race checking, some issues become errors; stage with -strict-concurrency=complete (https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/enabledataracesafety/, checked 2026-11-20)
+- Swift: SwiftLint enforces style (https://github.com/realm/SwiftLint, checked 2026-11-20)
+- Swift: Package.resolved should be committed (forum post quoting Apple Xcode Cloud docs, secondary source) (https://forums.swift.org/t/package-resolved-should-go-in-the-gitignore/14699, checked 2026-11-20)
+- iOS: kSecAttrAccessibleWhenUnlockedThisDeviceOnly limits access to unlocked device, not migrated (https://developer.apple.com/documentation/security/ksecattraccessiblewhenunlockedthisdeviceonly, checked 2026-11-20)
+- iOS: NSAllowsArbitraryLoads triggers App Store review justification (https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html, checked 2026-11-20)
+- iOS: PrivacyInfo.xcprivacy declares data collected and required-reason APIs; privacy-impacting SDKs must ship their own (https://developer.apple.com/videos/play/wwdc2023/10060/, checked 2026-11-20)
+- Dart: pub surfaces advisories at `dart pub get`; `ignored_advisories` in pubspec.yaml (https://dart.dev/tools/pub/security-advisories, checked 2026-11-20)
+- Dart: lints (core, recommended) and flutter_lints (https://dart.dev/tools/linter-rules, checked 2026-11-20)
+- Flutter: `--obfuscate --split-debug-info`; obfuscation does not encrypt resources or protect secrets (https://docs.flutter.dev/deployment/obfuscate, checked 2026-11-20)
+- Flutter: flutter_secure_storage uses Keychain on iOS, encrypted storage on Android, maintained (https://pub.dev/packages/flutter_secure_storage, checked 2026-11-20)
+- Scala: 3 LTS (3.3.x) for libraries, Scala Next for apps; 2.13 maintained indefinitely; 2.12 minimal (https://www.scala-lang.org/development/, checked 2026-11-20)
+- Scala: scalafmt formatter (https://scalameta.org/scalafmt/, checked 2026-11-20)
+- Scala: doobie fr/sql interpolation binds parameters; Fragment.const does no escaping (https://typelevel.org/doobie/docs/08-Fragments.html, checked 2026-11-20)
+- Elixir: bug fixes only latest minor (1.20); security patches last 5 minors; 1.20 supports OTP 27-29 (https://elixir.hexdocs.pm/compatibility-and-deprecations.html, checked 2026-11-20)
+- Erlang: latest OTP 29.1.2 (https://www.erlang.org/downloads, checked 2026-11-20)
+- Erlang/Elixir: avoid String.to_atom, List.to_atom, Module.concat, list_to_atom, binary_to_atom, atom interpolation, file:consult on untrusted; prefer lookup table, then to_existing_atom (https://security.erlef.org/secure_coding_and_deployment_hardening/atom_exhaustion, checked 2026-11-20)
+- Erlang/Elixir: binary_to_term safe option; Plug.Crypto.non_executable_binary_to_term; still validate (https://security.erlef.org/secure_coding_and_deployment_hardening/serialisation, checked 2026-11-20)
+- Erlang/Elixir: os:cmd uses a shell; open_port spawn_executable and System.cmd pass args as-is; env inherited (https://security.erlef.org/secure_coding_and_deployment_hardening/external_executables, checked 2026-11-20)
+- Erlang: ssl default verify_none; set verify_peer; public_key:cacerts_get on OTP 25+ (https://security.erlef.org/secure_coding_and_deployment_hardening/ssl, checked 2026-11-20)
+- Ecto: each ? in fragment is a parameter; identifier/constant are inlined (https://ecto.hexdocs.pm/Ecto.Query.API.html, checked 2026-11-20)
+- Phoenix.HTML: escapes by default; raw/1 marks safe (https://phoenix-html.hexdocs.pm/Phoenix.HTML.html, checked 2026-11-20)
+- Elixir: Sobelow for Phoenix (https://github.com/sobelow/sobelow, checked 2026-11-20); Credo (https://github.com/rrrene/credo, checked 2026-11-20); mix hex.audit retired/advised packages (https://hex.hexdocs.pm/Mix.Tasks.Hex.Audit.html, checked 2026-11-20); mix_audit `mix deps.audit` (https://mix-audit.hexdocs.pm/readme.html, checked 2026-11-20)
+- Clojure: read-string can execute code; use clojure.edn/read-string for data (https://clojuredocs.org/clojure.core/read-string, checked 2026-11-20)
+- Clojure: next.jdbc SQL vector with ? params (https://github.com/seancorfield/next-jdbc/blob/develop/doc/getting-started.md, checked 2026-11-20); clj-kondo linter (https://github.com/clj-kondo/clj-kondo, checked 2026-11-20); deps.edn git deps require :git/sha, branches unsupported (https://clojure.org/reference/deps_edn, checked 2026-11-20)
+- Haskell: GHC 9.14.1 newest major, 9.12.4 latest release; status on GHC Status wiki (https://www.haskell.org/ghc/, checked 2026-11-20)
+- Haskell: HLint (https://github.com/ndmitchell/hlint, checked 2026-11-20); Fourmolu forked from Ormolu (https://github.com/fourmolu/fourmolu, checked 2026-11-20); cabal.project.freeze (https://cabal.readthedocs.io/en/stable/cabal-commands.html, checked 2026-11-20)
+- Haskell: postgresql-simple Query type discourages concatenation; ? substitution escapes (https://hackage.haskell.org/package/postgresql-simple/docs/Database-PostgreSQL-Simple.html, checked 2026-11-20)
+- OCaml: 5.5.2 (2026-10-23) and 4.14.5 listed (https://ocaml.org/releases, checked 2026-11-20)
+- OCaml: Marshal not type-safe (https://ocaml.org/manual/latest/api/Marshal.html, checked 2026-11-20); Unix.create_process takes argv array, Unix.system uses /bin/sh (https://ocaml.org/manual/latest/api/Unix.html, checked 2026-11-20); ocamlformat via dune fmt (https://github.com/ocaml-ppx/ocamlformat, checked 2026-11-20); opam lock writes .locked files (https://opam.ocaml.org/doc/man/opam-lock.html, checked 2026-11-20)
+- Groovy: 5.1 stable (JDK11+), 4.0 previous, 3.0 earlier, 6.0 alpha (https://groovy.apache.org/download.html, checked 2026-11-20)
+- Groovy: GString queries become placeholders; concatenation is injection; quoting a GString placeholder disables binding (https://docs.groovy-lang.org/latest/html/api/groovy/sql/Sql.html, checked 2026-11-20)
+- Jenkins: never Groovy interpolation with credentials; single quotes; withCredentials (https://www.jenkins.io/doc/book/pipeline/jenkinsfile/, checked 2026-11-20)
+- Crystal: 1.22.3 current, compatibility kept within major (https://crystal-lang.org/api/, checked 2026-11-20); Process.run shell defaults to false (https://crystal-lang.org/api/Process.html, checked 2026-11-20); Ameba (https://github.com/crystal-ameba/ameba, checked 2026-11-20)
+- Mobile: MASVS groups STORAGE, CRYPTO, AUTH, NETWORK, PLATFORM, CODE, RESILIENCE, PRIVACY; MASTG companion (https://mas.owasp.org/MASVS/, checked 2026-11-20)
+- Android: cleartext disabled by default from API 28; pin-set with backup pin and optional expiration (https://developer.android.com/privacy-and-security/security-config, checked 2026-11-20)
+- Android: security-crypto 1.1.0 deprecated all APIs in favour of platform APIs and Android Keystore (https://developer.android.com/jetpack/androidx/releases/security, checked 2026-11-20)
+- Android: android:exported false is default without intent filters (https://developer.android.com/guide/topics/manifest/activity-element, checked 2026-11-20)
+- Android: dataExtractionRules (12+) and fullBackupContent (11 and lower) to exclude data (https://developer.android.com/privacy-and-security/risks/backup-best-practices, checked 2026-11-20)
+- Android: deep links autoVerify, allowlist validation (https://developer.android.com/privacy-and-security/risks/unsafe-use-of-deeplinks, checked 2026-11-20)
+- Android: addJavascriptInterface risks, JS disabled by default, removeJavascriptInterface (https://developer.android.com/privacy-and-security/risks/insecure-webview-native-bridges, checked 2026-11-20)
+- Android: Play Integrity API (https://developer.android.com/google/play/integrity, checked 2026-11-20)
+- React Native: no secrets in app; AsyncStorage unencrypted; react-native-keychain, expo-secure-store; deep links not secure; OAuth PKCE with react-native-app-auth; pinning rotation (https://reactnative.dev/docs/security, checked 2026-11-20)
+- Expo: EXPO_PUBLIC_ inlined, visible in plain text (https://docs.expo.dev/guides/environment-variables/, checked 2026-11-20); SecureStore uses Keystore/Keychain (https://docs.expo.dev/versions/latest/sdk/securestore/, checked 2026-11-20)
+- endoflife.date product slugs present: android, apache-groovy, dotnet, dotnetfx, elixir, erlang, ghc, go, ios, kotlin, rails, react-native, ruby, scala (https://endoflife.date/api/all.json, checked 2026-11-20)
+- Go: math/rand must not be used for security-sensitive work; use crypto/rand (https://pkg.go.dev/math/rand/v2, checked 2026-11-20)
+- Go: golang.org/x/crypto/bcrypt implements bcrypt password hashing (https://pkg.go.dev/golang.org/x/crypto/bcrypt, checked 2026-11-20)
+- Go: go vet reports likely mistakes (https://pkg.go.dev/cmd/vet, checked 2026-11-20)
+- .NET: `dotnet format` formats to .editorconfig, .NET 6 SDK+ (https://learn.microsoft.com/dotnet/core/tools/dotnet-format, checked 2026-11-20)
+- .NET: FromSql / ExecuteSql FormattableString overloads documented from EF Core 7.0 (https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.relationalqueryableextensions.fromsql?view=efcore-7.0, checked 2026-11-20)
+- .NET: FromSqlInterpolated / ExecuteSqlInterpolated introduced in EF Core 3.0 (https://learn.microsoft.com/ef/core/what-is-new/ef-core-3.x/breaking-changes, checked 2026-11-20)
+- .NET: minimal API antiforgery middleware added in ASP.NET Core 8 (https://learn.microsoft.com/aspnet/core/release-notes/aspnetcore-8.0, checked 2026-11-20)
+- .NET Framework: follows the Component Lifecycle Policy; 4.6.2 ends 2027-01-12 (https://learn.microsoft.com/en-us/lifecycle/products/microsoft-net-framework, checked 2026-11-20)
+- Rails: params.expect added in Rails 8.0; `expect(user: {})` permits all attributes (https://api.rubyonrails.org/v8.0/classes/ActionController/Parameters.html, checked 2026-11-20)
+- Ruby: process creation by Kernel#open and IO class methods with a leading pipe removed in 4.0 (https://docs.ruby-lang.org/en/master/NEWS/NEWS-4_0_0_md.html, checked 2026-11-20)
+- Ruby: RuboCop defaults follow the community Ruby Style Guide (https://rubocop.org/, checked 2026-11-20)
+- Kotlin: GlobalScope is a delicate API; cannot be cancelled or awaited (https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/, checked 2026-11-20)
+- Android: Room @Query binds function parameters as `:name` (https://developer.android.com/training/data-storage/room/accessing-data, checked 2026-11-20)
+- Swift: API Design Guidelines page on swift.org (https://www.swift.org/documentation/api-design-guidelines/, checked 2026-11-20)
+- Dart: Effective Dart is the official guideline set (https://dart.dev/effective-dart, checked 2026-11-20)
+- Dart: `dart pub outdated` identifies out-of-date dependencies (https://dart.dev/tools/pub/cmd/pub-outdated, checked 2026-11-20)
+- Flutter: release archive; docs reflect Flutter 3.50 (2026-11-11); no support window published on the page (https://docs.flutter.dev/release/archive, checked 2026-11-20)
+- Clojure: 1.12.7 stable; recommends Java 25, minimum Java 8 (https://clojure.org/releases/downloads, checked 2026-11-20)
+- OCaml: Sys.command runs through the shell (https://ocaml.org/manual/latest/api/Sys.html, checked 2026-11-20)
+- Groovy: Eval.me evaluates a Groovy expression via GroovyShell (https://docs.groovy-lang.org/latest/html/api/groovy/util/Eval.html, checked 2026-11-20)
+- Crystal: `crystal tool format`; libraries do not commit shard.lock (https://crystal-lang.org/reference/latest/man/crystal/index.html, checked 2026-11-20)
+- Crystal: crystal-db placeholders `?` (MySQL) and `$1` (PostgreSQL) (https://crystal-lang.org/reference/latest/database/, checked 2026-11-20)
+- .NET: Json.NET TypeNameHandling other than None flagged by CA2326 (https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2326, checked 2026-11-20)
+
+## Changed from the previous text
+- PowerShell and shell sections removed; one-line pointer to scripts-e-automacao.md.
+- Added Swift, Dart/Flutter, Scala, Elixir/Erlang/Phoenix, Clojure, Haskell, OCaml, Groovy (incl. Jenkins), Crystal; F# and VB.NET under .NET.
+- Version policy line plus per-language lifecycle source; removed "target the current LTS" from memory.
+- .NET: BinaryFormatter removal, NuGet audit modes, FromSqlRaw trap, locked-mode restore, user-secrets is dev only, antiforgery details.
+- Rails: params.expect (8.0+), Brakeman, Kernel#open pipe removal in 4.0, credentials.
+- Added tuning and errors-never-fail-open bullets per mainstream stack.
+- Go: os.Root, rand.Text, tool directive gated (1.24+).
+- Kotlin: Gradle dependency verification, coroutine cancellation trap.
+- Mobile: MASVS, EncryptedSharedPreferences deprecation, ATS, cleartext default, exported, deep links, WebView bridge, backups, PKCE, Play Integrity, privacy manifest, EXPO_PUBLIC_ exposure.
+
+## Not verified (left out or kept version-independent)
+- Go: exact http.Server timeout field names (wording kept generic); `argon2` package path not fetched (bcrypt was).
+- Ruby: Psych 4 default of `load` (only safe_load stated); Standard (Ruby) not fetched.
+- Swift: CryptoKit (replaced with generic wording); `[weak self]` idiom from general knowledge.
+- Scala: Slick splice syntax, circe, Scalafix (removed).
+- Erlang: rebar3, Elvis (removed); OTP support window (erlang.org does not state one).
+- Haskell: persistent rawSql, sqlite-simple (removed); Stack and `readMaybe` / `unsafePerformIO` names from general knowledge; exact GHC maintenance window.
+- OCaml: Caqti, Unix.execv (removed).
+- Clojure: HoneySQL, load-string (removed).
+- Groovy: CodeNarc, ConfigSlurper (removed).
+- .NET: `<Nullable>enable</Nullable>`, `Option Explicit`, Exposed (Kotlin) named from general knowledge.
+- Apple App Attest, Android Play target API level requirement (left out).
+- Android: android:exported mandatory with intent filters on API 31+ (not found on page; wording kept to "set explicitly").

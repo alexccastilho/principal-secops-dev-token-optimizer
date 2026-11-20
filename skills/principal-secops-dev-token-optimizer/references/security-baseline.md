@@ -1,4 +1,4 @@
-# Security baseline — OWASP Top 10:2025, ASVS 5.0, supply chain, LGPD
+# Security baseline: OWASP Top 10:2025, ASVS 5.0, supply chain, LGPD
 
 ## Contents
 - OWASP Top 10:2025 controls, category by category (supply chain is A03, authentication A07, logging A09, error handling A10)
@@ -15,7 +15,7 @@
 - Standards map
 - Severity scale for audits
 
-Target: the current OWASP ASVS, Level 1 for any public app, Level 2 when it handles money, health data or personal data at scale. The editions named in this file (OWASP Top 10:2025, ASVS 5.0) are the ones known when it was written; confirm the current edition with `versoes-e-fontes.md` before citing one in a formal document, and keep the control intent when the numbering changes.
+Target: the current OWASP ASVS, Level 1 for any public app, Level 2 when it handles money, health data or personal data at scale. The editions named in this file (OWASP Top 10:2025, ASVS 5.0.0) were checked as current on 2026-11-20; confirm the current edition with `versoes-e-fontes.md` before citing one in a formal document, and keep the control intent when the numbering changes.
 
 ## OWASP Top 10:2025 controls
 
@@ -45,7 +45,7 @@ Target: the current OWASP ASVS, Level 1 for any public app, Level 2 when it hand
 
 **A04 Cryptographic Failures**
 * TLS everywhere, HSTS on, no mixed content.
-* Passwords: Argon2id (memory ≥ 19 MiB, iterations ≥ 2, parallelism 1) or bcrypt cost ≥ 12. bcrypt reads only the first 72 bytes, so cap the accepted length there or use Argon2id. Never MD5, SHA-1, SHA-256 alone, never homemade crypto.
+* Passwords: Argon2id (memory ≥ 19 MiB, iterations ≥ 2, parallelism 1), or bcrypt with cost 12 by default (OWASP floor is 10; raise it while a login stays acceptably fast on the server). bcrypt reads only the first 72 bytes, so cap the accepted length there or use Argon2id. Where FIPS-140 is required: PBKDF2-HMAC-SHA256 with 600,000 iterations. Never MD5, SHA-1, SHA-256 alone, never homemade crypto.
 * Data at rest: AES-256-GCM through the platform library. Keys from the environment or a KMS, rotated, never next to the ciphertext.
 * Randomness for tokens from a cryptographic source (`random_bytes`, `secrets`, `crypto.randomBytes`, `SecureRandom`), never a plain RNG.
 * Never log, cache or put in a URL: passwords, tokens, full card numbers, CPF.
@@ -63,7 +63,7 @@ Target: the current OWASP ASVS, Level 1 for any public app, Level 2 when it hand
 * Segregate tenants: a query without a tenant or owner filter is a bug.
 
 **A07 Authentication Failures**
-* Long passphrases allowed (at least 64 chars accepted), no forced periodic rotation, block known-breached passwords.
+* Passwords (NIST SP 800-63B-4): minimum 15 characters when the password is the only factor, 8 when it is part of MFA; accept at least 64; no composition rules (no "one uppercase, one symbol"); no forced periodic rotation, only on evidence of compromise; check new passwords against a blocklist of common and breached ones and tell the user why one was refused.
 * MFA available on anything with money or admin access.
 * New session id after login and after privilege change. Invalidate on logout and on password change.
 * Generic messages on login and on password recovery, so the form does not reveal which e-mails exist.
@@ -141,7 +141,9 @@ Applies to any system handling personal data of people in Brazil.
 * Support the data subject rights: access, correction, deletion, portability, and revoking consent. Design the deletion path before launch.
 * Encrypt sensitive data at rest, restrict access by role, log who read what.
 * Retention limit: define how long each dataset is kept, then actually delete it.
-* Incident with risk or relevant damage to the subject: notify the ANPD and the affected people within **3 business days** of learning the incident affected personal data (Resolução CD/ANPD nº 15/2024, which also allows a complementary notice within 20 business days). Keep an incident log.
+* The regulator is the ANPD, now Agência Nacional de Proteção de Dados (Lei 15.352/2026).
+* Incident with risk or relevant damage to the subject: notify the ANPD and the affected people within **3 business days** of learning the incident affected personal data (Resolução CD/ANPD nº 15/2024, arts. 6 and 9; a complementary notice to the ANPD is allowed within 20 business days). Small processors (agentes de pequeno porte, Resolução CD/ANPD nº 2/2022) get these deadlines doubled, but only if they qualify: no high-risk processing and revenue within the legal limit (art. 3). Keep an incident record for at least 5 years (art. 10).
+* Small processors may adopt a simplified information security policy and are not required to name an encarregado, but must offer a channel for data subjects (Resolução CD/ANPD nº 2/2022, arts. 11 and 13).
 * Sending data abroad (a US-hosted API, an analytics provider) is international transfer. Note it in the privacy notice.
 
 Explain this to the user in one plain pt-BR line when it applies, for example: "Como o formulário guarda CPF, ele precisa de um jeito de o cliente pedir exclusão dos dados. Já deixei o campo isolado numa tabela própria para isso ficar simples."
@@ -152,6 +154,7 @@ Explain this to the user in one plain pt-BR line when it applies, for example: "
 * Content that came from a user, a webpage or a document can carry instructions to the model. Keep system instructions separate from data, and never grant the model a capability the current user does not already have.
 * Cap tokens, rate limit per user, and log prompts without personal data.
 * API keys stay server-side. A browser calling the provider directly leaks the key.
+* An agent that calls tools or acts on its own (sends e-mail, runs code, moves money): least privilege per tool, human confirmation for irreversible actions. Map risks with the OWASP Top 10 for Agentic Applications.
 
 ## Incident or unpatched flaw (0-day)
 
@@ -162,7 +165,7 @@ Use when a flaw is announced with no fix yet, when a dependency in use shows up 
 3. **Preserve.** Copy the logs and the changed files before any cleanup. They are the evidence of what happened.
 4. **Monitor.** Search the logs for the indicators of compromise the advisory published (paths, user agents, IPs, file hashes).
 5. **Fix.** Update to the corrected version as soon as it exists, after a backup, and rerun the audit.
-6. **Communicate.** If personal data was affected, the ANPD and the data subjects must be notified within 3 business days (see LGPD above). Record the incident: what, when, which data, what was done.
+6. **Communicate.** If personal data was affected, the ANPD and the data subjects must be notified within 3 business days, 6 only for a qualifying small processor (see LGPD above). Record the incident: what, when, which data, what was done.
 
 Never run a cleanup command copied from the internet on a compromised server without understanding it. When in doubt, restore from a backup taken before the intrusion and rotate every secret.
 
@@ -193,7 +196,7 @@ Security does not end at deploy. Keep this running:
 
 ## Standards map
 
-Name the standard and edition when the user asks for compliance. The editions below were current when this file was written. Confirm the current one at the owner's site (sources in `versoes-e-fontes.md`) before quoting it in a formal document.
+Name the standard and edition when the user asks for compliance. The editions below were checked as current on 2026-11-20. Confirm the current one at the owner's site (sources in `versoes-e-fontes.md`) before quoting it in a formal document.
 
 | Need | Standard |
 |---|---|
@@ -201,21 +204,22 @@ Name the standard and edition when the user asks for compliance. The editions be
 | Verification checklist | OWASP ASVS 5.0.0 |
 | APIs | OWASP API Security Top 10 (2023) |
 | Features that call an LLM | OWASP Top 10 for LLM Applications (2025) |
-| Weakness catalog | CWE Top 25 (MITRE, yearly list) |
-| Secure development process | NIST SP 800-218 SSDF (v1.1 final) |
+| AI agents that use tools | OWASP Top 10 for Agentic Applications (2026 edition, published December 2025) |
+| Weakness catalog | CWE Top 25 (MITRE, yearly list; latest is 2025) |
+| Secure development process | NIST SP 800-218 SSDF v1.1 (final; v1.2, SP 800-218 Rev. 1, was still a draft when checked) |
 | Passwords and authentication | NIST SP 800-63B-4 |
-| Payment cards | PCI DSS 4.0.1 |
+| Payment cards | PCI DSS 4.0.1 (PCI SSC opened comments for the next iteration in 2026; check for a successor) |
 | Information security management | ISO/IEC 27001:2022 |
 | Server and database hardening | CIS Benchmarks |
 | Build integrity | SLSA, SBOM in CycloneDX or SPDX |
-| Brazilian personal data | LGPD (Lei 13.709/2018) and Resolução CD/ANPD nº 15/2024 |
-| EU products with software | Cyber Resilience Act (Regulation 2024/2847), see `compliance-licencas.md` |
+| Brazilian personal data | LGPD (Lei 13.709/2018), Resolução CD/ANPD nº 15/2024 (incidents), nº 2/2022 (small processors) |
+| EU products with software | Cyber Resilience Act (Regulation 2024/2847): reporting since 11 Sep 2026, full obligations from 11 Dec 2027; see `compliance-licencas.md` |
 
 ## Severity scale for audits
 
 Report findings in this order, one line each, in pt-BR, with the fix:
 
-* **CRÍTICO** — exploitable now, data or money at risk. Fix before anything else.
-* **ALTO** — exploitable with effort or in a plausible scenario.
-* **MÉDIO** — weakens defense, needs another flaw to be exploited.
-* **BAIXO** — hygiene, best practice, no direct exposure.
+* **CRÍTICO**: exploitable now, data or money at risk. Fix before anything else.
+* **ALTO**: exploitable with effort or in a plausible scenario.
+* **MÉDIO**: weakens defense, needs another flaw to be exploited.
+* **BAIXO**: hygiene, best practice, no direct exposure.
