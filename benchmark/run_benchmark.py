@@ -59,11 +59,28 @@ def _commit():
 
 SKILL_COMMIT = _commit()
 
-ALLOWED_TOOLS = "Read Write Edit Glob Grep Skill Bash(python:*) Bash(py:*) Bash(python3:*)"
+# Both conditions may look a version up (the skill's rules require it) and run the language's
+# own quick checks; neither may install packages, so the build check stays comparable.
+ALLOWED_TOOLS = ("Read Write Edit Glob Grep Skill WebFetch WebSearch Bash(python:*) Bash(py:*) Bash(python3:*) "
+                 "Bash(curl:*) Bash(node --version) Bash(node -v) Bash(npm view:*) Bash(php -v) Bash(php -l:*) "
+                 "Bash(go version) Bash(go vet:*) Bash(dotnet --version) Bash(dotnet --list-sdks) Bash(java -version) "
+                 "Bash(javac -version)")
+
+
+def long_path(path):
+    """Expand Windows 8.3 short names (ALEXCA~1): Claude Code asks for approval to write
+    to a path containing "~", which a non-interactive run can never give."""
+    path = str(pathlib.Path(path).resolve())
+    if os.name == "nt" and "~" in path:
+        import ctypes
+        buf = ctypes.create_unicode_buffer(32768)
+        if ctypes.windll.kernel32.GetLongPathNameW(path, buf, len(buf)):
+            path = buf.value
+    return path
 
 
 def run_one(lang, condition, rep, args):
-    work = pathlib.Path(args.out) / lang / condition / f"r{rep}"
+    work = pathlib.Path(long_path(args.out)) / lang / condition / f"r{rep}"
     app = work / "app"
     app.mkdir(parents=True, exist_ok=True)
     transcript = work / "transcript.jsonl"
@@ -82,7 +99,7 @@ def run_one(lang, condition, rep, args):
     # The account also syncs skills uploaded to claude.ai (an older copy of this skill among
     # them) into any config dir. Turning off non-essential traffic stops that sync, so the
     # baseline sees no copy of the skill and the skill condition sees only --plugin-dir.
-    env = dict(os.environ, CLAUDE_CONFIG_DIR=str(pathlib.Path(args.config_dir).resolve()),
+    env = dict(os.environ, CLAUDE_CONFIG_DIR=long_path(args.config_dir),
                CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1")
     started = time.monotonic()
     timed_out = False
@@ -153,8 +170,11 @@ def main():
     parser.add_argument("--jobs", type=int, default=3)
     parser.add_argument("--timeout", type=int, default=1500)
     args = parser.parse_args()
+    pathlib.Path(args.out).mkdir(parents=True, exist_ok=True)
     if pathlib.Path(args.out).resolve().is_relative_to(ROOT):
         sys.exit("--out must be outside the repository")
+    if "~" in long_path(args.out):
+        sys.exit("--out must not contain '~' (Windows short name); pass the long path")
     jobs = [(lang, cond, rep) for rep in range(1, args.reps + 1)
             for lang in args.langs.split(",") for cond in ("baseline", "skill")]
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as pool:
