@@ -133,7 +133,7 @@ Código de saída 0 quer dizer nenhum achado HIGH, 1 quer dizer pelo menos um HI
 
 ## Benchmark
 
-O mesmo app pequeno (contatos com login e SQLite) foi pedido ao Claude Code com e sem a skill, em PHP, Python, Node.js, Java, C# e Go, numa configuração limpa, sem outros plugins. Tokens, tempo, custo, linhas de código, compilação e achados de segurança estão comparados em [BENCHMARK.pt-BR.md](BENCHMARK.pt-BR.md), junto com o método e como reproduzir.
+O mesmo app pequeno (contatos com login e SQLite) foi pedido 36 vezes ao Claude Code, com e sem a skill, em PHP, Python, Node.js, Java, C# e Go, numa configuração isolada. Numa revisão às cegas, o app feito com a skill foi o mais seguro nas 6 linguagens, e sempre veio com instruções de uso. O custo: cerca de 3 vezes o preço e 2,5 vezes o tempo por app (US$ 0,58 contra 0,20, 176 s contra 69 s), e 16 de 18 apps compilaram, contra 18 de 18 sem a skill. Tabelas completas, método, limites e como reproduzir: [BENCHMARK.pt-BR.md](BENCHMARK.pt-BR.md).
 
 ## Estrutura do repositório
 

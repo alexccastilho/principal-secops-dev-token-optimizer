@@ -1,0 +1,2520 @@
+[
+  {
+    "lang": "csharp",
+    "condition": "baseline",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 36.9,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 3,
+      "Write": 2
+    },
+    "duration_ms": 36540,
+    "num_turns": 6,
+    "cost_usd": 0.1149416,
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 11792,
+    "cache_read_input_tokens": 99936,
+    "output_tokens": 5776,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 5776,
+        "cacheReadInputTokens": 99936,
+        "cacheCreationInputTokens": 11792,
+        "webSearchRequests": 0,
+        "costUSD": 0.1149416,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 416,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 11792,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 2,
+    "source_files": 1,
+    "source_lines": 191,
+    "source_code_lines": 185,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 8.8,
+    "build_detail": "-gcr7-jv3q\nC:\\Users\\<user>\\AppData\\Local\\Temp\\claude\\ced57474e19a37b7\\f07dcdba-85d3-42cc-9017-09c5264d3ead\\scratchpad\\bench-final\\csharp\\baseline\\r1\\app\\Contatos.csproj : warning NU1903: O pacote 'SQLitePCLRaw.lib.e_sqlite3' 2.1.10 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-2m69-gcr7-jv3q\n    2 Aviso(s)\n    0 Erro(s)\n\nTempo Decorrido 00:00:08.39\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 1,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 349
+  },
+  {
+    "lang": "csharp",
+    "condition": "baseline",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 73.1,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 4,
+      "Write": 4
+    },
+    "duration_ms": 72689,
+    "num_turns": 9,
+    "cost_usd": 0.2240887,
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 19513,
+    "cache_read_input_tokens": 146227,
+    "output_tokens": 13139,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 13139,
+        "cacheReadInputTokens": 146227,
+        "cacheCreationInputTokens": 19513,
+        "webSearchRequests": 0,
+        "costUSD": 0.2240887,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 731,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 19513,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 4,
+    "source_files": 3,
+    "source_lines": 294,
+    "source_code_lines": 281,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 2.2,
+    "build_detail": "-gcr7-jv3q\nC:\\Users\\<user>\\AppData\\Local\\Temp\\claude\\ced57474e19a37b7\\f07dcdba-85d3-42cc-9017-09c5264d3ead\\scratchpad\\bench-final\\csharp\\baseline\\r2\\app\\Contatos.csproj : warning NU1903: O pacote 'SQLitePCLRaw.lib.e_sqlite3' 2.1.10 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-2m69-gcr7-jv3q\n    2 Aviso(s)\n    0 Erro(s)\n\nTempo Decorrido 00:00:01.85\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 1,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 354
+  },
+  {
+    "lang": "csharp",
+    "condition": "baseline",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 71.1,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 4,
+      "Write": 3
+    },
+    "duration_ms": 70694,
+    "num_turns": 8,
+    "cost_usd": 0.2207019,
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 19169,
+    "cache_read_input_tokens": 145419,
+    "output_tokens": 12946,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 12946,
+        "cacheReadInputTokens": 145419,
+        "cacheCreationInputTokens": 19169,
+        "webSearchRequests": 0,
+        "costUSD": 0.2207019,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 765,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 19169,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 3,
+    "source_files": 2,
+    "source_lines": 287,
+    "source_code_lines": 280,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 2.0,
+    "build_detail": "-gcr7-jv3q\nC:\\Users\\<user>\\AppData\\Local\\Temp\\claude\\ced57474e19a37b7\\f07dcdba-85d3-42cc-9017-09c5264d3ead\\scratchpad\\bench-final\\csharp\\baseline\\r3\\app\\Contatos.csproj : warning NU1903: O pacote 'SQLitePCLRaw.lib.e_sqlite3' 2.1.10 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-2m69-gcr7-jv3q\n    2 Aviso(s)\n    0 Erro(s)\n\nTempo Decorrido 00:00:01.71\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 353
+  },
+  {
+    "lang": "csharp",
+    "condition": "skill",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 167.4,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 5,
+      "Grep": 2,
+      "Bash": 6,
+      "Write": 16,
+      "Edit": 9,
+      "ToolSearch": 1,
+      "WebFetch": 3
+    },
+    "duration_ms": 166999,
+    "num_turns": 45,
+    "cost_usd": 0.5759621000000001,
+    "input_tokens": 32,
+    "cache_creation_input_tokens": 63309,
+    "cache_read_input_tokens": 763451,
+    "output_tokens": 24474,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 32,
+        "outputTokens": 24474,
+        "cacheReadInputTokens": 763451,
+        "cacheCreationInputTokens": 63309,
+        "webSearchRequests": 0,
+        "costUSD": 0.5743851000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 5150,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 63309,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-haiku-5-5": {
+        "inputTokens": 7810,
+        "outputTokens": 1592,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0015769999999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1235,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 16,
+    "source_files": 12,
+    "source_lines": 649,
+    "source_code_lines": 636,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 3.3,
+    "build_detail": "\nCompilação com êxito.\n    0 Aviso(s)\n    0 Erro(s)\n\nTempo Decorrido 00:00:03.06\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 1,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 289
+  },
+  {
+    "lang": "csharp",
+    "condition": "skill",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 242.2,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Bash": 7,
+      "Read": 6,
+      "Grep": 2,
+      "ToolSearch": 1,
+      "Write": 32,
+      "WebFetch": 3,
+      "Edit": 1
+    },
+    "duration_ms": 241800,
+    "num_turns": 55,
+    "cost_usd": 0.7745644000000002,
+    "input_tokens": 42,
+    "cache_creation_input_tokens": 77390,
+    "cache_read_input_tokens": 1092046,
+    "output_tokens": 35379,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 42,
+        "outputTokens": 35379,
+        "cacheReadInputTokens": 1092046,
+        "cacheCreationInputTokens": 77390,
+        "webSearchRequests": 0,
+        "costUSD": 0.7726386,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 9684,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 77390,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-haiku-5-5": {
+        "inputTokens": 11288,
+        "outputTokens": 1594,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0019257999999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1120,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 32,
+    "source_files": 15,
+    "source_lines": 682,
+    "source_code_lines": 662,
+    "web_lines": 206,
+    "build": "ok",
+    "build_seconds": 3.2,
+    "build_detail": "\nCompilação com êxito.\n    0 Aviso(s)\n    0 Erro(s)\n\nTempo Decorrido 00:00:02.93\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 1,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 356
+  },
+  {
+    "lang": "csharp",
+    "condition": "skill",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 193.5,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 6,
+      "Grep": 4,
+      "Bash": 8,
+      "Write": 13,
+      "Edit": 1
+    },
+    "duration_ms": 193084,
+    "num_turns": 35,
+    "cost_usd": 0.6114364,
+    "input_tokens": 34,
+    "cache_creation_input_tokens": 60705,
+    "cache_read_input_tokens": 746284,
+    "output_tokens": 29392,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 34,
+        "outputTokens": 29392,
+        "cacheReadInputTokens": 746284,
+        "cacheCreationInputTokens": 60705,
+        "webSearchRequests": 0,
+        "costUSD": 0.6114364,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 9888,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 60705,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 13,
+    "source_files": 9,
+    "source_lines": 756,
+    "source_code_lines": 736,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 3.8,
+    "build_detail": "\nCompilação com êxito.\n    0 Aviso(s)\n    0 Erro(s)\n\nTempo Decorrido 00:00:03.52\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 2,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 312
+  },
+  {
+    "lang": "go",
+    "condition": "baseline",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 108.9,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 4,
+      "Write": 13
+    },
+    "duration_ms": 108499,
+    "num_turns": 18,
+    "cost_usd": 0.29866400000000004,
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 25346,
+    "cache_read_input_tokens": 187680,
+    "output_tokens": 17848,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 17848,
+        "cacheReadInputTokens": 187680,
+        "cacheCreationInputTokens": 25346,
+        "webSearchRequests": 0,
+        "costUSD": 0.29866400000000004,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 3701,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 25346,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 13,
+    "source_files": 3,
+    "source_lines": 534,
+    "source_code_lines": 522,
+    "web_lines": 89,
+    "build": "ok",
+    "build_seconds": 2.3,
+    "build_detail": "go: finding module for package modernc.org/sqlite\ngo: finding module for package golang.org/x/crypto/bcrypt\ngo: found golang.org/x/crypto/bcrypt in golang.org/x/crypto v0.59.0\ngo: found modernc.org/sqlite in modernc.org/sqlite v1.62.0\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 1,
+      "WARNING": 7,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 350
+  },
+  {
+    "lang": "go",
+    "condition": "baseline",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 86.1,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 1,
+      "Write": 3
+    },
+    "duration_ms": 85669,
+    "num_turns": 5,
+    "cost_usd": 0.2267906,
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 20271,
+    "cache_read_input_tokens": 54146,
+    "output_tokens": 14028,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 14028,
+        "cacheReadInputTokens": 54146,
+        "cacheCreationInputTokens": 20271,
+        "webSearchRequests": 0,
+        "costUSD": 0.2267906,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 4659,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 20271,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 3,
+    "source_files": 1,
+    "source_lines": 448,
+    "source_code_lines": 439,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 1.2,
+    "build_detail": "go: finding module for package modernc.org/sqlite\ngo: finding module for package golang.org/x/crypto/bcrypt\ngo: found golang.org/x/crypto/bcrypt in golang.org/x/crypto v0.59.0\ngo: found modernc.org/sqlite in modernc.org/sqlite v1.62.0\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 3,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 319
+  },
+  {
+    "lang": "go",
+    "condition": "baseline",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 82.9,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 2,
+      "Glob": 1,
+      "Write": 4
+    },
+    "duration_ms": 82455,
+    "num_turns": 8,
+    "cost_usd": 0.2159113,
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 18897,
+    "cache_read_input_tokens": 74973,
+    "output_tokens": 13281,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 13281,
+        "cacheReadInputTokens": 74973,
+        "cacheCreationInputTokens": 18897,
+        "webSearchRequests": 0,
+        "costUSD": 0.2159113,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2428,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 18897,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 4,
+    "source_files": 2,
+    "source_lines": 526,
+    "source_code_lines": 509,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 1.5,
+    "build_detail": "go: finding module for package modernc.org/sqlite\ngo: finding module for package golang.org/x/crypto/bcrypt\ngo: found golang.org/x/crypto/bcrypt in golang.org/x/crypto v0.59.0\ngo: found modernc.org/sqlite in modernc.org/sqlite v1.62.0\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 4,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 415
+  },
+  {
+    "lang": "go",
+    "condition": "skill",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 212.5,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 6,
+      "Bash": 4,
+      "Write": 16
+    },
+    "duration_ms": 212100,
+    "num_turns": 29,
+    "cost_usd": 0.7312114,
+    "input_tokens": 24,
+    "cache_creation_input_tokens": 82573,
+    "cache_read_input_tokens": 663514,
+    "output_tokens": 33452,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 24,
+        "outputTokens": 33452,
+        "cacheReadInputTokens": 663514,
+        "cacheCreationInputTokens": 82573,
+        "webSearchRequests": 0,
+        "costUSD": 0.7312114,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 11827,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 82573,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 16,
+    "source_files": 6,
+    "source_lines": 874,
+    "source_code_lines": 826,
+    "web_lines": 98,
+    "build": "ok",
+    "build_seconds": 2.5,
+    "build_detail": "go: finding module for package modernc.org/sqlite\ngo: finding module for package golang.org/x/term\ngo: finding module for package golang.org/x/crypto/argon2\ngo: found golang.org/x/term in golang.org/x/term v0.48.0\ngo: found golang.org/x/crypto/argon2 in golang.org/x/crypto v0.59.0\ngo: found modernc.org/sqlite in modernc.org/sqlite v1.62.0\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 7,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 346
+  },
+  {
+    "lang": "go",
+    "condition": "skill",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 187.4,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 5,
+      "Grep": 1,
+      "Bash": 3,
+      "Write": 10,
+      "Edit": 1
+    },
+    "duration_ms": 186933,
+    "num_turns": 23,
+    "cost_usd": 0.5922876,
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 64352,
+    "cache_read_input_tokens": 358536,
+    "output_tokens": 29899,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 18,
+        "outputTokens": 29899,
+        "cacheReadInputTokens": 358536,
+        "cacheCreationInputTokens": 64352,
+        "webSearchRequests": 0,
+        "costUSD": 0.5922876,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 12008,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 64352,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 10,
+    "source_files": 5,
+    "source_lines": 785,
+    "source_code_lines": 766,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 1.4,
+    "build_detail": "go: finding module for package modernc.org/sqlite\ngo: finding module for package golang.org/x/term\ngo: finding module for package golang.org/x/crypto/argon2\ngo: found golang.org/x/crypto/argon2 in golang.org/x/crypto v0.59.0\ngo: found golang.org/x/term in golang.org/x/term v0.48.0\ngo: found modernc.org/sqlite in modernc.org/sqlite v1.62.0\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 3,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 299
+  },
+  {
+    "lang": "go",
+    "condition": "skill",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 179.3,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Bash": 5,
+      "Read": 5,
+      "Grep": 1,
+      "Write": 10
+    },
+    "duration_ms": 178823,
+    "num_turns": 24,
+    "cost_usd": 0.5912715,
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 67544,
+    "cache_read_input_tokens": 370455,
+    "output_tokens": 28401,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 20,
+        "outputTokens": 28401,
+        "cacheReadInputTokens": 370455,
+        "cacheCreationInputTokens": 67544,
+        "webSearchRequests": 0,
+        "costUSD": 0.5912715,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 10761,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 67544,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 10,
+    "source_files": 5,
+    "source_lines": 732,
+    "source_code_lines": 710,
+    "web_lines": 90,
+    "build": "fail",
+    "build_seconds": 0,
+    "build_detail": "no go.mod",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 6,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 326
+  },
+  {
+    "lang": "java",
+    "condition": "baseline",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 102.0,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 5,
+      "Write": 3,
+      "Edit": 1
+    },
+    "duration_ms": 101581,
+    "num_turns": 10,
+    "cost_usd": 0.27240319999999996,
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 23053,
+    "cache_read_input_tokens": 180092,
+    "output_tokens": 16215,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 16215,
+        "cacheReadInputTokens": 180092,
+        "cacheCreationInputTokens": 23053,
+        "webSearchRequests": 0,
+        "costUSD": 0.27240319999999996,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 4253,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 23053,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 5,
+    "source_files": 1,
+    "source_lines": 451,
+    "source_code_lines": 438,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.8,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 324
+  },
+  {
+    "lang": "java",
+    "condition": "baseline",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 87.7,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 4,
+      "Write": 8,
+      "Edit": 2
+    },
+    "duration_ms": 87231,
+    "num_turns": 15,
+    "cost_usd": 0.24518460000000003,
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 21909,
+    "cache_read_input_tokens": 131946,
+    "output_tokens": 14433,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 14433,
+        "cacheReadInputTokens": 131946,
+        "cacheCreationInputTokens": 21909,
+        "webSearchRequests": 0,
+        "costUSD": 0.24518460000000003,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2933,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 21909,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 8,
+    "source_files": 6,
+    "source_lines": 457,
+    "source_code_lines": 445,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.8,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 336
+  },
+  {
+    "lang": "java",
+    "condition": "baseline",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 89.0,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 3,
+      "Write": 3
+    },
+    "duration_ms": 88560,
+    "num_turns": 7,
+    "cost_usd": 0.23305209999999998,
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 20320,
+    "cache_read_input_tokens": 106421,
+    "output_tokens": 14111,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 14111,
+        "cacheReadInputTokens": 106421,
+        "cacheCreationInputTokens": 20320,
+        "webSearchRequests": 0,
+        "costUSD": 0.23305209999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 4786,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 20320,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 3,
+    "source_files": 1,
+    "source_lines": 342,
+    "source_code_lines": 329,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.7,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 364
+  },
+  {
+    "lang": "java",
+    "condition": "skill",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 162.4,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 5,
+      "Bash": 14,
+      "Grep": 3,
+      "Write": 11
+    },
+    "duration_ms": 161970,
+    "num_turns": 36,
+    "cost_usd": 0.5371835,
+    "input_tokens": 36,
+    "cache_creation_input_tokens": 54596,
+    "cache_read_input_tokens": 746675,
+    "output_tokens": 24406,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 36,
+        "outputTokens": 24406,
+        "cacheReadInputTokens": 746675,
+        "cacheCreationInputTokens": 54596,
+        "webSearchRequests": 0,
+        "costUSD": 0.5371835,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 7089,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 54596,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 12,
+    "source_files": 8,
+    "source_lines": 624,
+    "source_code_lines": 610,
+    "web_lines": 0,
+    "build": "fail",
+    "build_seconds": 0.7,
+    "build_detail": "                ^\n  symbol:   class SQLiteConfig\n  location: class Database\nC:\\Users\\<user>\\AppData\\Local\\Temp\\claude\\ced57474e19a37b7\\f07dcdba-85d3-42cc-9017-09c5264d3ead\\scratchpad\\bench-final\\java\\skill\\r1\\app\\src\\comum\\Database.java:25: error: package SQLiteConfig does not exist\n        config.setJournalMode(SQLiteConfig.JournalMode.WAL);\n                                          ^\n4 errors\n",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 287
+  },
+  {
+    "lang": "java",
+    "condition": "skill",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 153.3,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 6,
+      "Bash": 5,
+      "Grep": 2,
+      "ToolSearch": 1,
+      "WebFetch": 5,
+      "Write": 13,
+      "Edit": 2
+    },
+    "duration_ms": 152839,
+    "num_turns": 37,
+    "cost_usd": 0.5140703,
+    "input_tokens": 30,
+    "cache_creation_input_tokens": 55869,
+    "cache_read_input_tokens": 552828,
+    "output_tokens": 23380,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 30,
+        "outputTokens": 23380,
+        "cacheReadInputTokens": 552828,
+        "cacheCreationInputTokens": 55869,
+        "webSearchRequests": 0,
+        "costUSD": 0.5126187999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 5356,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 55869,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-haiku-5-5": {
+        "inputTokens": 7220,
+        "outputTokens": 1459,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0014515,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1053,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 13,
+    "source_files": 9,
+    "source_lines": 620,
+    "source_code_lines": 606,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 11.6,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 342
+  },
+  {
+    "lang": "java",
+    "condition": "skill",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 178.9,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 5,
+      "Grep": 2,
+      "Bash": 15,
+      "Glob": 2,
+      "Write": 11,
+      "Edit": 3
+    },
+    "duration_ms": 178433,
+    "num_turns": 41,
+    "cost_usd": 0.6355086999999999,
+    "input_tokens": 42,
+    "cache_creation_input_tokens": 65759,
+    "cache_read_input_tokens": 1055287,
+    "output_tokens": 26686,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 42,
+        "outputTokens": 26686,
+        "cacheReadInputTokens": 1055287,
+        "cacheCreationInputTokens": 65759,
+        "webSearchRequests": 0,
+        "costUSD": 0.6355086999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 7428,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 65759,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 12,
+    "source_files": 9,
+    "source_lines": 675,
+    "source_code_lines": 656,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.9,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 338
+  },
+  {
+    "lang": "node",
+    "condition": "baseline",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 67.8,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 5,
+      "Write": 3,
+      "Edit": 2
+    },
+    "duration_ms": 67362,
+    "num_turns": 11,
+    "cost_usd": 0.1916391,
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 17032,
+    "cache_read_input_tokens": 192191,
+    "output_tokens": 10426,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 10426,
+        "cacheReadInputTokens": 192191,
+        "cacheCreationInputTokens": 17032,
+        "webSearchRequests": 0,
+        "costUSD": 0.1916391,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1573,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 17032,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 3,
+    "source_files": 1,
+    "source_lines": 220,
+    "source_code_lines": 209,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 2,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 352
+  },
+  {
+    "lang": "node",
+    "condition": "baseline",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 60.0,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 5,
+      "Write": 3
+    },
+    "duration_ms": 59569,
+    "num_turns": 9,
+    "cost_usd": 0.17073050000000004,
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 15570,
+    "cache_read_input_tokens": 159925,
+    "output_tokens": 9243,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 14,
+        "outputTokens": 9243,
+        "cacheReadInputTokens": 159925,
+        "cacheCreationInputTokens": 15570,
+        "webSearchRequests": 0,
+        "costUSD": 0.17073050000000004,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1112,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 15570,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 3,
+    "source_files": 1,
+    "source_lines": 207,
+    "source_code_lines": 194,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 1,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 1,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 332
+  },
+  {
+    "lang": "node",
+    "condition": "baseline",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 62.1,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 5,
+      "Write": 2,
+      "Edit": 1
+    },
+    "duration_ms": 61700,
+    "num_turns": 9,
+    "cost_usd": 0.17925400000000002,
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 15923,
+    "cache_read_input_tokens": 188900,
+    "output_tokens": 9664,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 16,
+        "outputTokens": 9664,
+        "cacheReadInputTokens": 188900,
+        "cacheCreationInputTokens": 15923,
+        "webSearchRequests": 0,
+        "costUSD": 0.17925400000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 941,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 15923,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 2,
+    "source_files": 1,
+    "source_lines": 232,
+    "source_code_lines": 223,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 1,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 3,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 352
+  },
+  {
+    "lang": "node",
+    "condition": "skill",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 209.9,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 6,
+      "Grep": 1,
+      "Bash": 7,
+      "Write": 18
+    },
+    "duration_ms": 209463,
+    "num_turns": 35,
+    "cost_usd": 0.6776508000000001,
+    "input_tokens": 34,
+    "cache_creation_input_tokens": 68288,
+    "cache_read_input_tokens": 932608,
+    "output_tokens": 31117,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 34,
+        "outputTokens": 31117,
+        "cacheReadInputTokens": 932608,
+        "cacheCreationInputTokens": 68288,
+        "webSearchRequests": 0,
+        "costUSD": 0.6776508000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 11015,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 68288,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 17,
+    "source_files": 13,
+    "source_lines": 748,
+    "source_code_lines": 730,
+    "web_lines": 30,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 287
+  },
+  {
+    "lang": "node",
+    "condition": "skill",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 169.4,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 5,
+      "Grep": 2,
+      "Bash": 7,
+      "Write": 18,
+      "Edit": 1
+    },
+    "duration_ms": 168955,
+    "num_turns": 36,
+    "cost_usd": 0.5438599999999999,
+    "input_tokens": 30,
+    "cache_creation_input_tokens": 56342,
+    "cache_read_input_tokens": 667120,
+    "output_tokens": 25172,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 30,
+        "outputTokens": 25172,
+        "cacheReadInputTokens": 667120,
+        "cacheCreationInputTokens": 56342,
+        "webSearchRequests": 0,
+        "costUSD": 0.5438599999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 7185,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 56342,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 18,
+    "source_files": 14,
+    "source_lines": 599,
+    "source_code_lines": 581,
+    "web_lines": 21,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 1,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 3,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 269
+  },
+  {
+    "lang": "node",
+    "condition": "skill",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 137.6,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 4,
+      "Grep": 2,
+      "Bash": 7,
+      "Write": 15,
+      "Edit": 1
+    },
+    "duration_ms": 137115,
+    "num_turns": 32,
+    "cost_usd": 0.4650108,
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 50941,
+    "cache_read_input_tokens": 526248,
+    "output_tokens": 20857,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 26,
+        "outputTokens": 20857,
+        "cacheReadInputTokens": 526248,
+        "cacheCreationInputTokens": 50941,
+        "webSearchRequests": 0,
+        "costUSD": 0.4650108,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 5110,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 50941,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 15,
+    "source_files": 11,
+    "source_lines": 488,
+    "source_code_lines": 481,
+    "web_lines": 24,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 4,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 360
+  },
+  {
+    "lang": "php",
+    "condition": "baseline",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 68.8,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 2,
+      "Write": 10,
+      "Edit": 2
+    },
+    "duration_ms": 68207,
+    "num_turns": 15,
+    "cost_usd": 0.1993939,
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 18884,
+    "cache_read_input_tokens": 105779,
+    "output_tokens": 11326,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 11326,
+        "cacheReadInputTokens": 105779,
+        "cacheCreationInputTokens": 18884,
+        "webSearchRequests": 0,
+        "costUSD": 0.1993939,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 941,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 18884,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 10,
+    "source_files": 7,
+    "source_lines": 320,
+    "source_code_lines": 314,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 335
+  },
+  {
+    "lang": "php",
+    "condition": "baseline",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 61.4,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 3,
+      "Write": 10
+    },
+    "duration_ms": 60996,
+    "num_turns": 14,
+    "cost_usd": 0.1806563,
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 17448,
+    "cache_read_input_tokens": 95843,
+    "output_tokens": 10126,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 10126,
+        "cacheReadInputTokens": 95843,
+        "cacheCreationInputTokens": 17448,
+        "webSearchRequests": 0,
+        "costUSD": 0.1806563,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 886,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 17448,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 10,
+    "source_files": 7,
+    "source_lines": 302,
+    "source_code_lines": 296,
+    "web_lines": 14,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 1,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 309
+  },
+  {
+    "lang": "php",
+    "condition": "baseline",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 54.7,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Bash": 3,
+      "Write": 9
+    },
+    "duration_ms": 54319,
+    "num_turns": 13,
+    "cost_usd": 0.1642201,
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 16359,
+    "cache_read_input_tokens": 74481,
+    "output_tokens": 9132,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 9132,
+        "cacheReadInputTokens": 74481,
+        "cacheCreationInputTokens": 16359,
+        "webSearchRequests": 0,
+        "costUSD": 0.1642201,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 720,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 16359,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 9,
+    "source_files": 7,
+    "source_lines": 304,
+    "source_code_lines": 299,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 309
+  },
+  {
+    "lang": "php",
+    "condition": "skill",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 110.9,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Bash": 4,
+      "Read": 4,
+      "Grep": 1,
+      "ToolSearch": 1,
+      "WebFetch": 1,
+      "Write": 16,
+      "Edit": 1
+    },
+    "duration_ms": 110272,
+    "num_turns": 31,
+    "cost_usd": 0.3943272,
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 48753,
+    "cache_read_input_tokens": 425412,
+    "output_tokens": 15491,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 26,
+        "outputTokens": 15491,
+        "cacheReadInputTokens": 425412,
+        "cacheCreationInputTokens": 48753,
+        "webSearchRequests": 0,
+        "costUSD": 0.3925152,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1613,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 48753,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-haiku-5-5": {
+        "inputTokens": 2165,
+        "outputTokens": 3191,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0018119999999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1922,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 15,
+    "source_files": 10,
+    "source_lines": 420,
+    "source_code_lines": 409,
+    "web_lines": 14,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 284
+  },
+  {
+    "lang": "php",
+    "condition": "skill",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 207.3,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 3,
+      "Grep": 1,
+      "Bash": 3,
+      "ToolSearch": 1,
+      "WebFetch": 1,
+      "Write": 22
+    },
+    "duration_ms": 206919,
+    "num_turns": 34,
+    "cost_usd": 0.60156,
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 64257,
+    "cache_read_input_tokens": 446095,
+    "output_tokens": 29907,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 29907,
+        "cacheReadInputTokens": 446095,
+        "cacheCreationInputTokens": 64257,
+        "webSearchRequests": 0,
+        "costUSD": 0.6007515,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 13522,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 64257,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-haiku-5-5": {
+        "inputTokens": 3790,
+        "outputTokens": 859,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0008085,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 597,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 21,
+    "source_files": 13,
+    "source_lines": 509,
+    "source_code_lines": 492,
+    "web_lines": 20,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 296
+  },
+  {
+    "lang": "php",
+    "condition": "skill",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 146.7,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 3,
+      "Grep": 2,
+      "Bash": 3,
+      "ToolSearch": 1,
+      "WebFetch": 1,
+      "Write": 16
+    },
+    "duration_ms": 146276,
+    "num_turns": 29,
+    "cost_usd": 0.44885749999999996,
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 49407,
+    "cache_read_input_tokens": 381090,
+    "output_tokens": 21255,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 22,
+        "outputTokens": 21255,
+        "cacheReadInputTokens": 381090,
+        "cacheCreationInputTokens": 49407,
+        "webSearchRequests": 0,
+        "costUSD": 0.448331,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 5081,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 49407,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-haiku-5-5": {
+        "inputTokens": 2175,
+        "outputTokens": 618,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.0005265,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 347,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-haiku-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 16,
+    "source_files": 11,
+    "source_lines": 572,
+    "source_code_lines": 547,
+    "web_lines": 22,
+    "build": "ok",
+    "build_seconds": 0,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 272
+  },
+  {
+    "lang": "python",
+    "condition": "baseline",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 40.7,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Write": 2,
+      "Bash": 3
+    },
+    "duration_ms": 40081,
+    "num_turns": 6,
+    "cost_usd": 0.11950949999999999,
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 12374,
+    "cache_read_input_tokens": 84775,
+    "output_tokens": 6152,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 6152,
+        "cacheReadInputTokens": 84775,
+        "cacheCreationInputTokens": 12374,
+        "webSearchRequests": 0,
+        "costUSD": 0.11950949999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 906,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 12374,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 2,
+    "source_files": 1,
+    "source_lines": 188,
+    "source_code_lines": 183,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.1,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 310
+  },
+  {
+    "lang": "python",
+    "condition": "baseline",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 43.4,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Write": 2,
+      "Bash": 2
+    },
+    "duration_ms": 42964,
+    "num_turns": 5,
+    "cost_usd": 0.1253217,
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 12686,
+    "cache_read_input_tokens": 85217,
+    "output_tokens": 6604,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 6604,
+        "cacheReadInputTokens": 85217,
+        "cacheCreationInputTokens": 12686,
+        "webSearchRequests": 0,
+        "costUSD": 0.1253217,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 723,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 12686,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 2,
+    "source_files": 1,
+    "source_lines": 222,
+    "source_code_lines": 218,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.1,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 358
+  },
+  {
+    "lang": "python",
+    "condition": "baseline",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 47.3,
+    "stderr_tail": "",
+    "skill_used": false,
+    "secops_skills_loaded": [],
+    "skill_names_called": [],
+    "tool_calls": {
+      "Write": 2,
+      "Bash": 3
+    },
+    "duration_ms": 46801,
+    "num_turns": 6,
+    "cost_usd": 0.1339494,
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 13272,
+    "cache_read_input_tokens": 111414,
+    "output_tokens": 6970,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 10,
+        "outputTokens": 6970,
+        "cacheReadInputTokens": 111414,
+        "cacheCreationInputTokens": 13272,
+        "webSearchRequests": 0,
+        "costUSD": 0.1339494,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 1016,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 13272,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 2,
+    "source_files": 1,
+    "source_lines": 198,
+    "source_code_lines": 193,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.1,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 327
+  },
+  {
+    "lang": "python",
+    "condition": "skill",
+    "rep": 1,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 150.2,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 3,
+      "Grep": 1,
+      "Bash": 8,
+      "Write": 11,
+      "Edit": 1
+    },
+    "duration_ms": 149806,
+    "num_turns": 27,
+    "cost_usd": 0.4748798,
+    "input_tokens": 30,
+    "cache_creation_input_tokens": 50791,
+    "cache_read_input_tokens": 666958,
+    "output_tokens": 20496,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 30,
+        "outputTokens": 20496,
+        "cacheReadInputTokens": 666958,
+        "cacheCreationInputTokens": 50791,
+        "webSearchRequests": 0,
+        "costUSD": 0.4748798,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 5959,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 50791,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 11,
+    "source_files": 6,
+    "source_lines": 471,
+    "source_code_lines": 469,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.4,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 2,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 336
+  },
+  {
+    "lang": "python",
+    "condition": "skill",
+    "rep": 2,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 184.9,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 5,
+      "Bash": 10,
+      "Write": 13,
+      "Edit": 2
+    },
+    "duration_ms": 184395,
+    "num_turns": 33,
+    "cost_usd": 0.6300488000000001,
+    "input_tokens": 34,
+    "cache_creation_input_tokens": 68636,
+    "cache_read_input_tokens": 958168,
+    "output_tokens": 25962,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 34,
+        "outputTokens": 25962,
+        "cacheReadInputTokens": 958168,
+        "cacheCreationInputTokens": 68636,
+        "webSearchRequests": 0,
+        "costUSD": 0.6300488000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 9198,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 68636,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 12,
+    "source_files": 8,
+    "source_lines": 510,
+    "source_code_lines": 507,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.4,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 2,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 349
+  },
+  {
+    "lang": "python",
+    "condition": "skill",
+    "rep": 3,
+    "exit_code": 0,
+    "timed_out": false,
+    "skill_commit": "b723084",
+    "wall_seconds": 177.2,
+    "stderr_tail": "",
+    "skill_used": true,
+    "secops_skills_loaded": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "skill_names_called": [
+      "principal-secops-dev-token-optimizer:principal-secops-dev-token-optimizer"
+    ],
+    "tool_calls": {
+      "Skill": 1,
+      "Read": 5,
+      "Bash": 6,
+      "Grep": 1,
+      "Write": 13
+    },
+    "duration_ms": 176732,
+    "num_turns": 28,
+    "cost_usd": 0.5728403000000001,
+    "input_tokens": 30,
+    "cache_creation_input_tokens": 60955,
+    "cache_read_input_tokens": 746703,
+    "output_tokens": 25429,
+    "is_error": false,
+    "model_usage": {
+      "claude-sonnet-5-5": {
+        "inputTokens": 30,
+        "outputTokens": 25429,
+        "cacheReadInputTokens": 746703,
+        "cacheCreationInputTokens": 60955,
+        "webSearchRequests": 0,
+        "costUSD": 0.5728403000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 7553,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 60955,
+        "canonicalModel": "claude-sonnet-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "files": 12,
+    "source_files": 8,
+    "source_lines": 659,
+    "source_code_lines": 657,
+    "web_lines": 0,
+    "build": "ok",
+    "build_seconds": 0.4,
+    "build_detail": "",
+    "scanner": {
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0
+    },
+    "semgrep": {
+      "ERROR": 0,
+      "WARNING": 0,
+      "INFO": 0
+    },
+    "password_hashing": "strong",
+    "answer_words": 358
+  }
+]

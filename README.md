@@ -133,7 +133,7 @@ Exit code 0 means no HIGH finding, 1 means at least one HIGH, and 2 means the pa
 
 ## Benchmark
 
-The same small app (contacts with login and SQLite) was requested through Claude Code with and without the skill, in PHP, Python, Node.js, Java, C# and Go, in a clean configuration with no other plugins. Tokens, time, cost, lines of code, build result and security findings are compared in [docs/BENCHMARK.md](docs/BENCHMARK.md), together with the method and how to reproduce it.
+The same small app (contacts with login and SQLite) was requested 36 times through Claude Code, with and without the skill, in PHP, Python, Node.js, Java, C# and Go, in an isolated configuration. In a blind review, the app built with the skill was the more secure one in all 6 languages, and it always came with run instructions. The cost: about 3 times the price and 2.5 times the time per app (USD 0.58 against 0.20, 176 s against 69 s), and 16 of 18 apps compiled, against 18 of 18 without it. Full tables, method, limits and how to reproduce: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
 ## Repository layout
 
