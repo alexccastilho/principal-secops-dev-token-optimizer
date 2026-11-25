@@ -1,0 +1,72 @@
+{
+  "A01": {
+    "lang": "node",
+    "security": 7,
+    "critical": [
+      "low: server.js:168-182 first-run setup (POST /configurar) has no CSRF token or Origin check, and temUsuario is read before the awaited body parse, so until the owner creates the account any web page the user visits can create an account cross-site (Host check passes because the browser sends localhost:3000), and two concurrent requests can both insert users. The result is account squatting or locking the owner out on first run; bound to 127.0.0.1, so no remote data exposure"
+    ],
+    "delivery": 7,
+    "notes": "Single file, no external deps, parameterized SQL, strict CSP, CSRF tokens, HttpOnly SameSite=Strict cookie, new session on login, POST logout. Weaker points: scrypt left at Node defaults (N=2^14) and run with scryptSync (blocks the event loop), one global lockout counter (5 failures, 60 s), no log, no package.json/engines, schema has no constraints beyond NOT NULL and no indexes. LEIA-ME is short and clear and names Node 22.13+."
+  },
+  "A02": {
+    "lang": "csharp",
+    "security": 9,
+    "critical": [],
+    "delivery": 7,
+    "notes": "ASP.NET minimal API: deny-by-default FallbackPolicy, built-in antiforgery on every POST including login/setup/logout, Identity PasswordHasher (PBKDF2-SHA512, 210k), dummy-hash timing equalization, atomic single-account creation, AllowedHosts plus 127.0.0.1 binding, strict CSP, error page shows only a correlation code, DB in user-private AppData. Minor: the stateless auth cookie is not revoked server-side on logout (valid up to 8h if it was copied), and the lockout is global. Delivery: needs .NET 10 SDK and a first build; iniciar.bat opens the browser before the server is up, contrary to LEIA-ME; email and phone are mandatory; STRICT tables but no index."
+  },
+  "A03": {
+    "lang": "node",
+    "security": 9,
+    "critical": [],
+    "delivery": 6,
+    "notes": "Strongest Node app: scrypt N=2^15 async with bounded params, multi-user with per-owner scoping on every query (usuario_id in WHERE for select/update/delete), CSRF tokens plus Origin check, idle and absolute session timeouts, Host allowlist, CSP, body size and content-type limits, LIKE escaping, log without secrets, FK and index in a STRICT schema. Lockout is keyed by IP, so in practice it is global on localhost (local DoS only). Delivery: needs Node 24 and terminal commands (npm run criar-usuario, npm start); no .bat; no password-reset path."
+  },
+  "A04": {
+    "lang": "python",
+    "security": 9,
+    "critical": [],
+    "delivery": 8,
+    "notes": "Tkinter desktop app: Argon2id (argon2-cffi pinned) with rehash, 15-char minimum plus weak-password checks, persistent per-user exponential lockout stored in the DB, dummy-hash timing equalization, atomic single-account insert, owner_id scoping with FK and index in a STRICT schema, LIKE escaping, generic errors with a log that holds no PII, safe backup, unit tests. Delivery: Instalar.bat creates a venv and Abrir Contatos.bat runs it; LEIA-ME is clear (Python must already be installed). Email is mandatory, which is a usability nit."
+  },
+  "A05": {
+    "lang": "csharp",
+    "security": 8,
+    "critical": [],
+    "delivery": 7,
+    "notes": "Razor Pages: AuthorizeFolder deny-by-default, automatic antiforgery on all POST forms, PBKDF2-SHA256 600k, persistent per-user lockout, atomic first-user insert, IsLocalUrl on returnUrl, Razor auto-encoding, AllowedHosts plus 127.0.0.1 binding, DB in AppData. Weaker: no maximum password length, cookie not revoked server-side on logout, looser CSP (script 'self'), schema not STRICT with nullable email/phone and no index, Verify uses int.Parse without guards. Delivery: SDK link plus iniciar.bat; the browser opens before the build finishes."
+  },
+  "A06": {
+    "lang": "python",
+    "security": 8,
+    "critical": [],
+    "delivery": 6,
+    "notes": "Tkinter desktop app: Argon2id with rehash, 15-char minimum, parameterized SQL with LIKE escaping, versioned migrations via user_version, CHECK constraints, index, STRICT tables, PII-free log, safe backup. Weaker: the lockout counter lives in the login frame (5 failures, 30 s), so logout/login or a restart resets it; no dummy hash for unknown users (timing reveals the username, minor on a desktop app). Delivery: setup is three PowerShell commands, with no .bat."
+  },
+  "A07": {
+    "lang": "node",
+    "security": 8,
+    "critical": [],
+    "delivery": 6,
+    "notes": "Single-user web app: scrypt N=2^15 async, CSRF on every authenticated POST plus Origin check (which also covers setup/login), Host allowlist, strict CSP, setup re-checked before insert, dummy-hash timing, sliding-window global lockout, log without secrets, trusted_schema OFF, STRICT tables. Weaker: no bounds on the stored-hash params, global lockout (local DoS), no index. Delivery: iniciar.bat double-click, but LEIA-ME never says Node.js must be installed or which version (only package.json engines >=24); backup requires npm in a terminal."
+  },
+  "A08": {
+    "lang": "csharp",
+    "security": 9,
+    "critical": [],
+    "delivery": 5,
+    "notes": "WinForms desktop app: PBKDF2-SHA256 600k with bounded iteration parsing, persistent per-user lockout in the DB, dummy-hash timing equalization, parameterized SQL with LIKE escaping, validation via MailAddress, generic error dialogs with details only in the log, DB in user-private AppData, small attack surface. Minor: floating package version 10.0.*, non-atomic HasAnyUser/insert (harmless single-process), no index. Delivery: winget plus `cd <pasta>` plus `dotnet run` in a terminal on every launch, with no .bat."
+  },
+  "A09": {
+    "lang": "python",
+    "security": 7,
+    "critical": [],
+    "delivery": 4,
+    "notes": "Single-file tkinter app, stdlib only: PBKDF2-SHA256 600k with per-user salt and stored iterations, compare_digest, dummy-hash timing, parameterized SQL. Weaker: 8-char minimum, in-memory lockout reset by restarting, LIKE wildcards not escaped (functional only), no logging or error handling, DB next to the code. Delivery: no LEIA-ME/instructions at all, only abrir.bat; minimal schema with no constraints, indexes or migrations."
+  },
+  "ranking": {
+    "python": ["A04", "A06", "A09"],
+    "node": ["A03", "A07", "A01"],
+    "csharp": [["A02", "A08"], "A05"]
+  }
+}

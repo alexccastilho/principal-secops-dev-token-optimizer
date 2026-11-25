@@ -1,0 +1,218 @@
+{
+ "csharp||baseline": {
+  "cost_usd": 0.25712884999999996,
+  "output_tokens": 15280,
+  "cache_creation_input_tokens": 22647.5,
+  "cache_read_input_tokens": 137148.5,
+  "input_tokens": 12,
+  "num_turns": 17.5,
+  "wall_seconds": 88.65
+ },
+ "csharp||v221": {
+  "cost_usd": 0.6549617999999999,
+  "output_tokens": 31094.5,
+  "cache_creation_input_tokens": 71730,
+  "cache_read_input_tokens": 557400,
+  "input_tokens": 27,
+  "num_turns": 35.5,
+  "wall_seconds": 198.65
+ },
+ "csharp||v23": {
+  "cost_usd": 0.4988733000000001,
+  "output_tokens": 25106.5,
+  "cache_creation_input_tokens": 50205.5,
+  "cache_read_input_tokens": 469283,
+  "input_tokens": 29,
+  "num_turns": 38,
+  "wall_seconds": 155.5
+ },
+ "node||baseline": {
+  "cost_usd": 0.26223640000000004,
+  "output_tokens": 14842,
+  "cache_creation_input_tokens": 21289,
+  "cache_read_input_tokens": 286184,
+  "input_tokens": 21,
+  "num_turns": 14.5,
+  "wall_seconds": 92.75
+ },
+ "node||v221": {
+  "cost_usd": 0.5820311499999999,
+  "output_tokens": 26687,
+  "cache_creation_input_tokens": 59248,
+  "cache_read_input_tokens": 781051.5,
+  "input_tokens": 32,
+  "num_turns": 37,
+  "wall_seconds": 174.05
+ },
+ "node||v23": {
+  "cost_usd": 0.5827389999999999,
+  "output_tokens": 27293.5,
+  "cache_creation_input_tokens": 57430,
+  "cache_read_input_tokens": 800200,
+  "input_tokens": 32,
+  "num_turns": 37,
+  "wall_seconds": 177.0
+ },
+ "python||baseline": {
+  "cost_usd": 0.12308884999999999,
+  "output_tokens": 6599,
+  "cache_creation_input_tokens": 12539.5,
+  "cache_read_input_tokens": 69268.5,
+  "input_tokens": 7,
+  "num_turns": 5,
+  "wall_seconds": 46.9
+ },
+ "python||v221": {
+  "cost_usd": 0.48782440000000005,
+  "output_tokens": 21069,
+  "cache_creation_input_tokens": 51769,
+  "cache_read_input_tokens": 699964,
+  "input_tokens": 31,
+  "num_turns": 30.5,
+  "wall_seconds": 163.2
+ },
+ "python||v23": {
+  "cost_usd": 0.5165189,
+  "output_tokens": 20702.5,
+  "cache_creation_input_tokens": 53367.5,
+  "cache_read_input_tokens": 959399,
+  "input_tokens": 42,
+  "num_turns": 41,
+  "wall_seconds": 152.25
+ },
+ "node|bugfix|baseline": {
+  "cost_usd": 0.0575958,
+  "output_tokens": 768,
+  "cache_creation_input_tokens": 10111.666666666666,
+  "cache_read_input_tokens": 94504.66666666667,
+  "input_tokens": 9.333333333333334,
+  "num_turns": 5.333333333333333,
+  "wall_seconds": 13.7
+ },
+ "node|bugfix|v221": {
+  "cost_usd": 0.057920433333333333,
+  "output_tokens": 745,
+  "cache_creation_input_tokens": 10601,
+  "cache_read_input_tokens": 80504.33333333333,
+  "input_tokens": 8,
+  "num_turns": 5,
+  "wall_seconds": 15.166666666666666
+ },
+ "node|bugfix|v23": {
+  "cost_usd": 0.09787663333333334,
+  "output_tokens": 967.3333333333334,
+  "cache_creation_input_tokens": 19076.666666666668,
+  "cache_read_input_tokens": 118739.66666666667,
+  "input_tokens": 11.333333333333334,
+  "num_turns": 7.666666666666667,
+  "wall_seconds": 12.6
+ },
+ "node|review|baseline": {
+  "cost_usd": 0.35743556666666665,
+  "output_tokens": 6472.333333333333,
+  "cache_creation_input_tokens": 66703,
+  "cache_read_input_tokens": 258682.33333333334,
+  "input_tokens": 16,
+  "num_turns": 12.333333333333334,
+  "wall_seconds": 61.56666666666667
+ },
+ "node|review|v221": {
+  "cost_usd": 0.38853703333333334,
+  "output_tokens": 6769.333333333333,
+  "cache_creation_input_tokens": 75633,
+  "cache_read_input_tokens": 182837,
+  "input_tokens": 14,
+  "num_turns": 21,
+  "wall_seconds": 57.833333333333336
+ },
+ "node|review|v23": {
+  "cost_usd": 0.35889713333333334,
+  "output_tokens": 6513.666666666667,
+  "cache_creation_input_tokens": 70311.33333333333,
+  "cache_read_input_tokens": 124938,
+  "input_tokens": 10.666666666666666,
+  "num_turns": 21.333333333333332,
+  "wall_seconds": 51.63333333333333
+ },
+ "python|bugfix|baseline": {
+  "cost_usd": 0.0600439,
+  "output_tokens": 906,
+  "cache_creation_input_tokens": 10375.666666666666,
+  "cache_read_input_tokens": 94625.66666666667,
+  "input_tokens": 9.333333333333334,
+  "num_turns": 6,
+  "wall_seconds": 17.166666666666668
+ },
+ "python|bugfix|v221": {
+  "cost_usd": 0.05847516666666667,
+  "output_tokens": 883,
+  "cache_creation_input_tokens": 10225.666666666666,
+  "cache_read_input_tokens": 87251.66666666667,
+  "input_tokens": 8.666666666666666,
+  "num_turns": 5.333333333333333,
+  "wall_seconds": 13.4
+ },
+ "python|bugfix|v23": {
+  "cost_usd": 0.10027986666666666,
+  "output_tokens": 1181,
+  "cache_creation_input_tokens": 19403,
+  "cache_read_input_tokens": 108365.33333333333,
+  "input_tokens": 10.666666666666666,
+  "num_turns": 8,
+  "wall_seconds": 16.133333333333333
+ },
+ "python|review|baseline": {
+  "cost_usd": 0.3648520333333333,
+  "output_tokens": 9734,
+  "cache_creation_input_tokens": 63896.333333333336,
+  "cache_read_input_tokens": 119080.33333333333,
+  "input_tokens": 9.333333333333334,
+  "num_turns": 23,
+  "wall_seconds": 76.66666666666667
+ },
+ "python|review|v221": {
+  "cost_usd": 0.4156309,
+  "output_tokens": 7837.333333333333,
+  "cache_creation_input_tokens": 78401.33333333333,
+  "cache_read_input_tokens": 236215.66666666666,
+  "input_tokens": 15.333333333333334,
+  "num_turns": 27,
+  "wall_seconds": 63.900000000000006
+ },
+ "python|review|v23": {
+  "cost_usd": 0.3860421333333333,
+  "output_tokens": 6739,
+  "cache_creation_input_tokens": 72962.33333333333,
+  "cache_read_input_tokens": 267721.3333333333,
+  "input_tokens": 15.333333333333334,
+  "num_turns": 21,
+  "wall_seconds": 55.0
+ },
+ "todos||baseline": {
+  "cost_usd": 0.054264878571428574,
+  "output_tokens": 638.1071428571429,
+  "cache_creation_input_tokens": 10899.857142857143,
+  "cache_read_input_tokens": 42746.642857142855,
+  "input_tokens": 4.857142857142857,
+  "num_turns": 3.3214285714285716,
+  "wall_seconds": 8.569642857142856
+ },
+ "todos||v221": {
+  "cost_usd": 0.07019509285714286,
+  "output_tokens": 697.9464285714286,
+  "cache_creation_input_tokens": 14647.017857142857,
+  "cache_read_input_tokens": 46162.71428571428,
+  "input_tokens": 5.642857142857143,
+  "num_turns": 3.2142857142857144,
+  "wall_seconds": 9.246428571428572
+ },
+ "todos||v23": {
+  "cost_usd": 0.07520678392857143,
+  "output_tokens": 639.6071428571429,
+  "cache_creation_input_tokens": 15987.482142857143,
+  "cache_read_input_tokens": 48484.982142857145,
+  "input_tokens": 6.142857142857143,
+  "num_turns": 3.2857142857142856,
+  "wall_seconds": 8.551785714285714
+ }
+}

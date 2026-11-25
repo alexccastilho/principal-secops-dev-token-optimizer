@@ -1,0 +1,91 @@
+{
+  "A01": {
+    "lang": "python",
+    "security": 9,
+    "critical": [],
+    "delivery": 8,
+    "runs_as_delivered": true,
+    "notes": "Flask+waitress on 127.0.0.1 with Argon2id (library defaults), CSRF (flask-wtf), Host allow-list against DNS rebinding, CSP, every query scoped by usuario_id, global 5-failures/5-min lockout. Weak spots: Flask's signed-cookie session cannot be revoked server-side and has no expiry; DB file permissions not restricted. One-click iniciar.bat creates the venv, installs pinned requirements (all present on PyPI) and asks for the user in the console; changing the password needs a terminal command."
+  },
+  "A02": {
+    "lang": "python",
+    "security": 9,
+    "critical": [],
+    "delivery": 8,
+    "runs_as_delivered": true,
+    "notes": "Tkinter desktop app with no network surface. Argon2id with rehash-on-login, 15-character minimum plus a common-password list, per-account lockout stored in the DB with exponential backoff, atomic single-account creation, owner-scoped queries, LIKE escaping, generic error dialogs. Ships unit tests and a consistent-backup button. Needs two launchers (Instalar.bat, then Abrir Contatos.bat) and the py launcher; no password recovery; under pythonw a crash at startup is silent."
+  },
+  "A03": {
+    "lang": "csharp",
+    "security": 9,
+    "critical": [],
+    "delivery": 8,
+    "runs_as_delivered": true,
+    "notes": "Razor Pages with a deny-by-default FallbackPolicy, automatic antiforgery, PBKDF2-SHA512 at 210k iterations with fixed-time compare and a dummy hash for unknown users, owner-scoped repositories, CSP/nosniff, AllowedHosts, generic error page that logs the details. Login lockout is global (the owner can be locked out) and the cookie auth is not revocable server-side. iniciar.bat checks for .NET 10 and installs it via winget; a forgotten password requires outside help."
+  },
+  "A04": {
+    "lang": "node",
+    "security": 9,
+    "critical": [],
+    "delivery": 7,
+    "runs_as_delivered": true,
+    "notes": "Strongest Node app: scrypt N=2^17 (OWASP), server-side sessions keyed by hashed token with idle and absolute timeouts and rotation at login, CSRF token plus Origin/Sec-Fetch-Site and Host guards, helmet CSP with script-src 'none', owner-scoped queries, versioned SQL migrations with CHECK constraints. Manifest defect: package.json declares no dependencies although src imports express and helmet. It only starts because iniciar.bat runs 'npm install express helmet' (unpinned, no lockfile), so 'npm start' on a fresh copy fails. Includes .bat files for backup and password reset."
+  },
+  "A05": {
+    "lang": "csharp",
+    "security": 8,
+    "critical": [],
+    "delivery": 6,
+    "runs_as_delivered": true,
+    "notes": "Minimal API with deny-by-default auth, explicit antiforgery validation on every POST, ASP.NET Identity PasswordHasher (PBKDF2-SHA512, 210k iterations), HTML encoding everywhere, strict CSP, DB stored in the per-user LocalAppData folder. By design there is a single account, and contacts have no owner column. Lockout is global. The schema has no indexes and no migrations. iniciar.bat does not check for the .NET SDK and opens the browser before the first build finishes, which contradicts the LEIA-ME. Microsoft.Data.Sqlite 11.0.0 exists and targets net10.0."
+  },
+  "A06": {
+    "lang": "node",
+    "security": 7,
+    "critical": [],
+    "delivery": 4,
+    "runs_as_delivered": true,
+    "notes": "Built on node:http and node:sqlite only, with in-memory sessions, a CSRF token on authenticated POSTs, an Origin check on every POST, a Host allow-list, escaping and CSP. scrypt N=2^15 (src/login/senha.js:5) is below the OWASP minimum. Single-user design with no owner column. The LEIA-ME never says Node.js must be installed (or which version, even though node:sqlite needs a recent one), iniciar.bat does not check for Node, and backup requires typing 'npm run backup' in a terminal."
+  },
+  "A07": {
+    "lang": "csharp",
+    "security": 7,
+    "critical": [],
+    "delivery": 5,
+    "runs_as_delivered": true,
+    "notes": "Razor Pages with AuthorizeFolder, automatic antiforgery, PBKDF2-SHA256 at 600k iterations, per-user lockout stored in the DB, IsLocalUrl check on returnUrl, CSP. Username enumeration: an unknown user costs two PBKDF2 runs (Db.cs:110), and only a real user can return 'Locked' (Db.cs:107). No logging, no global exception page, weak schema (not STRICT, no constraints or indexes). The launcher does not check for .NET and opens the browser before the build finishes. A forgotten password means deleting the DB and losing every contact."
+  },
+  "A08": {
+    "lang": "python",
+    "security": 6,
+    "critical": [],
+    "delivery": 3,
+    "runs_as_delivered": true,
+    "notes": "One-file Tkinter app using only the standard library. Parameterized SQL and PBKDF2-SHA256 at 600k iterations with per-user salt. Weak points: 8-character minimum password, an in-memory 60-second lockout that resets when the app restarts, no logging, DB in the app folder, LIKE wildcards not escaped. There is no LEIA-ME at all: Python is mentioned only inside abrir.bat's error message, with no backup, password or data-location guidance."
+  },
+  "A09": {
+    "lang": "node",
+    "security": 5,
+    "critical": [
+      "A09-node/server.js:173-178 - POST /configurar has no CSRF token and no Origin check, so any website opened before the first setup can submit a cross-site form that creates the only account with attacker-chosen credentials. The owner is locked out and can only recover by deleting data/ (and all contacts).",
+      "A09-node/server.js:168-178 - setup race: the 'no user yet' check happens before 'await lerForm' and the INSERT is not guarded (no WHERE NOT EXISTS), so two concurrent setup posts with different usernames create two full-access accounts.",
+      "A09-node/server.js:187-193 with :35 - POST /entrar has no CSRF/Origin check, the global throttle is only 5 tries per minute (about 7,200 guesses a day, reachable from any cross-site page) and scryptSync uses the default N=16384 (below OWASP); the same cross-site posts can keep the owner locked out."
+    ],
+    "delivery": 5,
+    "runs_as_delivered": true,
+    "notes": "Single-file server with zero dependencies (needs Node 22.13+, which LEIA-ME.txt names). Parameterized SQL, escaping, a Host check, CSP and a CSRF token on authenticated POSTs. Minimal schema with no logging. The README is short but usable; a forgotten password means deleting all data."
+  },
+  "ranking": {
+    "security": {
+      "python": ["A02", "A01", "A08"],
+      "node": ["A04", "A06", "A09"],
+      "csharp": ["A03", "A05", "A07"]
+    },
+    "delivery": {
+      "python": ["A01", "A02", "A08"],
+      "node": ["A04", "A09", "A06"],
+      "csharp": ["A03", "A05", "A07"]
+    },
+    "notes": "A01 and A02 are both 9 on security; A02 ranks first because it has no network surface and its lockout is per account and persistent. A01 and A02 are both 8 on delivery; A01 ranks first because one launcher does everything."
+  }
+}

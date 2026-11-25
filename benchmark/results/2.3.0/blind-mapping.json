@@ -1,0 +1,137 @@
+{
+ "R01": [
+  "python",
+  "v221",
+  "r3"
+ ],
+ "R02": [
+  "node",
+  "baseline",
+  "r3"
+ ],
+ "R03": [
+  "node",
+  "v23",
+  "r2"
+ ],
+ "R04": [
+  "node",
+  "v221",
+  "r1"
+ ],
+ "R05": [
+  "node",
+  "v221",
+  "r2"
+ ],
+ "R06": [
+  "python",
+  "v221",
+  "r2"
+ ],
+ "R07": [
+  "node",
+  "baseline",
+  "r1"
+ ],
+ "R08": [
+  "python",
+  "baseline",
+  "r2"
+ ],
+ "R09": [
+  "python",
+  "v23",
+  "r2"
+ ],
+ "R10": [
+  "python",
+  "baseline",
+  "r3"
+ ],
+ "R11": [
+  "python",
+  "v23",
+  "r1"
+ ],
+ "R12": [
+  "node",
+  "v23",
+  "r1"
+ ],
+ "R13": [
+  "node",
+  "v23",
+  "r3"
+ ],
+ "R14": [
+  "python",
+  "v221",
+  "r1"
+ ],
+ "R15": [
+  "python",
+  "v23",
+  "r3"
+ ],
+ "R16": [
+  "node",
+  "v221",
+  "r3"
+ ],
+ "R17": [
+  "node",
+  "baseline",
+  "r2"
+ ],
+ "R18": [
+  "python",
+  "baseline",
+  "r1"
+ ],
+ "A01": [
+  "node",
+  "baseline",
+  "r1"
+ ],
+ "A02": [
+  "csharp",
+  "v221",
+  "r1"
+ ],
+ "A03": [
+  "node",
+  "v23",
+  "r1"
+ ],
+ "A04": [
+  "python",
+  "v221",
+  "r1"
+ ],
+ "A05": [
+  "csharp",
+  "baseline",
+  "r1"
+ ],
+ "A06": [
+  "python",
+  "v23",
+  "r1"
+ ],
+ "A07": [
+  "node",
+  "v221",
+  "r1"
+ ],
+ "A08": [
+  "csharp",
+  "v23",
+  "r1"
+ ],
+ "A09": [
+  "python",
+  "baseline",
+  "r1"
+ ]
+}

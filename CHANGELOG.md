@@ -4,6 +4,24 @@
 
 All notable changes to this project. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [SemVer](https://semver.org/).
 
+## [2.3.0] - 2026-11-25
+
+Live facts instead of written ones, and code that runs as delivered.
+
+### Added
+- `scripts/fontes.py`: reads at the moment of use the support status of a version (endoflife.date) and the known flaws of the project's locked dependencies (OSV), flagging the ones in CISA's actively exploited list (KEV). The registry `fontes/registro.json` holds only addresses, never dated facts, so a new release of PHP or a new CVE needs no new release of the skill. Fixed host list, HTTPS only, cache outside the skill and the project, `SECOPS_OFFLINE=1` to turn the network off, and "not checked" instead of a guess when a source is down. Only packages that provably come from the public registry are sent to OSV; for Go, private modules outside the project's own path need `GOPRIVATE`.
+- `revisar_codigo.py --entrega`: checks, without running anything, that every file a launcher, the README or `package.json` mentions exists, and that the language manifest is there and lists the packages the code imports. Each check reproduces a failure measured in the 2.2.0 benchmark.
+- `references/padrao-de-entrega.md`: what "done" means for code, database schemas and migrations, APIs, tests and operation, applied in proportion to the request.
+- A weekly CI canary (`.github/workflows/fontes-canario.yml`) that opens an issue when a source stops answering with the fields the script reads.
+
+### Changed
+- `SKILL.md`: the pre-delivery gate now starts with "works as delivered" (build once, happy path, `--entrega`); new sections on working alongside planning, TDD, debugging and diff-review skills (section 11) and on proportional delivery with fewer turns (section 12). The description now opens with "load before the first edit to any code file, even for a one-line fix": in the 2.2.1 measurement the skill was never called for a bug fix on an existing project (0 of 6), a new field, a new table, a dependency upgrade or writing tests (0 of 4 each). The wording was chosen in a small pilot on the bug-fix task (4 of 4 against 0 of 4 for the first draft) before the full run.
+- The documentation no longer promises token savings: token use is measured in the benchmark.
+- A new app for a non-programmer always comes with a double-click launcher and the prerequisites with their links; tests, backup scripts and admin tools come only when asked or when the risk calls for them.
+
+### Measured
+- Partial benchmark against 2.2.1 and no skill, in Python, Node.js and C#: [docs/BENCHMARK-2.3.md](docs/BENCHMARK-2.3.md). With the skill working in both, 2.3.0 was not more expensive per new app or per review, and a small bug fix costs USD 0.04 more because the skill now loads for it; in blind reviews its apps were as secure or more and easier to run, and its reviews made no false claims. C# could not be compiled on the test machine.
+
 ## [2.2.1] - 2026-11-20
 
 ### Changed

@@ -4,6 +4,24 @@
 
 Todas as mudanças relevantes deste projeto. Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), versões em [SemVer](https://semver.org/lang/pt-BR/).
 
+## [2.3.0] - 2026-11-25
+
+Fatos consultados na hora em vez de escritos, e código que roda como foi entregue.
+
+### Adicionado
+- `scripts/fontes.py`: lê no momento do uso o status de suporte de uma versão (endoflife.date) e as falhas conhecidas das dependências travadas do projeto (OSV), marcando as que estão na lista de exploradas ativamente da CISA (KEV). O registro `fontes/registro.json` guarda só endereços, nunca fatos datados, então uma versão nova do PHP ou um CVE novo não exige versão nova da skill. Lista fixa de hosts, só HTTPS, cache fora da skill e do projeto, `SECOPS_OFFLINE=1` para desligar a rede, e "não conferido" em vez de chute quando a fonte está fora do ar. Só vão ao OSV pacotes que comprovadamente vêm do registro público; no Go, módulo privado fora do caminho do próprio projeto precisa estar no `GOPRIVATE`.
+- `revisar_codigo.py --entrega`: confere, sem executar nada, se todo arquivo citado num atalho, no README ou no `package.json` existe, e se o manifesto da linguagem está lá e lista os pacotes que o código importa. Cada checagem reproduz uma falha medida no benchmark da 2.2.0.
+- `references/padrao-de-entrega.md`: o que é "pronto" para código, esquema e migração de banco, API, testes e operação, aplicado na proporção do pedido.
+- Canário semanal no CI (`.github/workflows/fontes-canario.yml`) que abre uma issue quando uma fonte deixa de responder com os campos que o script lê.
+
+### Alterado
+- `SKILL.md`: o portão de pré-entrega agora começa por "funciona como entregue" (compilar uma vez, caminho feliz, `--entrega`); seções novas sobre trabalhar junto com skills de planejamento, TDD, depuração e revisão de diff (seção 11) e sobre entrega proporcional com menos rodadas (seção 12). A descrição agora abre com "carregue antes da primeira edição de qualquer arquivo de código, mesmo numa correção de uma linha": na medição da 2.2.1 a skill nunca foi chamada para corrigir bug num projeto existente (0 de 6), criar um campo, criar uma tabela, atualizar dependências ou escrever testes (0 de 4 cada). O texto foi escolhido num piloto pequeno na tarefa de bugfix (4 de 4 contra 0 de 4 do primeiro rascunho), antes da rodada completa.
+- A documentação não promete mais economia de tokens: o gasto é medido no benchmark.
+- App novo para quem não programa sempre vem com atalho de dois cliques e os pré-requisitos com o link; testes, scripts de backup e ferramentas de administração só quando pedidos ou quando o risco pede.
+
+### Medido
+- Benchmark parcial contra a 2.2.1 e sem a skill, em Python, Node.js e C#: [BENCHMARK-2.3.pt-BR.md](BENCHMARK-2.3.pt-BR.md). Com a skill funcionando nas duas, a 2.3.0 não ficou mais cara por app novo nem por revisão, e uma correção pequena custa US$ 0,04 a mais porque agora a skill carrega; nas avaliações cegas os apps dela foram tão seguros ou mais e mais fáceis de rodar, e as revisões não fizeram nenhuma alegação falsa. O C# não pôde ser compilado na máquina de teste.
+
 ## [2.2.1] - 2026-11-20
 
 ### Alterado

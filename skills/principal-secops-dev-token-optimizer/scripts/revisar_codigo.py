@@ -4,6 +4,7 @@
 Uso (Windows: troque python3 por py -3):
     python3 revisar_codigo.py <arquivo-ou-pasta> [mais arquivos...]
     python3 revisar_codigo.py . --json
+    python3 revisar_codigo.py <pasta-do-projeto> --entrega   (tambem confere se roda como entregue)
 
 Requer Python 3.8 ou mais novo. So usa a biblioteca padrao.
 
@@ -13,8 +14,8 @@ segredo. Arquivos onde segredo e esperado (.env, wp-config.php) nunca tem
 trecho impresso.
 
 Codigo de saida:
-    0 = nenhum achado HIGH
-    1 = pelo menos um achado HIGH (nao entregar o codigo assim)
+    0 = nenhum achado HIGH (e, com --entrega, nenhum problema de entrega)
+    1 = pelo menos um achado HIGH, ou com --entrega um problema que impede rodar
     2 = erro de uso (caminho inexistente, nenhum arquivo legivel)
 
 O scanner e deliberadamente conservador: ele aponta padroes que quase sempre
@@ -895,6 +896,182 @@ def report_text(findings: List[Finding], files_scanned: int, notes: Dict[str, in
         print("\nHIGH em codigo que voce escreveu ou alterou: corrija e rode de novo antes de entregar.")
 
 
+# --------------------------------------------------------------------------- entrega
+# --entrega: confere, sem rede e sem executar nada, se o que foi entregue tem as pecas
+# para rodar. Cada checagem veio de uma falha medida no benchmark: um atalho que chama
+# um script nunca escrito, Go sem go.mod, pacote usado e nao declarado.
+
+_REF_EXTS = "php|py|js|mjs|cjs|ts|ps1|bat|cmd|sh|csproj|sln|java|go|rb"
+_REF_RX = re.compile(r"(?<![\w/\\.:@-])((?:\.{1,2}[\\/])?[\w.\-]+(?:[\\/][\w.\-]+)*\.(?:%s))(?![\w.])" % _REF_EXTS)
+_GENERATED_DIRS = {"node_modules", "vendor", "obj", "dist", "build", "target", ".venv", "venv",
+                   "__pycache__", ".git"}
+_NODE_BUILTINS = {
+    "assert", "async_hooks", "buffer", "child_process", "cluster", "console", "constants", "crypto",
+    "dgram", "diagnostics_channel", "dns", "domain", "events", "fs", "http", "http2", "https",
+    "inspector", "module", "net", "os", "path", "perf_hooks", "process", "punycode", "querystring",
+    "readline", "repl", "stream", "string_decoder", "sys", "test", "timers", "tls", "trace_events",
+    "tty", "url", "util", "v8", "vm", "wasi", "worker_threads", "zlib", "sqlite",
+}
+
+
+def _project_files(root: Path) -> List[Path]:
+    out = []
+    for dirpath, dirs, files in os.walk(root):
+        dirs[:] = [d for d in dirs if d not in _GENERATED_DIRS and not d.startswith(".")]
+        out.extend(Path(dirpath) / f for f in files)
+    return out
+
+
+def _read(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+
+
+# Nomes de produto que terminam como arquivo e nunca sao um arquivo do projeto.
+_PRODUCT_NAMES = {"node.js", "next.js", "nuxt.js", "vue.js", "react.js", "express.js", "nest.js",
+                  "three.js", "chart.js", "d3.js", "alpine.js", "ember.js", "backbone.js", "angular.js",
+                  "deno.js", "socket.io.js", "moment.js", "day.js", "p5.js", "htmx.js"}
+
+
+def _missing_refs(root: Path, src: Path, text: str, names: List[str]) -> List[str]:
+    """Arquivos citados que nao existem. `names` sao os nomes de todos os arquivos do projeto:
+    uma citacao vale se bater com o caminho ou, sem caminho, com o nome de qualquer arquivo
+    (o README costuma citar `db.py` que mora numa subpasta, ou "Abrir Contatos.bat")."""
+    missing = []
+    lower_names = [n.lower() for n in names]
+    for ref in sorted(set(_REF_RX.findall(text))):
+        if any(c in ref for c in "<>*$%{}") or ref.lower().startswith(("http", "www.")):
+            continue
+        if ref.lower() in _PRODUCT_NAMES:
+            continue
+        norm = ref.replace("\\", "/")
+        if norm.startswith("/") or re.match(r"^[A-Za-z]:", norm):
+            continue
+        parts = [p for p in norm.split("/") if p not in (".", "")]
+        if not parts or any(p in _GENERATED_DIRS for p in parts):
+            continue
+        rel = "/".join(parts)
+        if (src.parent / rel).exists() or (root / rel).exists():
+            continue
+        base = parts[-1].lower()
+        if len(parts) == 1 and any(n == base or n.endswith(" " + base) for n in lower_names):
+            continue
+        missing.append(ref)
+    return missing
+
+
+def check_delivery(root: Path) -> List[str]:
+    """Problemas que impedem o projeto de rodar como entregue (lista vazia = ok)."""
+    problems: List[str] = []
+    files = _project_files(root)
+    rel = lambda p: str(p.relative_to(root))  # noqa: E731
+    by_ext: Dict[str, List[Path]] = {}
+    for f in files:
+        by_ext.setdefault(f.suffix.lower(), []).append(f)
+    names = [f.name for f in files]
+
+    # 1. Arquivo citado em atalho, instrucao ou script do package.json existe.
+    for f in files:
+        name, ext = f.name.lower(), f.suffix.lower()
+        text = ""
+        if ext in (".bat", ".cmd", ".ps1", ".sh"):
+            text = "\n".join(l for l in _read(f).splitlines()
+                             if not re.match(r"\s*(rem\b|::|#|echo\b)", l, re.I))
+        elif ext == ".md" and f.parent == root:
+            md = _read(f)
+            text = "\n".join(re.findall(r"```.*?```", md, re.S) + re.findall(r"`([^`\n]+)`", md))
+        elif name == "package.json" and f.parent == root:
+            try:
+                text = "\n".join(str(v) for v in (json.loads(_read(f)).get("scripts") or {}).values())
+            except ValueError:
+                problems.append("%s: JSON invalido" % rel(f))
+        for ref in _missing_refs(root, f, text, names):
+            problems.append("%s cita '%s', que nao existe no projeto" % (rel(f), ref))
+
+    # 2. Manifesto que a linguagem precisa para compilar ou instalar.
+    if by_ext.get(".go") and not any(f.name == "go.mod" for f in files):
+        problems.append("Codigo Go sem go.mod: 'go build' falha. Rode 'go mod init <nome>' e 'go mod tidy'.")
+    if by_ext.get(".cs") and not (by_ext.get(".csproj") or by_ext.get(".sln")):
+        problems.append("Codigo C# sem arquivo .csproj: 'dotnet build' e 'dotnet run' falham.")
+    php_autoload = any("vendor/autoload.php" in _read(f) for f in by_ext.get(".php", []))
+    if php_autoload and not any(f.name == "composer.json" for f in files):
+        problems.append("PHP usa vendor/autoload.php mas nao ha composer.json: 'composer install' nao tem o que instalar.")
+
+    js = by_ext.get(".js", []) + by_ext.get(".mjs", []) + by_ext.get(".cjs", []) + by_ext.get(".ts", [])
+    declared_cache: Dict[Path, Optional[set]] = {}
+
+    def nearest_manifest(f: Path) -> Optional[Path]:
+        for parent in f.parents:
+            if (parent / "package.json").is_file():
+                return parent / "package.json"
+            if parent == root:
+                return None
+        return None
+
+    def declared_in(manifest: Path) -> set:
+        if manifest not in declared_cache:
+            found = set()
+            try:
+                data = json.loads(_read(manifest))
+                for key in ("dependencies", "devDependencies", "optionalDependencies", "peerDependencies"):
+                    found.update((data.get(key) or {}).keys())
+                for key in ("imports",):  # subpath imports (#alias)
+                    found.update((data.get(key) or {}).keys())
+            except (ValueError, AttributeError):
+                pass
+            declared_cache[manifest] = found
+        return declared_cache[manifest]
+
+    undeclared: Dict[str, set] = {}
+    no_manifest = set()
+    for f in js:
+        manifest = nearest_manifest(f)
+        for m in re.finditer(r"""(?:require\(\s*|from\s+|import\s+)['"]([^'"./][^'"]*)['"]""", _read(f)):
+            spec = m.group(1)
+            # node:, https:, npm:, jsr:, virtual: e aliases de caminho (@/, ~/, #) nao sao pacotes do registro.
+            if ":" in spec or spec.startswith(("@/", "~", "#")):
+                continue
+            pkg = "/".join(spec.split("/")[:2]) if spec.startswith("@") else spec.split("/")[0]
+            if pkg in _NODE_BUILTINS:
+                continue
+            if manifest is None:
+                no_manifest.add(pkg)
+            elif pkg not in declared_in(manifest):
+                undeclared.setdefault(rel(manifest), set()).add(pkg)
+    for manifest, pkgs in sorted(undeclared.items()):
+        for pkg in sorted(pkgs):
+            problems.append("Pacote '%s' e usado no codigo mas nao esta no %s." % (pkg, manifest))
+    if no_manifest:
+        problems.append("Codigo Node usa pacotes (%s) mas nao ha package.json." % ", ".join(sorted(no_manifest)[:5]))
+
+    stdlib = getattr(sys, "stdlib_module_names", None)  # Python 3.10+
+    if stdlib and by_ext.get(".py"):
+        local = {f.stem for f in by_ext[".py"]} | {f.parent.name for f in by_ext[".py"]}
+        third = set()
+        for f in by_ext[".py"]:
+            for m in re.finditer(r"^\s*(?:from\s+([A-Za-z_]\w*)[\w.]*\s+import|import\s+([A-Za-z_]\w*))", _read(f), re.M):
+                mod = m.group(1) or m.group(2)
+                if mod not in stdlib and mod not in local and mod != "__future__":
+                    third.add(mod)
+        manifests = {"requirements.txt", "pyproject.toml", "setup.py", "setup.cfg", "Pipfile"}
+        if third and not any(f.name in manifests or f.name.startswith("requirements") for f in files):
+            problems.append("Codigo Python importa pacotes de fora (%s) sem requirements.txt ou pyproject.toml."
+                            % ", ".join(sorted(third)[:5]))
+    return problems
+
+
+def report_delivery(root: Path, problems: List[str]) -> None:
+    if not problems:
+        print("ENTREGA OK em %s: arquivos citados existem e os manifestos necessarios estao presentes." % root)
+        print("Isso nao substitui compilar e rodar o caminho feliz (SKILL.md, secao 7).")
+        return
+    print("\n--- ENTREGA: %d problema(s) que impedem rodar como entregue ---" % len(problems))
+    for p in problems:
+        print("  " + p)
+
+
 def _utf8_streams() -> None:
     # Console do Windows em cp1252 quebra com UnicodeEncodeError ao imprimir
     # um trecho de codigo com caractere fora da pagina de codigo.
@@ -913,6 +1090,8 @@ def main() -> int:
     )
     parser.add_argument("paths", nargs="+", help="arquivos ou pastas para analisar")
     parser.add_argument("--json", action="store_true", help="saida em JSON")
+    parser.add_argument("--entrega", action="store_true",
+                        help="tambem confere se o projeto tem as pecas para rodar como entregue")
     args = parser.parse_args()
 
     notes = {"grandes": 0, "binarios": 0, "linhas_longas": 0, "ausentes": 0}
@@ -925,16 +1104,28 @@ def main() -> int:
     for f in files:
         findings.extend(scan_file(f, notes))
 
+    delivery: Dict[str, List[str]] = {}
+    if args.entrega:
+        for p in args.paths:
+            root = Path(p)
+            if root.is_dir():
+                delivery[str(root)] = check_delivery(root.resolve())
+
     if args.json:
-        print(json.dumps({
+        payload = {
             "files_scanned": len(files),
             "not_scanned": notes,
             "findings": [asdict(f) for f in findings],
-        }, ensure_ascii=False, indent=2))
+        }
+        if args.entrega:
+            payload["delivery"] = delivery
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
     else:
         report_text(findings, len(files), notes)
+        for root, problems in delivery.items():
+            report_delivery(Path(root), problems)
 
-    if any(f.severity == "HIGH" for f in findings):
+    if any(f.severity == "HIGH" for f in findings) or any(delivery.values()):
         return 1
     # Um caminho digitado errado nao pode passar como "OK".
     return 2 if notes["ausentes"] else 0

@@ -174,7 +174,7 @@ def aggregate(records):
     for (lang, task, cond), rs in sorted(groups.items()):
         rows.append({
             "lang": lang, "task": task, "condition": cond, "runs": len(rs),
-            "skill_not_used": sum(1 for r in rs if cond == "skill" and not r.get("skill_used")),
+            "skill_not_used": sum(1 for r in rs if cond != "baseline" and not r.get("skill_used")),
             "contaminated": sum(1 for r in rs if cond == "baseline" and r.get("skill_used")),
             "read_outside": sum(1 for r in rs if r.get("outside_paths")),
             "timed_out": sum(1 for r in rs if r.get("timed_out")),

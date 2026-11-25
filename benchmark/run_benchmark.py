@@ -1,18 +1,26 @@
 """Run the same requests through Claude Code with and without the skill.
 
-Two suites:
-  create    the same small app built from an empty folder (one request per language);
-  refactor  existing code in benchmark/refactor/fixtures/<lang>: review it, fix one bug,
-            and refactor the whole project (three requests per language).
+Three suites:
+  create      the same small app built from an empty folder (one request per language);
+  refactor    existing code in benchmark/refactor/fixtures/<lang>: review it, fix one bug,
+              and refactor the whole project (three requests per language);
+  activation  short requests on the same fixture, cut after a few turns, to see whether
+              the skill loads when it should and stays out when it should not.
 
 Each run starts in an empty folder, in a clean Claude Code configuration (no user
-plugins, skills, memory or CLAUDE.md), so the only difference between the two
-conditions is the plugin loaded with --plugin-dir.
+plugins, skills, memory or CLAUDE.md), so the only difference between the conditions
+is the plugin loaded with --plugin-dir.
+
+Conditions: "baseline" (no plugin) plus one per --arm NAME=PATH, where PATH is a checkout
+of this repository (for example a git worktree of an older tag). Without --arm, the only
+arm is "skill", built from this checkout. Runs already on disk are kept, so a later
+invocation with --conditions can add an arm to an existing results folder.
 
 Usage:
   python benchmark/run_benchmark.py --config-dir <clean CLAUDE_CONFIG_DIR> --out <folder>
-      [--suite create|refactor] [--langs php,python,node,java,csharp,go]
+      [--suite create|refactor|activation] [--langs php,python,node,java,csharp,go]
       [--tasks review,bugfix,refactor] [--reps 3] [--model sonnet] [--jobs 3]
+      [--arm v221=../secops-v221 --arm v23=.] [--conditions baseline,v221,v23]
 
 The clean config dir must hold only the login (.credentials.json). Everything
 the runs produce goes to --out, never into the repository.
@@ -69,6 +77,26 @@ TASK_PROMPTS = {
 # refactor mode does so before it starts, before the plan and before deleting tests), the
 # harness answers with this text. Both conditions get the same reply under the same rule,
 # up to MAX_REPLIES times.
+# Activation suite: (request, should the skill load when it is the only plugin?). Code work
+# on the fixture should load it; requests that are not about code should not.
+ACTIVATION_PROMPTS = {
+    "a01": ("Revise o código deste projeto e me diga o problema mais grave.", True),
+    "a02": ("Tem algum problema de segurança nesse sistema?", True),
+    "a03": ("O total do pedido sai errado quando o cliente tem desconto. Corrija isso.", True),
+    "a04": ("Deu erro quando tento cadastrar um cliente sem telefone. Arruma pra mim.", True),
+    "a05": ("Adicione um campo de CPF no cadastro de clientes.", True),
+    "a06": ("É seguro colocar esse sistema na internet?", True),
+    "a07": ("Quero atualizar as dependências desse projeto para versões novas.", True),
+    "a08": ("Crie uma tabela de fornecedores no banco, ligada aos produtos.", True),
+    "a09": ("O relatório de vendas está muito lento. Melhora isso.", True),
+    "a10": ("Escreva testes para o cálculo de desconto.", True),
+    "n01": ("Me explique em duas frases o que é a LGPD.", False),
+    "n02": ("Escreva um e-mail curto para meu fornecedor pedindo mais prazo de entrega.", False),
+    "n03": ("Qual é a capital da Austrália?", False),
+    "n04": ("Traduza para o inglês: bom dia, tudo bem?", False),
+}
+ACTIVATION_MAX_TURNS = "3"
+
 AUTO_REPLY = ("Pode seguir com tudo o que você propôs, sem as adições opcionais. "
               "Não precisa me perguntar mais nada; decida você.")
 MAX_REPLIES = 3
@@ -84,18 +112,15 @@ REFACTOR_TOOLS = (" Bash(node --test:*) Bash(node cli.js:*) Bash(git status:*) B
 CLAUDE = shutil.which("claude") or "claude"
 
 
-def _commit():
+def _commit(root=ROOT):
     try:
-        out = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--short", "HEAD"],
+        out = subprocess.run(["git", "-C", str(root), "rev-parse", "--short", "HEAD"],
                              capture_output=True, text=True, check=True).stdout.strip()
-        dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "--", "skills"],
+        dirty = subprocess.run(["git", "-C", str(root), "status", "--porcelain", "--", "skills"],
                                capture_output=True, text=True).stdout.strip()
         return out + ("-dirty" if dirty else "")
     except (OSError, subprocess.CalledProcessError):
         return None
-
-
-SKILL_COMMIT = _commit()
 
 # Both conditions may look a version up (the skill's rules require it) and run the language's
 # own quick checks; neither may install packages, so the build check stays comparable.
@@ -111,7 +136,12 @@ ALLOWED_TOOLS = ("Read Write Edit Glob Grep Skill WebSearch WebFetch(domain:endo
                  "WebFetch(domain:www.nuget.org) WebFetch(domain:search.maven.org) "
                  "Bash(python:*) Bash(py:*) Bash(python3:*) Bash(node --version) Bash(node -v) "
                  "Bash(php -v) Bash(php -l:*) Bash(go version) Bash(dotnet --version) Bash(dotnet --list-sdks) "
-                 "Bash(java -version) Bash(javac -version)")
+                 "Bash(java -version) Bash(javac -version) "
+                 # Since 2.3.0 both conditions may also compile what they wrote, so "it builds"
+                 # can be checked inside the session. Package restore still needs the network
+                 # the run already has; nothing here installs a tool.
+                 "Bash(node --check:*) Bash(go build:*) Bash(go vet:*) Bash(dotnet build:*) "
+                 "Bash(javac:*) Bash(mvn -q:*)")
 
 # Only what Claude Code and the toolchains need; tokens and keys in the caller's
 # environment are not handed to the run.
@@ -134,14 +164,17 @@ def long_path(path):
     return path
 
 
-def export_plugin(out):
-    """Copy only the plugin (manifest, commands, skill) to a folder outside the repository,
-    so the skill condition cannot reach the benchmark's fixtures, answer key or results."""
-    dest = pathlib.Path(long_path(out)) / "_plugin"
+def export_plugin(out, name="skill", source=ROOT):
+    """Copy only the plugin (manifest, commands, skill, hooks) to a folder outside the
+    repository, so the skill condition cannot reach the benchmark's fixtures, answer key
+    or results."""
+    dest = pathlib.Path(long_path(out)) / ("_plugin" if name == "skill" else f"_plugin-{name}")
     if dest.exists():
         shutil.rmtree(dest)
-    for part in (".claude-plugin", "commands", "skills"):
-        shutil.copytree(ROOT / part, dest / part, ignore=shutil.ignore_patterns("__pycache__"))
+    for part in (".claude-plugin", "commands", "skills", "hooks"):
+        if (pathlib.Path(source) / part).is_dir():
+            shutil.copytree(pathlib.Path(source) / part, dest / part,
+                            ignore=shutil.ignore_patterns("__pycache__"))
     return dest
 
 
@@ -174,7 +207,11 @@ def run_one(lang, condition, rep, args, task=None):
     if app.exists():
         shutil.rmtree(app)
     app.mkdir(parents=True)
-    if task:
+    activation = task in ACTIVATION_PROMPTS
+    if activation:
+        prepare_fixture(lang, app)
+        prompt, tools = ACTIVATION_PROMPTS[task][0], ALLOWED_TOOLS
+    elif task:
         prepare_fixture(lang, app)
         prompt, tools = TASK_PROMPTS[task], ALLOWED_TOOLS + REFACTOR_TOOLS
     else:
@@ -188,9 +225,11 @@ def run_one(lang, condition, rep, args, task=None):
         "--permission-mode", "acceptEdits",
         "--allowedTools", tools,
     ]
-    cmd += ["--session-id", session] if task else ["--no-session-persistence"]
-    if condition == "skill":
-        cmd += ["--plugin-dir", str(args.plugin_dir)]
+    cmd += ["--session-id", session] if task and not activation else ["--no-session-persistence"]
+    if activation:
+        cmd += ["--max-turns", ACTIVATION_MAX_TURNS]
+    if condition != "baseline":
+        cmd += ["--plugin-dir", str(args.plugin_dirs[condition])]
     # The account also syncs skills uploaded to claude.ai (an older copy of this skill among
     # them) into any config dir. Turning off non-essential traffic stops that sync, so the
     # baseline sees no copy of the skill and the skill condition sees only --plugin-dir.
@@ -223,10 +262,14 @@ def run_one(lang, condition, rep, args, task=None):
             cmd[2] = AUTO_REPLY
             cmd += ["--resume", session]
     wall = time.monotonic() - started
+    plugin = args.plugin_dirs.get(condition)
     record = {"lang": lang, "task": task, "condition": condition, "rep": rep, "exit_code": exit_code,
-              "timed_out": timed_out, "auto_replies": replies, "skill_commit": SKILL_COMMIT,
+              "timed_out": timed_out, "auto_replies": replies,
+              "skill_commit": args.arm_commits.get(condition), "model_requested": args.model,
               "wall_seconds": round(wall, 1), "stderr_tail": (stderr or "")[-500:]}
-    record.update(parse_transcript(transcript, app=app, plugin=args.plugin_dir))
+    if activation:
+        record["should_load"] = ACTIVATION_PROMPTS[task][1]
+    record.update(parse_transcript(transcript, app=app, plugin=plugin))
     (work / "run.json").write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"{lang:7} {task or '':8} {condition:8} r{rep} exit={exit_code} {wall:6.0f}s replies={replies} "
           f"skill_used={record.get('skill_used')} out_tokens={record.get('output_tokens')}", flush=True)
@@ -321,20 +364,35 @@ def main():
     parser.add_argument("--model", default="sonnet")
     parser.add_argument("--jobs", type=int, default=3)
     parser.add_argument("--timeout", type=int, default=1500)
-    parser.add_argument("--suite", choices=("create", "refactor"), default="create")
-    parser.add_argument("--tasks", default=",".join(TASK_PROMPTS))
+    parser.add_argument("--suite", choices=("create", "refactor", "activation"), default="create")
+    parser.add_argument("--tasks", default=None)
+    parser.add_argument("--arm", action="append", default=[], metavar="NAME=PATH",
+                        help="a condition with the plugin taken from PATH (repeatable)")
+    parser.add_argument("--conditions", default=None,
+                        help="comma list of conditions to run (default: baseline and every arm)")
     args = parser.parse_args()
-    if args.suite == "refactor" and args.langs == ",".join(LANGS):
+    if args.suite in ("refactor", "activation") and args.langs == ",".join(LANGS):
         args.langs = ",".join(REFACTOR_LANGS)
     pathlib.Path(args.out).mkdir(parents=True, exist_ok=True)
     if pathlib.Path(args.out).resolve().is_relative_to(ROOT):
         sys.exit("--out must be outside the repository")
     if "~" in long_path(args.out):
         sys.exit("--out must not contain '~' (Windows short name); pass the long path")
-    args.plugin_dir = export_plugin(args.out)
-    tasks = args.tasks.split(",") if args.suite == "refactor" else [None]
+    arms = dict(a.split("=", 1) for a in args.arm) or {"skill": str(ROOT)}
+    if "baseline" in arms:
+        sys.exit("'baseline' is reserved for the condition without a plugin")
+    conditions = (args.conditions.split(",") if args.conditions else ["baseline", *arms])
+    unknown = [c for c in conditions if c != "baseline" and c not in arms]
+    if unknown:
+        sys.exit(f"conditions without an --arm: {unknown}")
+    args.plugin_dirs = {name: export_plugin(args.out, name, pathlib.Path(path).resolve())
+                        for name, path in arms.items() if name in conditions}
+    args.arm_commits = {name: _commit(pathlib.Path(path).resolve()) for name, path in arms.items()}
+    default_tasks = {"create": None, "refactor": ",".join(TASK_PROMPTS),
+                     "activation": ",".join(ACTIVATION_PROMPTS)}[args.suite]
+    tasks = (args.tasks or default_tasks).split(",") if args.suite != "create" else [None]
     jobs = [(lang, cond, rep, task) for rep in range(1, args.reps + 1) for task in tasks
-            for lang in args.langs.split(",") for cond in ("baseline", "skill")]
+            for lang in args.langs.split(",") for cond in conditions]
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as pool:
         futures = [pool.submit(run_one, lang, cond, rep, args, task) for lang, cond, rep, task in jobs]
         for future in concurrent.futures.as_completed(futures):

@@ -6,7 +6,7 @@
 
 [![Tests](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/actions/workflows/tests.yml/badge.svg)](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/actions/workflows/tests.yml) [![CodeQL](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/actions/workflows/codeql.yml/badge.svg)](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/actions/workflows/codeql.yml) [![Release](https://img.shields.io/github/v/release/alexccastilho/principal-secops-dev-token-optimizer)](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/releases/latest) [![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-blue)](../LICENSE)
 
-Skill para **Claude Code** y **claude.ai** que hace que Claude trabaje como un desarrollador sénior de seguridad (SecOps) que atiende a una persona que **no programa**. Entrega código seguro, que funciona y sigue siendo fácil de cambiar, lo explica en portugués sencillo y gasta el mínimo de tokens.
+Skill para **Claude Code** y **claude.ai** que hace que Claude trabaje como un desarrollador sénior de seguridad (SecOps) que atiende a una persona que **no programa**. Entrega código seguro, que funciona y sigue siendo fácil de cambiar, lo explica en portugués sencillo y mantiene cada entrega del tamaño que el pedido necesita.
 
 **Autor:** Alex Camacho Castilho ([@alexccastilho](https://github.com/alexccastilho)) · **Licencia:** [MIT](../LICENSE)
 
@@ -18,9 +18,9 @@ Skill para **Claude Code** y **claude.ai** que hace que Claude trabaje como un d
 - **No rompe lo que ya funciona.** Lee los archivos antes de editarlos, toca solo lo que el pedido necesita, mantiene intactos los contratos (rutas, columnas, formatos JSON) y pide confirmación antes de cualquier acción destructiva.
 - **Evita que el código se vuelva un desorden.** Antes de escribir, se pregunta "¿qué tiene que cambiar junto con esto?". No copia lógica, no ata módulos que cambian por motivos distintos, no corrige un error con un `if` para un solo valor y escribe pruebas que detectan regresiones reales. Novedad de la 2.1.0.
 - **Habla el idioma de quien no programa.** Las respuestas llegan en pt-BR claro: dónde va el archivo, qué comando ejecutar y cómo probar el caso correcto y el caso de error.
-- **Ahorra tokens.** Envía solo los bloques que cambiaron, carga sus referencias bajo demanda y respeta un límite de archivos por tarea.
-- **Consulta las versiones en vez de adivinar.** Lee la versión que usa el proyecto y verifica el estado de soporte actual, en lugar de confiar en la memoria del modelo.
-- **Verifica antes de entregar.** Incluye el escáner `scripts/revisar_codigo.py` (Python 3.8+, solo biblioteca estándar, 77 reglas sobre 151 tipos de archivo), que busca secretos en el código, SQL armado con texto, hash débil, salida sin escapar, `eval`/`exec`, comandos del sistema armados con datos, verificación TLS desactivada y trampas de memoria en C, C++ y Rust.
+- **Entrega proporcional.** Escribe solo los archivos que el pedido necesita, envía solo los bloques que cambiaron, carga sus referencias bajo demanda y agrupa sus turnos. El gasto de tokens se mide en el benchmark, no se promete.
+- **Consulta versiones y fallas conocidas en el momento.** `scripts/fontes.py` lee en endoflife.date el estado de soporte de la versión en uso y en OSV las fallas conocidas de las dependencias fijadas del proyecto, y marca las que están en la lista de explotadas activamente de la CISA. Los datos nuevos llegan sin una nueva versión de la skill. Novedad de la 2.3.0.
+- **Verifica antes de entregar.** Incluye el escáner `scripts/revisar_codigo.py` (Python 3.8+, solo biblioteca estándar, 77 reglas sobre 151 tipos de archivo), que busca secretos en el código, SQL armado con texto, hash débil, salida sin escapar, `eval`/`exec`, comandos del sistema armados con datos, verificación TLS desactivada y trampas de memoria en C, C++ y Rust. Con `--entrega` también verifica que el proyecto tenga las piezas para funcionar tal como se entrega (novedad de la 2.3.0).
 - **Mantiene sistemas heredados en lugar de reescribirlos.** Delphi, Clipper/Harbour, VB6, FoxPro, COBOL, VBA: primero la copia de seguridad, seguridad donde está, migración por etapas. Novedad de la 2.2.0.
 
 ## Dos modos
@@ -127,13 +127,14 @@ La skill ejecuta el escáner sobre lo que escribió antes de entregar. También 
 ```bash
 python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py <archivo-o-carpeta>
 python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --json <archivo-o-carpeta>
+python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --entrega <carpeta-del-proyecto>
 ```
 
 El código de salida 0 significa ningún hallazgo HIGH, 1 significa al menos un HIGH, y 2 significa ruta equivocada o nada legible, lo que no es una aprobación. Nunca imprime el valor de un secreto: el fragmento se oculta en toda la línea. Un análisis limpio no prueba nada por sí solo; la lista de comprobación de la skill sigue vigente.
 
 ## Benchmark
 
-La misma app pequeña (contactos con login y SQLite) se pidió 36 veces a Claude Code, con y sin la skill, en PHP, Python, Node.js, Java, C# y Go, en una configuración aislada. En una revisión a ciegas, la app hecha con la skill fue la más segura en los 6 lenguajes, y siempre vino con instrucciones de uso. El costo: cerca de 3 veces el precio y 2,5 veces el tiempo por app (USD 0,58 contra 0,20, 176 s contra 69 s), y compilaron 16 de 18 apps, contra 18 de 18 sin la skill. Tablas completas, método, límites y cómo reproducir: [BENCHMARK.es.md](BENCHMARK.es.md).
+La misma app pequeña (contactos con login y SQLite) se pidió 36 veces a Claude Code, con y sin la skill, en PHP, Python, Node.js, Java, C# y Go, en una configuración aislada. En una revisión a ciegas, la app hecha con la skill fue la más segura en los 6 lenguajes, y siempre vino con instrucciones de uso. El costo: cerca de 3 veces el precio y 2,5 veces el tiempo por app (USD 0,58 contra 0,20, 176 s contra 69 s), y compilaron 16 de 18 apps, contra 18 de 18 sin la skill. Tablas completas, método, límites y cómo reproducir: [BENCHMARK.es.md](BENCHMARK.es.md). La versión 2.3.0 se midió contra la 2.2.1 (parcial, tres lenguajes): se carga en todo tipo de pedido de código, no fue más cara que la 2.2.1 por app ni por revisión (una corrección pequeña cuesta USD 0,04 más, porque ahora la skill se carga), y sus apps se calificaron como igual de seguras o más y más fáciles de ejecutar: [BENCHMARK-2.3.es.md](BENCHMARK-2.3.es.md).
 
 ## Estructura del repositorio
 
@@ -148,6 +149,8 @@ skills/principal-secops-dev-token-optimizer/
   SKILL.md                 # instrucciones principales
   references/              # guías cargadas bajo demanda (stacks, estructura, modo refactorización)
   scripts/revisar_codigo.py  # escáner usado antes de la entrega
+  scripts/fontes.py        # versiones y fallas conocidas en el momento (endoflife.date, OSV, CISA KEV)
+  fontes/registro.json     # direcciones de las fuentes oficiales por tecnología
   evals/evals.json         # escenarios de evaluación
   THIRD_PARTY_NOTICES.md   # créditos y licencias de trabajos adaptados
 tests/                     # suite de pruebas (unittest de la biblioteca estándar)

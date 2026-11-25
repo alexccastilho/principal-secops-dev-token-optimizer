@@ -1,6 +1,6 @@
 {
   "name": "principal-secops-dev-token-optimizer",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Principal SecOps Dev & Token Optimizer: secure, working code that stays easy to change, explained in plain Brazilian Portuguese to people who do not program, with token economy. Includes /secops-refatorar for a full, guarded refactor.",
   "icon": ".claude-plugin/icon.png",
   "author": {

@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "conferido_em": "2026-11-25",
+  "nota": "Endereços de fontes, não instruções. Camada A: ciclo de vida em API (endoflife.date) e falhas de pacote no OSV. Camada B: só página oficial. Fatos (versões, datas, falhas) nunca ficam aqui: o fontes.py lê na hora.",
+  "tecnologias": {
+    "php": {"nome": "PHP", "camada": "A", "eol": "php", "osv": "Packagist", "avisos": "https://www.php.net/supported-versions.php", "notas": "https://www.php.net/ChangeLog-8.php", "migracao": "https://www.php.net/manual/en/appendices.php"},
+    "wordpress": {"nome": "WordPress", "camada": "A", "eol": "wordpress", "osv": "WordPress", "avisos": "https://wordpress.org/news/category/security/", "notas": "https://wordpress.org/documentation/wordpress-versions/"},
+    "laravel": {"nome": "Laravel", "camada": "A", "eol": "laravel", "osv": "Packagist", "avisos": "https://laravel.com/docs/releases", "notas": "https://laravel.com/docs/releases", "migracao": "https://laravel.com/docs/upgrade"},
+    "symfony": {"nome": "Symfony", "camada": "A", "eol": "symfony", "osv": "Packagist", "avisos": "https://symfony.com/blog/category/security-advisories", "notas": "https://symfony.com/releases"},
+    "nodejs": {"nome": "Node.js", "camada": "A", "eol": "nodejs", "osv": "npm", "avisos": "https://nodejs.org/en/blog/vulnerability", "notas": "https://nodejs.org/en/about/previous-releases"},
+    "python": {"nome": "Python", "camada": "A", "eol": "python", "osv": "PyPI", "avisos": "https://www.python.org/news/security/", "notas": "https://devguide.python.org/versions/"},
+    "django": {"nome": "Django", "camada": "A", "eol": "django", "osv": "PyPI", "avisos": "https://www.djangoproject.com/weblog/", "notas": "https://docs.djangoproject.com/en/stable/releases/"},
+    "java": {"nome": "Java (Eclipse Temurin)", "camada": "A", "eol": "eclipse-temurin", "osv": "Maven", "avisos": "https://www.oracle.com/security-alerts/", "notas": "https://adoptium.net/support/"},
+    "spring-boot": {"nome": "Spring Boot", "camada": "A", "eol": "spring-boot", "osv": "Maven", "avisos": "https://spring.io/security", "notas": "https://github.com/spring-projects/spring-boot/releases"},
+    "dotnet": {"nome": ".NET", "camada": "A", "eol": "dotnet", "osv": "NuGet", "avisos": "https://github.com/dotnet/announcements/issues", "notas": "https://dotnet.microsoft.com/platform/support/policy"},
+    "go": {"nome": "Go", "camada": "A", "eol": "go", "osv": "Go", "avisos": "https://pkg.go.dev/vuln/", "notas": "https://go.dev/doc/devel/release"},
+    "rust": {"nome": "Rust", "camada": "A", "eol": "rust", "osv": "crates.io", "avisos": "https://rustsec.org/advisories/", "notas": "https://releases.rs/"},
+    "ruby": {"nome": "Ruby", "camada": "A", "eol": "ruby", "osv": "RubyGems", "avisos": "https://www.ruby-lang.org/en/security/", "notas": "https://www.ruby-lang.org/en/downloads/branches/"},
+    "mysql": {"nome": "MySQL", "camada": "A", "eol": "mysql", "avisos": "https://www.oracle.com/security-alerts/", "notas": "https://dev.mysql.com/doc/relnotes/mysql/en/"},
+    "mariadb": {"nome": "MariaDB", "camada": "A", "eol": "mariadb", "avisos": "https://mariadb.com/kb/en/security/", "notas": "https://mariadb.com/kb/en/release-notes/"},
+    "postgresql": {"nome": "PostgreSQL", "camada": "A", "eol": "postgresql", "avisos": "https://www.postgresql.org/support/security/", "notas": "https://www.postgresql.org/support/versioning/"},
+    "sqlite": {"nome": "SQLite", "camada": "A", "eol": "sqlite", "avisos": "https://www.sqlite.org/cves.html", "notas": "https://www.sqlite.org/changes.html"},
+    "mongodb": {"nome": "MongoDB", "camada": "A", "eol": "mongodb", "avisos": "https://www.mongodb.com/resources/products/alerts", "notas": "https://www.mongodb.com/docs/manual/release-notes/"},
+    "redis": {"nome": "Redis", "camada": "A", "eol": "redis", "avisos": "https://github.com/redis/redis/security/advisories", "notas": "https://github.com/redis/redis/releases"},
+    "sqlserver": {"nome": "SQL Server", "camada": "A", "eol": "mssqlserver", "avisos": "https://msrc.microsoft.com/update-guide", "notas": "https://learn.microsoft.com/sql/database-engine/install-windows/latest-updates-for-microsoft-sql-server"},
+    "firebird": {"nome": "Firebird", "camada": "B", "avisos": "https://firebirdsql.org/en/news/", "notas": "https://firebirdsql.org/en/release-notes/"},
+    "delphi": {"nome": "Delphi", "camada": "B", "avisos": "https://www.embarcadero.com/products/delphi", "notas": "https://docwiki.embarcadero.com/RADStudio/en/What%27s_New"},
+    "owasp-top10": {"nome": "OWASP Top 10", "camada": "B", "avisos": "https://owasp.org/Top10/"},
+    "asvs": {"nome": "OWASP ASVS", "camada": "B", "avisos": "https://github.com/OWASP/ASVS/releases"},
+    "lgpd": {"nome": "LGPD", "camada": "B", "avisos": "https://www.gov.br/anpd/pt-br"}
+  }
+}

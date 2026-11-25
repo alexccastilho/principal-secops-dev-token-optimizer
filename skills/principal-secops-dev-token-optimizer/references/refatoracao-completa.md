@@ -33,7 +33,7 @@ Do these before reading the code in depth. Each one is how a refactor stays reve
 
 ## 1. Ask
 
-In the start message (SKILL.md, section 10), besides confirming the scope, list these two optional additions with their exact descriptions and ask which ones to do. Then do only those.
+**The start message.** Before changing anything, send one message in pt-BR saying what the mode does, that it touches many files, that it needs Git and a branch of its own, and that contracts stay identical. Besides confirming the scope, list these two optional additions with their exact descriptions and ask which ones to do. Then do only those.
 
 | Adição | O que faz |
 |---|---|

@@ -6,7 +6,7 @@
 
 [![Tests](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/actions/workflows/tests.yml/badge.svg)](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/actions/workflows/tests.yml) [![CodeQL](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/actions/workflows/codeql.yml/badge.svg)](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/actions/workflows/codeql.yml) [![Release](https://img.shields.io/github/v/release/alexccastilho/principal-secops-dev-token-optimizer)](https://github.com/alexccastilho/principal-secops-dev-token-optimizer/releases/latest) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-A skill for **Claude Code** and **claude.ai** that makes Claude work as a senior security engineer (SecOps) serving someone who **does not program**. It delivers secure, working code that stays easy to change, explains it in plain Brazilian Portuguese, and spends as few tokens as possible.
+A skill for **Claude Code** and **claude.ai** that makes Claude work as a senior security engineer (SecOps) serving someone who **does not program**. It delivers secure, working code that stays easy to change, explains it in plain Brazilian Portuguese, and keeps each delivery the size the request needs.
 
 **Author:** Alex Camacho Castilho ([@alexccastilho](https://github.com/alexccastilho)) · **License:** [MIT](LICENSE)
 
@@ -18,9 +18,9 @@ A skill for **Claude Code** and **claude.ai** that makes Claude work as a senior
 - **Never breaks what already works.** It reads files before editing, touches only what the request needs, keeps contracts intact (routes, columns, JSON shapes) and asks before any destructive action.
 - **Keeps the code from getting messy.** Before writing, it asks "what has to change together with this?". It does not copy logic, does not tie modules that change for different reasons, does not patch a bug with an `if` for one value, and writes tests that catch real regressions. New in 2.1.0.
 - **Talks to people who do not program.** Answers come in clear pt-BR: where the file goes, which command to run, and how to test both the success case and the failure case.
-- **Saves tokens.** It sends only the changed blocks, loads its references on demand and respects a per-task file budget.
-- **Looks versions up instead of guessing.** It reads the version the project uses and checks the current support status, instead of trusting the model's memory.
-- **Checks before delivering.** It ships with `scripts/revisar_codigo.py` (Python 3.8+, standard library only, 77 rules over 151 file types), which looks for secrets in code, SQL built from text, weak hashing, unescaped output, `eval`/`exec`, shell commands built from data, disabled TLS checks and memory traps in C, C++ and Rust.
+- **Proportional delivery.** It writes only the files the request needs, sends only the changed blocks, loads its references on demand and batches its turns. Token use is measured in the benchmark, not promised.
+- **Looks versions and known flaws up live.** `scripts/fontes.py` reads the support status of the version in use from endoflife.date and the known flaws of the project's locked dependencies from OSV, flagging the ones in CISA's actively exploited list. New facts arrive without a new release of the skill. New in 2.3.0.
+- **Checks before delivering.** It ships with `scripts/revisar_codigo.py` (Python 3.8+, standard library only, 77 rules over 151 file types), which looks for secrets in code, SQL built from text, weak hashing, unescaped output, `eval`/`exec`, shell commands built from data, disabled TLS checks and memory traps in C, C++ and Rust. With `--entrega` it also checks that the project has the pieces to run as delivered (New in 2.3.0).
 - **Maintains legacy systems instead of rewriting them.** Delphi, Clipper/Harbour, VB6, FoxPro, COBOL, VBA: back up first, make it safe where it stands, migrate in stages. New in 2.2.0.
 
 ## Two modes
@@ -127,13 +127,14 @@ The skill runs the scanner on what it wrote before delivering. You can also run 
 ```bash
 python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py <file-or-folder>
 python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --json <file-or-folder>
+python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --entrega <project-folder>
 ```
 
 Exit code 0 means no HIGH finding, 1 means at least one HIGH, and 2 means the path was wrong or nothing was readable, which is not a pass. It never prints a secret value: the excerpt is hidden for the whole line. A clean scan proves nothing by itself; the skill's checklist still applies.
 
 ## Benchmark
 
-The same small app (contacts with login and SQLite) was requested 36 times through Claude Code, with and without the skill, in PHP, Python, Node.js, Java, C# and Go, in an isolated configuration. In a blind review, the app built with the skill was the more secure one in all 6 languages, and it always came with run instructions. The cost: about 3 times the price and 2.5 times the time per app (USD 0.58 against 0.20, 176 s against 69 s), and 16 of 18 apps compiled, against 18 of 18 without it. Full tables, method, limits and how to reproduce: [docs/BENCHMARK.md](docs/BENCHMARK.md).
+The same small app (contacts with login and SQLite) was requested 36 times through Claude Code, with and without the skill, in PHP, Python, Node.js, Java, C# and Go, in an isolated configuration. In a blind review, the app built with the skill was the more secure one in all 6 languages, and it always came with run instructions. The cost: about 3 times the price and 2.5 times the time per app (USD 0.58 against 0.20, 176 s against 69 s), and 16 of 18 apps compiled, against 18 of 18 without it. Full tables, method, limits and how to reproduce: [docs/BENCHMARK.md](docs/BENCHMARK.md). Version 2.3.0 was measured against 2.2.1 (partial, three languages): it loads for every kind of code request, was not more expensive than 2.2.1 per app or per review (a small bug fix costs USD 0.04 more, because the skill now loads for it), and its apps were rated as secure or more and easier to run: [docs/BENCHMARK-2.3.md](docs/BENCHMARK-2.3.md).
 
 ## Repository layout
 
@@ -148,6 +149,8 @@ skills/principal-secops-dev-token-optimizer/
   SKILL.md                 # main instructions
   references/              # guides loaded on demand (stacks, structure, refactor mode)
   scripts/revisar_codigo.py  # scanner run before delivery
+  scripts/fontes.py        # live versions and known flaws (endoflife.date, OSV, CISA KEV)
+  fontes/registro.json     # addresses of the official sources per technology
   evals/evals.json         # evaluation scenarios
   THIRD_PARTY_NOTICES.md   # credits and licenses of adapted work
 tests/                     # test suite (standard library unittest)
