@@ -20,7 +20,7 @@ A skill for **Claude Code** and **claude.ai** that makes Claude work as a senior
 - **Talks to people who do not program.** Answers come in clear pt-BR: where the file goes, which command to run, and how to test both the success case and the failure case.
 - **Proportional delivery.** It writes only the files the request needs, sends only the changed blocks, loads its references on demand and batches its turns. Token use is measured in the benchmark, not promised.
 - **Looks versions and known flaws up live.** `scripts/fontes.py` reads the support status of the version in use from endoflife.date and the known flaws of the project's locked dependencies from OSV, flagging the ones in CISA's actively exploited list. New facts arrive without a new release of the skill. New in 2.3.0.
-- **Checks before delivering.** It ships with `scripts/revisar_codigo.py` (Python 3.8+, standard library only, 77 rules over 151 file types), which looks for secrets in code, SQL built from text, weak hashing, unescaped output, `eval`/`exec`, shell commands built from data, disabled TLS checks and memory traps in C, C++ and Rust. With `--entrega` it also checks that the project has the pieces to run as delivered (New in 2.3.0).
+- **Checks before delivering.** It ships with `scripts/revisar_codigo.py` (Python 3.8+, standard library only, 77 rules over 153 file types), which looks for secrets in code, SQL built from text, weak hashing, unescaped output, `eval`/`exec`, shell commands built from data, disabled TLS checks and memory traps in C, C++ and Rust. With `--entrega` it also checks that the project has the pieces to run as delivered (New in 2.3.0).
 - **Maintains legacy systems instead of rewriting them.** Delphi, Clipper/Harbour, VB6, FoxPro, COBOL, VBA: back up first, make it safe where it stands, migrate in stages. New in 2.2.0.
 
 ## Two modes
@@ -130,7 +130,7 @@ python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --
 python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --entrega <project-folder>
 ```
 
-Exit code 0 means no HIGH finding, 1 means at least one HIGH, and 2 means the path was wrong or nothing was readable, which is not a pass. It never prints a secret value: the excerpt is hidden for the whole line. A clean scan proves nothing by itself; the skill's checklist still applies.
+Exit code 0 means no HIGH finding, 1 means at least one HIGH (with `--entrega`, also a missing piece for the project to run), and 2 means the path was wrong, nothing was readable or `--entrega` got a file instead of the project folder, which is not a pass. It never prints a secret value: the excerpt is hidden for the whole line. A clean scan proves nothing by itself; the skill's checklist still applies.
 
 ## Benchmark
 

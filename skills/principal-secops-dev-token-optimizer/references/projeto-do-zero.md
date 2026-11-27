@@ -54,10 +54,13 @@ Ship in this sequence so the user always has something working:
 - [ ] 3. The main feature (the thing they asked for)
 - [ ] 4. Authentication, if needed
 - [ ] 5. Hardening pass against security-baseline.md
-- [ ] 6. Handoff document
+- [ ] 6. Handoff document and the double-click launcher
+- [ ] 7. Delivery check: the scanner with --entrega on the project folder
 ```
 
 After each step, one test instruction and a stop. Do not dump the whole system in one message: the user cannot debug six files at once.
+
+What "done" means for each piece (code, schema, migration, tests, operation) is in `padrao-de-entrega.md`. A non-programmer always gets one double-click launcher (`iniciar.bat` on Windows) that installs what is missing and starts the app, so no terminal is ever needed. Before handing over, run the scanner with `--entrega` on the project folder: it fails when a file the launcher or the `LEIA-ME.md` mentions does not exist or a manifest is missing. Fix what it reports first.
 
 ## Standard project skeleton
 
@@ -77,6 +80,7 @@ projeto/
 ├── .env              segredos, NUNCA enviar pro Git
 ├── .env.example      mesmas chaves, valores vazios
 ├── .gitignore        contém .env, storage/, dependências
+├── iniciar.bat       atalho de dois cliques: instala o que falta e abre o sistema
 └── LEIA-ME.md        o documento de entrega
 ```
 

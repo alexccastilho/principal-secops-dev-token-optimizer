@@ -4,6 +4,25 @@
 
 All notable changes to this project. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [SemVer](https://semver.org/).
 
+## [2.3.1] - 2026-11-27
+
+Fixes from an external audit of 2.3.0. Each one has a test that failed before the fix.
+
+### Fixed
+- Scanner: the Android rule for traffic without encryption (`usesCleartextTraffic="true"`, `cleartextTrafficPermitted="true"`) never fired, because the file held an invisible control character (backspace, 0x08) where `\b` was meant. A test now rejects control characters in every Python file of the repository.
+- Scanner: `.gvy` and `.jenkinsfile` files were skipped when scanning a folder.
+- Scanner: a rule that exists once per language (`shell-montado`, `codigo-dinamico`) printed one language's fix for every language in the text report; a Clipper finding came with the Lua fix. Each fix now has its own group.
+- Scanner: a short password in lowercase letters only (`password = "minhasenha"`, `"adminadmin"`) was taken for a screen label and not reported. A label starts with a capital or ends in punctuation; throwaway passwords in automated tests are still not reported. On the benchmark apps the change added no finding outside test files.
+- `--entrega`: a sentence such as `"copy from 'somewhere'"` in a string, or an import in a comment, was taken for a missing package and failed the gate. `.jsx`, `.tsx`, `.mts` and `.cts` files were not checked. A Python import inside a docstring counted. On Python 3.8 and 3.9 the Python check was skipped silently. `--entrega` on a single file passed with exit 0; it now asks for the project folder and exits 2.
+- `--entrega` text in `SKILL.md`: it checks that `package.json` lists every package the Node.js code imports; for Python, Go, C# and PHP it checks only that the manifest is there. The 2.3.0 text said every manifest was matched against the imports.
+- `fontes.py`: a pre-release (`1.2.3-rc1`) counted as newer than the final release, which could hide the fixed version; the date of the oldest stale cache was compared as text (`01/12` before `25/11`); a CVE that is the record's own id, and not an alias, missed the CISA KEV flag; modules inside `exclude (...)` and `replace (...)` blocks of `go.mod` were sent to OSV as dependencies.
+- Benchmark: the Node.js original tests of the refactor suite were run with `node --test tests/`, which fails on Node 24, the version on the benchmark machine, so all six Node.js rows read 0/3. The cost in the new-app summaries had one decimal, and C# was recorded as a failed build when the machine had the .NET runtime but no SDK. The 2.3.0 summaries were recomputed from the same runs, with no new model call: Node.js 3/3, cost with three decimals, C# 0/0 (not checked). The second new-app round, which the benchmark table shows, is now in `custos2.json`. `ativacao.txt` was saved as CP1252 and is now UTF-8.
+
+### Changed
+- The plugin and marketplace descriptions no longer promise token economy.
+- `references/projeto-do-zero.md` points to `padrao-de-entrega.md`, the double-click launcher and `--entrega`; `references/security-baseline.md` points to `fontes.py`.
+- README: exit code 1 also covers a failed `--entrega`, and the scanner reads 153 file types. The benchmark records that gates 2 and 4 were accepted, and the Spanish version has the three passages it was missing.
+
 ## [2.3.0] - 2026-11-25
 
 Live facts instead of written ones, and code that runs as delivered.

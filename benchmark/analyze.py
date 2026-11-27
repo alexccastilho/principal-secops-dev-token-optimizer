@@ -95,6 +95,11 @@ def build_check(lang, app):
     if lang == "csharp":
         if not shutil.which("dotnet"):
             return "n/a", 0, "dotnet not installed"
+        # The runtime alone also puts "dotnet" on the PATH; building needs an SDK.
+        sdks = subprocess.run(["dotnet", "--list-sdks"], capture_output=True, text=True,
+                              encoding="utf-8", errors="replace")
+        if not sdks.stdout.strip():
+            return "n/a", 0, "dotnet SDK not installed (runtime only)"
         root = find_root(app, "*.csproj")
         if not root:
             return "fail", 0, "no .csproj"
@@ -182,9 +187,9 @@ def measure(run_dir):
     return record
 
 
-def mean(values):
+def mean(values, digits=1):
     values = [v for v in values if isinstance(v, (int, float))]
-    return round(statistics.mean(values), 1) if values else None
+    return round(statistics.mean(values), digits) if values else None
 
 
 def aggregate(records):
@@ -203,7 +208,7 @@ def aggregate(records):
             "output_tokens": mean(r.get("output_tokens") for r in rs),
             "input_tokens_total": mean((r.get("input_tokens") or 0) + (r.get("cache_creation_input_tokens") or 0)
                                        + (r.get("cache_read_input_tokens") or 0) for r in rs),
-            "cost_usd": mean(r.get("cost_usd") for r in rs),
+            "cost_usd": mean((r.get("cost_usd") for r in rs), digits=3),
             "num_turns": mean(r.get("num_turns") for r in rs),
             "files": mean(r["files"] for r in rs),
             "source_code_lines": mean(r["source_code_lines"] for r in rs),

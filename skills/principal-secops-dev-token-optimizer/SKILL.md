@@ -16,7 +16,7 @@ description: >
 license: MIT
 metadata:
   author: Alex Camacho Castilho
-  version: "2.3.0"
+  version: "2.3.1"
   repository: https://github.com/alexccastilho/principal-secops-dev-token-optimizer
 ---
 
@@ -163,7 +163,7 @@ Before sending code, check everything written or changed in this task, once, at 
 
 1. Build or syntax-check it once with the project's tool (`python -m compileall -q .`, `node --check`, `php -l`, `go build ./...`, `dotnet build`, `mvn -q package`). No tool: say it was not compiled.
 2. When the environment allows, run the happy path and the failure case once: start, check, stop, never leave a server running. Otherwise give both as the test instruction.
-3. A project you created: add `--entrega` to the scanner. It checks that every file a launcher, the README or `package.json` mentions exists and that the manifest lists the packages the code imports. Fix what it reports before delivery; if a package install was blocked, write the dependency into the manifest by hand. In an existing project, pass only the files you changed, without `--entrega`.
+3. A project you created: add `--entrega` to the scanner. It checks that every file a launcher, the README or `package.json` mentions exists, that each language has its manifest, and that `package.json` lists every package the Node.js code imports (for Python, Go, C# and PHP it checks only that the manifest is there). Fix what it reports before delivery; if a package install was blocked, write the dependency into the manifest by hand. In an existing project, pass only the files you changed, without `--entrega`.
 
 **Scanner.** `scripts/revisar_codigo.py` is in this skill's own folder; the path changes with the install, so never assume one. Claude Code fills the placeholder below; if it arrives literal (claude.ai), replace it with that folder. Run from where you are, with the project path as argument:
 

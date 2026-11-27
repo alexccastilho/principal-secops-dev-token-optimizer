@@ -64,8 +64,11 @@ def project_copy(app):
 
 
 def visible_tests(lang, project):
+    # On Node 24, "node --test tests/" is read as a module path (MODULE_NOT_FOUND), so the
+    # test files are listed here, which works the same on every Node version and shell.
+    node_files = sorted(p.relative_to(project).as_posix() for p in (project / "tests").glob("*.test.js"))
     cmd = ([sys.executable, "-B", "-m", "unittest", "discover", "-s", "tests", "-t", "."]
-           if lang == "python" else ["node", "--test", "--test-reporter=tap", "tests/"])
+           if lang == "python" else ["node", "--test", "--test-reporter=tap", *node_files])
     return counts(lang, *run(cmd, project))
 
 

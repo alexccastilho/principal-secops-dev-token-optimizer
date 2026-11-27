@@ -4,6 +4,25 @@
 
 Todas as mudanças relevantes deste projeto. Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), versões em [SemVer](https://semver.org/lang/pt-BR/).
 
+## [2.3.1] - 2026-11-27
+
+Correções de uma auditoria externa da 2.3.0. Cada uma tem um teste que falhava antes da correção.
+
+### Corrigido
+- Scanner: a regra do Android para tráfego sem criptografia (`usesCleartextTraffic="true"`, `cleartextTrafficPermitted="true"`) nunca disparava, porque o arquivo tinha um caractere de controle invisível (backspace, 0x08) no lugar do `\b`. Um teste agora recusa caractere de controle em todo arquivo Python do repositório.
+- Scanner: arquivos `.gvy` e `.jenkinsfile` ficavam de fora ao varrer uma pasta.
+- Scanner: uma regra que existe uma vez por linguagem (`shell-montado`, `codigo-dinamico`) imprimia no relatório de texto a correção de uma linguagem para todas; um achado de Clipper vinha com a correção de Lua. Cada correção agora tem o seu grupo.
+- Scanner: senha curta só com letras minúsculas (`password = "minhasenha"`, `"adminadmin"`) era tomada por rótulo de tela e não era apontada. Rótulo começa com maiúscula ou termina em pontuação; senha descartável em teste automatizado continua sem aviso. Nos apps do benchmark a mudança não acrescentou nenhum achado fora de arquivos de teste.
+- `--entrega`: uma frase como `"copy from 'somewhere'"` dentro de um texto, ou um import num comentário, era tomada por pacote faltando e reprovava o portão. Arquivos `.jsx`, `.tsx`, `.mts` e `.cts` não eram conferidos. Import de Python dentro de docstring contava. No Python 3.8 e 3.9 a conferência de Python era pulada sem aviso. `--entrega` num arquivo avulso passava com saída 0; agora pede a pasta do projeto e sai com 2.
+- Texto do `--entrega` no `SKILL.md`: ele confere se o `package.json` lista todo pacote que o código Node.js importa; para Python, Go, C# e PHP confere só se o manifesto existe. O texto da 2.3.0 dizia que todo manifesto era comparado com os imports.
+- `fontes.py`: uma pré-versão (`1.2.3-rc1`) contava como mais nova que a versão final, o que podia esconder a versão corrigida; a data do cache vencido mais antigo era comparada como texto (`01/12` antes de `25/11`); um CVE que é o próprio id do registro, e não um apelido, ficava sem a marca do KEV da CISA; módulos dentro dos blocos `exclude (...)` e `replace (...)` do `go.mod` iam para o OSV como dependências.
+- Benchmark: os testes originais do Node.js na suíte de refatoração rodavam com `node --test tests/`, que falha no Node 24, a versão da máquina do benchmark, então as seis linhas de Node.js mostravam 0/3. O custo nos resumos de app novo tinha uma casa decimal, e o C# ficava como build com falha quando a máquina tinha o runtime do .NET mas não o SDK. Os resumos da 2.3.0 foram recalculados a partir das mesmas execuções, sem chamar o modelo de novo: Node.js 3/3, custo com três casas, C# 0/0 (não conferido). A segunda rodada de app novo, que a tabela do benchmark mostra, agora está em `custos2.json`. O `ativacao.txt` estava em CP1252 e agora está em UTF-8.
+
+### Alterado
+- As descrições do plugin e do marketplace não prometem mais economia de tokens.
+- `references/projeto-do-zero.md` aponta para `padrao-de-entrega.md`, o atalho de dois cliques e o `--entrega`; `references/security-baseline.md` aponta para o `fontes.py`.
+- README: o código de saída 1 também cobre `--entrega` reprovado, e o scanner lê 153 tipos de arquivo. O benchmark registra que os portões 2 e 4 foram aceitos, e a versão em espanhol ganhou os três trechos que faltavam.
+
 ## [2.3.0] - 2026-11-25
 
 Fatos consultados na hora em vez de escritos, e código que roda como foi entregue.
