@@ -28,7 +28,7 @@ analyze_refactor = load("analyze_refactor")
 class RefactorAnalyzerTest(unittest.TestCase):
     @unittest.skipUnless(shutil.which("node"), "node not installed")
     def test_node_tests_in_a_tests_folder_are_run(self):
-        # "node --test tests/" fails with MODULE_NOT_FOUND on Node 22+; that zeroed every Node row.
+        # "node --test tests/" fails with MODULE_NOT_FOUND on Node 24 (the benchmark machine); that zeroed every Node row.
         project = pathlib.Path(tempfile.mkdtemp())
         (project / "tests").mkdir()
         (project / "tests" / "apoio.js").write_text("module.exports = { dois: 2 };\n", encoding="utf-8")

@@ -145,7 +145,7 @@ class DeliveryAuditTest(TempDir):
     def test_python_check_runs_without_stdlib_module_names(self):
         # Python 3.8 and 3.9 have no sys.stdlib_module_names; the check must not go silent.
         self.write("app.py", "import os\nimport json\nimport requests\n")
-        code = ("import sys, runpy; del sys.stdlib_module_names; sys.argv = %r; "
+        code = ("import sys, runpy; sys.__dict__.pop('stdlib_module_names', None); sys.argv = %r; "
                 "runpy.run_path(%r, run_name='__main__')"
                 % (["revisar_codigo.py", "--entrega", "--json", str(self.dir)], str(SCANNER)))
         result = subprocess.run([sys.executable, "-I", "-c", code], capture_output=True, text=True,
@@ -166,13 +166,14 @@ class FontesAuditTest(unittest.TestCase):
     def test_oldest_stale_cache_date_is_chronological(self):
         cache = pathlib.Path(tempfile.mkdtemp())
         fetch = fontes.Fetcher(cache, offline=True)
-        stamps = {"https://endoflife.date/api/v1/products/php/": (2026, 12, 1),
-                  "https://endoflife.date/api/v1/products/python/": (2026, 11, 25)}
+        stamps = {"https://endoflife.date/api/v1/products/php/": (2025, 12, 1),
+                  "https://endoflife.date/api/v1/products/python/": (2025, 11, 25)}
         for url, day in stamps.items():
             t = time.mktime(day + (12, 0, 0, 0, 0, -1))
             fetch._key(url, None).write_text(json.dumps({"t": t, "data": {}}), encoding="utf-8")
             fetch.get_json(url, "eol")
-        self.assertEqual(fetch.oldest_stale(), "25/11/2026")
+        self.assertEqual(len(fetch.stale_dates), 2)
+        self.assertEqual(fetch.oldest_stale(), "25/11/2025")
 
     def test_kev_flag_uses_the_record_id_when_it_is_a_cve(self):
         tmp = pathlib.Path(tempfile.mkdtemp())
