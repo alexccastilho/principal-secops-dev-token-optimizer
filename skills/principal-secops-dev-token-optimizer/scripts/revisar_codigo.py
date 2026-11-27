@@ -91,7 +91,7 @@ FSHARP = frozenset({".fs", ".fsi", ".fsx"})
 JAVA = frozenset({".java", ".jsp"})
 NEW_LANGS = (PASCAL | XBASE | VB | COBOL_RPG | ABAP | OPENEDGE | LUA | PERL | TCL | AHK | GAS
              | R_LANG | JULIA | FORTRAN | SAS | BEAM | CLOJURE | HASKELL | OCAML | CRYSTAL
-             | ZIG | ADA | DLANG | NIM | FSHARP | RUBY | KOTLIN | SWIFT | DART | SCALA
+             | ZIG | ADA | DLANG | NIM | FSHARP | RUBY | KOTLIN | SWIFT | DART | SCALA | GROOVY
              | GO | CS | RUST | JAVA | PS | SH | BATCH
              | frozenset({".mts", ".cts", ".ipynb", ".rules", ".dockerfile"}))
 
@@ -312,7 +312,7 @@ RULES: List[Rule] = [
              r"""|badCertificateCallback\s*=[^;\n]*=>\s*true\b|hostnameVerifier\s*\{\s*\w+\s*,\s*\w+\s*->\s*true"""
              r"""|setHostnameVerifier\s*\(\s*\(?\s*\w+\s*,\s*\w+\s*\)?\s*->\s*true|NoopHostnameVerifier|ALLOW_ALL_HOSTNAME_VERIFIER"""
              r"""|TrustServerCertificate\s*=\s*(?:true|yes)\b|VerifyMode\s*:=\s*\[\s*\]|\{\s*verify\s*,\s*verify_none\s*\}"""
-             r"""|SSL_VERIFY_NONE\b|usesCleartextTraffic\s*=\s*.true|cleartextTrafficPermitted\s*=\s*.true"""
+             r"""|SSL_VERIFY_NONE\b|usesCleartextTraffic\s*=\s*.true\b|cleartextTrafficPermitted\s*=\s*.true\b"""
              r"""|\bcurl\b[^\n|]*\s(?:-[a-zA-Z]*k[a-zA-Z]*|--insecure)\b|\bwget\b[^\n|]*--no-check-certificate"""),
          "Verificacao do certificado HTTPS desligada.",
          "Nunca desligue em producao. Corrija o certificado."),
@@ -674,7 +674,16 @@ class Finding:
     excerpt: str
 
 
-def _is_placeholder(value: Optional[str], config: bool = False) -> bool:
+_TEST_DIRS = {"test", "tests", "__tests__", "spec", "specs"}
+_TEST_NAME = re.compile(r"(?:^test_.*\.py$|_test\.\w+$|Tests?\.\w+$|\.(?:test|spec)\.\w+$)")
+
+
+def is_test_file(path: Path) -> bool:
+    """Teste automatizado: pasta de testes ou nome no padrao das ferramentas."""
+    return bool(_TEST_DIRS.intersection(p.lower() for p in path.parts[:-1])) or bool(_TEST_NAME.search(path.name))
+
+
+def _is_placeholder(value: Optional[str], config: bool = False, test: bool = False) -> bool:
     if not value:
         return False
     if _PLACEHOLDER.search(value) or _KEYWORD_ONLY.match(value):
@@ -682,8 +691,13 @@ def _is_placeholder(value: Optional[str], config: bool = False) -> bool:
     # Em arquivo de configuracao, numero puro e prazo ou tamanho (token_ttl: 3600).
     if config and value.isdigit():
         return True
-    # Uma palavra curta so de letras e rotulo de tela ("Esqueceu?"), nao senha.
-    return len(value) < 12 and bool(_LABEL.match(value))
+    # Uma palavra curta so de letras e rotulo de tela ("Senha", "Esqueceu?"),
+    # nao senha. Rotulo comeca com maiuscula ou termina em pontuacao; tudo em
+    # minusculas ("minhasenha", "adminadmin") e senha fraca de verdade. Em
+    # teste automatizado a palavra curta e dado descartavel ("abacaxi").
+    if len(value) >= 12 or not _LABEL.match(value):
+        return False
+    return test or value[0].isupper() or not value[-1].isalpha()
 
 
 def kind_of(path: Path) -> str:
@@ -788,6 +802,7 @@ def scan_file(path: Path, notes: Dict[str, int]) -> List[Finding]:
 
     kind = kind_of(path)
     secret_home = is_secret_home(path)
+    test_file = is_test_file(path)
     findings: List[Finding] = []
 
     for n, raw_line in enumerate(text.splitlines(), start=1):
@@ -824,7 +839,7 @@ def scan_file(path: Path, notes: Dict[str, int]) -> List[Finding]:
             if rule.id in ("secret-atribuido", "segredo-em-config"):
                 groups = m.groupdict()
                 if _is_placeholder(groups.get("v") or groups.get("w") or groups.get("u"),
-                                   config=rule.id == "segredo-em-config"):
+                                   config=rule.id == "segredo-em-config", test=test_file):
                     continue
             hits.append(rule)
 
@@ -877,12 +892,14 @@ def report_text(findings: List[Finding], files_scanned: int, notes: Dict[str, in
 
     # Agrupado por regra: a explicacao e a correcao saem uma vez, os locais
     # embaixo. Num projeto legado isso corta a saida para uma fracao.
-    groups: Dict[Tuple[int, str], List[Finding]] = {}
+    # A mesma regra pode ter uma versao por linguagem, com correcao propria
+    # (shell-montado em Lua e em Clipper): o grupo leva a correcao na chave.
+    groups: Dict[Tuple[int, str, str, str], List[Finding]] = {}
     for f in findings:
-        groups.setdefault((SEVERITY_ORDER[f.severity], f.rule), []).append(f)
+        groups.setdefault((SEVERITY_ORDER[f.severity], f.rule, f.message, f.fix), []).append(f)
 
     current = None
-    for (_, rule_id), items in sorted(groups.items()):
+    for (_, rule_id, _, _), items in sorted(groups.items()):
         first = items[0]
         if first.severity != current:
             current = first.severity
@@ -912,6 +929,46 @@ _NODE_BUILTINS = {
     "readline", "repl", "stream", "string_decoder", "sys", "test", "timers", "tls", "trace_events",
     "tty", "url", "util", "v8", "vm", "wasi", "worker_threads", "zlib", "sqlite",
 }
+_JS_EXTS = (".js", ".mjs", ".cjs", ".jsx", ".ts", ".mts", ".cts", ".tsx")
+# Import de verdade e instrucao no inicio da linha: "copy from 'x'" dentro de
+# um texto ou "// import x from 'y'" num comentario nao contam. O trecho entre
+# import/export e from nao atravessa aspas, entao nao sai de dentro de um texto.
+_JS_STATIC_IMPORT = re.compile(
+    r"""^[ \t]*(?:import|export)\b(?:[^'";]*?\bfrom)?\s*['"]([^'"./][^'"]*)['"]""", re.M)
+_JS_DYNAMIC_IMPORT = re.compile(r"""\b(?:require|import)\s*\(\s*['"]([^'"./][^'"]*)['"]\s*\)""")
+_PY_DOCSTRING = re.compile(r'("""|\'\'\')(?:.|\n)*?\1')
+
+
+def _js_imports(text: str) -> List[str]:
+    specs = [m.group(1) for m in _JS_STATIC_IMPORT.finditer(text)]
+    for m in _JS_DYNAMIC_IMPORT.finditer(text):
+        line_start = text.rfind("\n", 0, m.start()) + 1
+        before = text[line_start:m.start()]
+        if "//" in before or before.lstrip().startswith(("*", "/*")):
+            continue
+        specs.append(m.group(1))
+    return specs
+
+
+def _stdlib_names() -> FrozenSet[str]:
+    """Modulos da biblioteca padrao. Python 3.10+ traz a lista; no 3.8 e no 3.9
+    ela e lida da pasta da biblioteca, para a conferencia nao ficar muda."""
+    names = getattr(sys, "stdlib_module_names", None)
+    if names:
+        return frozenset(names)
+    import sysconfig
+    found = set(sys.builtin_module_names)
+    paths = sysconfig.get_paths()
+    folders = [paths.get("stdlib"), paths.get("platstdlib"), os.path.join(sys.base_prefix, "DLLs")]
+    folders += [os.path.join(f, "lib-dynload") for f in folders[:2] if f]
+    for folder in folders:
+        if not folder or not os.path.isdir(folder):
+            continue
+        for entry in os.listdir(folder):
+            name = entry.split(".", 1)[0]
+            if entry != "site-packages" and name.isidentifier():
+                found.add(name)
+    return frozenset(found)
 
 
 def _project_files(root: Path) -> List[Path]:
@@ -999,7 +1056,7 @@ def check_delivery(root: Path) -> List[str]:
     if php_autoload and not any(f.name == "composer.json" for f in files):
         problems.append("PHP usa vendor/autoload.php mas nao ha composer.json: 'composer install' nao tem o que instalar.")
 
-    js = by_ext.get(".js", []) + by_ext.get(".mjs", []) + by_ext.get(".cjs", []) + by_ext.get(".ts", [])
+    js = [f for ext in _JS_EXTS for f in by_ext.get(ext, [])]
     declared_cache: Dict[Path, Optional[set]] = {}
 
     def nearest_manifest(f: Path) -> Optional[Path]:
@@ -1028,8 +1085,7 @@ def check_delivery(root: Path) -> List[str]:
     no_manifest = set()
     for f in js:
         manifest = nearest_manifest(f)
-        for m in re.finditer(r"""(?:require\(\s*|from\s+|import\s+)['"]([^'"./][^'"]*)['"]""", _read(f)):
-            spec = m.group(1)
+        for spec in _js_imports(_read(f)):
             # node:, https:, npm:, jsr:, virtual: e aliases de caminho (@/, ~/, #) nao sao pacotes do registro.
             if ":" in spec or spec.startswith(("@/", "~", "#")):
                 continue
@@ -1046,12 +1102,13 @@ def check_delivery(root: Path) -> List[str]:
     if no_manifest:
         problems.append("Codigo Node usa pacotes (%s) mas nao ha package.json." % ", ".join(sorted(no_manifest)[:5]))
 
-    stdlib = getattr(sys, "stdlib_module_names", None)  # Python 3.10+
-    if stdlib and by_ext.get(".py"):
+    if by_ext.get(".py"):
+        stdlib = _stdlib_names()
         local = {f.stem for f in by_ext[".py"]} | {f.parent.name for f in by_ext[".py"]}
         third = set()
         for f in by_ext[".py"]:
-            for m in re.finditer(r"^\s*(?:from\s+([A-Za-z_]\w*)[\w.]*\s+import|import\s+([A-Za-z_]\w*))", _read(f), re.M):
+            code = _PY_DOCSTRING.sub("", _read(f))  # exemplo de uso em docstring nao e import
+            for m in re.finditer(r"^\s*(?:from\s+([A-Za-z_]\w*)[\w.]*\s+import|import\s+([A-Za-z_]\w*))", code, re.M):
                 mod = m.group(1) or m.group(2)
                 if mod not in stdlib and mod not in local and mod != "__future__":
                     third.add(mod)
@@ -1093,6 +1150,14 @@ def main() -> int:
     parser.add_argument("--entrega", action="store_true",
                         help="tambem confere se o projeto tem as pecas para rodar como entregue")
     args = parser.parse_args()
+
+    # --entrega confere o projeto inteiro: num arquivo avulso nao ha o que
+    # conferir, e sair com 0 pareceria aprovacao.
+    if args.entrega and not any(Path(p).is_dir() for p in args.paths):
+        print("--entrega precisa da pasta do projeto, nao de um arquivo. "
+              "Rode de novo passando a pasta; para conferir so arquivos alterados, tire o --entrega.",
+              file=sys.stderr)
+        return 2
 
     notes = {"grandes": 0, "binarios": 0, "linhas_longas": 0, "ausentes": 0}
     files = iter_files(args.paths, notes)

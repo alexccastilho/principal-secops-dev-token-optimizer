@@ -99,7 +99,14 @@ _OPENER = urllib.request.build_opener(_SameHostRedirect)
 class Fetcher:
     def __init__(self, cache: Path, offline: bool):
         self.cache, self.offline = cache, offline
-        self.stale_dates: List[str] = []
+        self.stale_dates: List[float] = []  # instantes do cache vencido usado
+
+    def oldest_stale(self) -> Optional[str]:
+        """Data do cache vencido mais antigo, para exibir. Compara o instante,
+        nao o texto: "01/12" vem antes de "25/11" em ordem de texto."""
+        if not self.stale_dates:
+            return None
+        return time.strftime("%d/%m/%Y", time.localtime(min(self.stale_dates)))
 
     def _key(self, url: str, body: Optional[bytes]) -> Path:
         digest = hashlib.sha256(url.encode() + b"\0" + (body or b"")).hexdigest()[:32]
@@ -144,7 +151,7 @@ class Fetcher:
 
     def _stale(self, cached: Optional[Dict[str, Any]], why: str) -> Any:
         if cached:
-            self.stale_dates.append(time.strftime("%d/%m/%Y", time.localtime(cached.get("t", 0))))
+            self.stale_dates.append(float(cached.get("t", 0)))
             return cached["data"]
         raise Unchecked(why)
 
@@ -172,6 +179,27 @@ def find_tech(registry: Dict[str, Any], name: str) -> Tuple[str, Dict[str, Any]]
 def _vtuple(text: str) -> Tuple[int, ...]:
     nums = re.findall(r"\d+", text or "")
     return tuple(int(n) for n in nums[:4])
+
+
+def _vkey(text: str) -> Tuple[Any, ...]:
+    """Chave para comparar versoes: 1.2.3-rc1 < 1.2.3 < 1.2.3.post1.
+    Fase: 0 dev, 1 pre-release (alpha, beta, rc, pseudo-versao do Go), 2 final, 3 post."""
+    m = re.match(r"\s*[vV]?(\d+(?:\.\d+)*)(.*)", text or "")
+    if not m:
+        return ((0, 0, 0, 0), 1, ((1, (text or "").lower()),))
+    nums = tuple(int(n) for n in m.group(1).split(".")[:4])
+    nums += (0,) * (4 - len(nums))
+    rest = m.group(2).split("+", 1)[0].lower()  # "+build" nao muda a ordem
+    parts = tuple((0, int(p)) if p.isdigit() else (1, p) for p in re.findall(r"\d+|[a-z]+", rest))
+    if not parts:
+        phase = 2
+    elif parts[0] == (1, "post"):
+        phase = 3
+    elif parts[0] == (1, "dev"):
+        phase = 0
+    else:
+        phase = 1
+    return (nums, phase, parts)
 
 
 def _status(rel: Dict[str, Any]) -> Tuple[str, bool]:
@@ -220,7 +248,7 @@ def cmd_versao(args, fetch: Fetcher, registry) -> Tuple[int, Dict[str, Any], Lis
             return ACT, out, lines
         status, act = _status(rel)
         latest = (rel.get("latest") or {})
-        behind = bool(latest.get("name")) and _vtuple(args.em_uso) < _vtuple(latest["name"]) and len(_vtuple(args.em_uso)) >= len(_vtuple(latest["name"]))
+        behind = bool(latest.get("name")) and _vkey(args.em_uso) < _vkey(latest["name"]) and len(_vtuple(args.em_uso)) >= len(_vtuple(latest["name"]))
         out["em_uso"] = {"versao": args.em_uso, "ciclo": rel.get("name"), "status": status,
                          "ultimo_patch": latest.get("name"), "atras_do_patch": behind, "notas": latest.get("link")}
         line = f"{tech['nome']} {args.em_uso} (ciclo {rel.get('name')}): {status}."
@@ -382,8 +410,23 @@ def read_locks(folder: Path) -> Tuple[List[Tuple[str, str, str, str]], List[str]
             elif name == "go.mod":
                 text = path.read_text(encoding="utf-8", errors="replace")
                 own = (re.search(r"^module\s+(\S+)", text, re.M) or [None, ""])[1]
-                for m in re.finditer(r"^\s*(?:require\s+)?([a-z0-9.\-]+\.[a-z]{2,}/[^\s]+)\s+(v[0-9][^\s]*)", text, re.M):
-                    if not _go_private(m.group(1), own):
+                # So o que esta em "require": exclude e replace citam modulos que nao entram no build.
+                block = False
+                for raw in text.splitlines():
+                    line = raw.split("//", 1)[0].strip()
+                    if block:
+                        if line.startswith(")"):
+                            block = False
+                            continue
+                    elif re.match(r"require\s*\($", line):
+                        block = True
+                        continue
+                    elif line.startswith("require "):
+                        line = line[len("require "):].strip()
+                    else:
+                        continue
+                    m = re.match(r"([a-z0-9.\-]+\.[a-z]{2,}/\S+)\s+(v[0-9]\S*)$", line)
+                    if m and not _go_private(m.group(1), own):
                         found.append(("Go", m.group(1), m.group(2), rel))
             elif name == "Gemfile.lock":
                 text = path.read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n")
@@ -418,16 +461,16 @@ def _severity(vuln: Dict[str, Any]) -> str:
 def _fixed(vuln: Dict[str, Any], name: str, installed: str) -> Optional[str]:
     """The lowest fixed version above the installed one. A flaw is often fixed on several
     branches (2.2.28, 3.2.14, 4.0.6); the first "fixed" event may belong to an older branch."""
-    mine = _vtuple(installed)
+    mine = _vkey(installed)
     fixes = []
     for aff in vuln.get("affected") or []:
         if (aff.get("package") or {}).get("name", "").lower() != name.lower():
             continue
         for rng in aff.get("ranges") or []:
             for ev in rng.get("events") or []:
-                if ev.get("fixed") and _vtuple(str(ev["fixed"])) > mine:
+                if ev.get("fixed") and _vkey(str(ev["fixed"])) > mine:
                     fixes.append(str(ev["fixed"]))
-    return min(fixes, key=_vtuple) if fixes else None
+    return min(fixes, key=_vkey) if fixes else None
 
 
 def _clean(text: str, limit: int = 80) -> str:
@@ -493,7 +536,9 @@ def cmd_deps(args, fetch: Fetcher, registry) -> Tuple[int, Dict[str, Any], List[
             vuln = fetch.get_json(OSV_VULN.format(id=urllib.parse.quote(vid)), "osv")
         except Unchecked:
             vuln = {}
-        aliases = [a for a in vuln.get("aliases") or [] if str(a).startswith("CVE-")]
+        # O CVE pode ser o proprio id do registro, nao so um apelido.
+        ids = [vuln.get("id") or vid] + list(vuln.get("aliases") or [])
+        aliases = list(dict.fromkeys(str(a) for a in ids if str(a).startswith("CVE-")))
         rows.append({"pacote": name, "versao": version, "ecossistema": eco, "arquivo": rel, "id": vid,
                      "cve": aliases[:2], "gravidade": _severity(vuln), "corrigida_em": _fixed(vuln, name, version),
                      "explorada_ativamente": any(a in kev_ids for a in aliases),
@@ -515,7 +560,7 @@ def cmd_deps(args, fetch: Fetcher, registry) -> Tuple[int, Dict[str, Any], List[
         worst = min((SEV_ORDER.get(r["gravidade"], 4) for r in detailed), default=4)
         kev = any(r["explorada_ativamente"] for r in detailed)
         fixes = [r["corrigida_em"] for r in detailed if r["corrigida_em"]]
-        target = max(fixes, key=_vtuple) if fixes else None
+        target = max(fixes, key=_vkey) if fixes else None
         top = sorted(detailed, key=lambda r: SEV_ORDER.get(r["gravidade"], 4))[:1]
         summary.append({"pacote": name, "versao": version, "arquivo": rel, "falhas": info["total"],
                         "pior": [k for k, v in SEV_ORDER.items() if v == worst][0], "kev": kev,
@@ -644,8 +689,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(json.dumps({"nao_conferido": str(exc)}, ensure_ascii=False) if args.json else msg)
         return UNCHECKED
     if fetch.stale_dates:
-        note = f"Atenção: sem acesso à fonte agora; dados do cache de {min(fetch.stale_dates)}."
-        out["cache_vencido_de"] = min(fetch.stale_dates)
+        note = f"Atenção: sem acesso à fonte agora; dados do cache de {fetch.oldest_stale()}."
+        out["cache_vencido_de"] = fetch.oldest_stale()
         lines.insert(0, note)
     if args.json:
         print(json.dumps(out, ensure_ascii=False, indent=1))

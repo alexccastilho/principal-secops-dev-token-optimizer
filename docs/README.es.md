@@ -20,7 +20,7 @@ Skill para **Claude Code** y **claude.ai** que hace que Claude trabaje como un d
 - **Habla el idioma de quien no programa.** Las respuestas llegan en pt-BR claro: dónde va el archivo, qué comando ejecutar y cómo probar el caso correcto y el caso de error.
 - **Entrega proporcional.** Escribe solo los archivos que el pedido necesita, envía solo los bloques que cambiaron, carga sus referencias bajo demanda y agrupa sus turnos. El gasto de tokens se mide en el benchmark, no se promete.
 - **Consulta versiones y fallas conocidas en el momento.** `scripts/fontes.py` lee en endoflife.date el estado de soporte de la versión en uso y en OSV las fallas conocidas de las dependencias fijadas del proyecto, y marca las que están en la lista de explotadas activamente de la CISA. Los datos nuevos llegan sin una nueva versión de la skill. Novedad de la 2.3.0.
-- **Verifica antes de entregar.** Incluye el escáner `scripts/revisar_codigo.py` (Python 3.8+, solo biblioteca estándar, 77 reglas sobre 151 tipos de archivo), que busca secretos en el código, SQL armado con texto, hash débil, salida sin escapar, `eval`/`exec`, comandos del sistema armados con datos, verificación TLS desactivada y trampas de memoria en C, C++ y Rust. Con `--entrega` también verifica que el proyecto tenga las piezas para funcionar tal como se entrega (novedad de la 2.3.0).
+- **Verifica antes de entregar.** Incluye el escáner `scripts/revisar_codigo.py` (Python 3.8+, solo biblioteca estándar, 77 reglas sobre 153 tipos de archivo), que busca secretos en el código, SQL armado con texto, hash débil, salida sin escapar, `eval`/`exec`, comandos del sistema armados con datos, verificación TLS desactivada y trampas de memoria en C, C++ y Rust. Con `--entrega` también verifica que el proyecto tenga las piezas para funcionar tal como se entrega (novedad de la 2.3.0).
 - **Mantiene sistemas heredados en lugar de reescribirlos.** Delphi, Clipper/Harbour, VB6, FoxPro, COBOL, VBA: primero la copia de seguridad, seguridad donde está, migración por etapas. Novedad de la 2.2.0.
 
 ## Dos modos
@@ -130,7 +130,7 @@ python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --
 python3 skills/principal-secops-dev-token-optimizer/scripts/revisar_codigo.py --entrega <carpeta-del-proyecto>
 ```
 
-El código de salida 0 significa ningún hallazgo HIGH, 1 significa al menos un HIGH, y 2 significa ruta equivocada o nada legible, lo que no es una aprobación. Nunca imprime el valor de un secreto: el fragmento se oculta en toda la línea. Un análisis limpio no prueba nada por sí solo; la lista de comprobación de la skill sigue vigente.
+El código de salida 0 significa ningún hallazgo HIGH, 1 significa al menos un HIGH (con `--entrega`, también que falta alguna pieza para que el proyecto funcione), y 2 significa ruta equivocada, nada legible o `--entrega` con un archivo en lugar de la carpeta del proyecto, lo que no es una aprobación. Nunca imprime el valor de un secreto: el fragmento se oculta en toda la línea. Un análisis limpio no prueba nada por sí solo; la lista de comprobación de la skill sigue vigente.
 
 ## Benchmark
 

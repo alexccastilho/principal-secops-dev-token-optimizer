@@ -2,7 +2,7 @@
 
 [English](BENCHMARK-2.3.md) · [Português](BENCHMARK-2.3.pt-BR.md) · [Primer benchmark](BENCHMARK.es.md) · [Benchmark de refactorización](BENCHMARK-REFACTOR.es.md)
 
-Ejecutado el 2026-11-25 con Claude Code 2.1.332, el modelo `sonnet` (`claude-sonnet-5-5`), en Windows 11, en la configuración aislada de `benchmark/run_benchmark.py`. Tres condiciones: sin la skill, versión 2.2.1 y versión 2.3.0. La 2.3.0 se midió a partir de los archivos de la rama `v2.3` antes del primer commit, así que sus ejecuciones registran el commit base con `-dirty`. **Esta ronda es parcial:** tres lenguajes en lugar de seis, dos o tres repeticiones por celda y un solo modelo. Los resúmenes, las notas a ciegas y los mapas de etiquetas están en [benchmark/results/2.3.0/](../benchmark/results/2.3.0/).
+Ejecutado el 2026-11-25 con Claude Code 2.1.332, el modelo `sonnet` (`claude-sonnet-5-5`), en Windows 11, en la configuración aislada de `benchmark/run_benchmark.py`. Tres condiciones: sin la skill, versión 2.2.1 y versión 2.3.0. La 2.3.0 se midió a partir de los archivos de la rama `v2.3` antes del primer commit, así que sus ejecuciones registran el commit base con `-dirty`. **Esta ronda es parcial:** tres lenguajes en lugar de seis, dos o tres repeticiones por celda y un solo modelo. Los resúmenes, las notas a ciegas y los mapas de etiquetas están en [benchmark/results/2.3.0/](../benchmark/results/2.3.0/). La segunda ronda de app nueva está en `custos2.json` y `create2-summary.json`. En la 2.3.1 los resúmenes se recalcularon a partir de las mismas ejecuciones, sin llamar de nuevo al modelo: costo con tres decimales, compilación de C# como no verificada (0/0) en lugar de fallida, y las pruebas originales de Node.js en la suite de refactorización como 3/3; un comando de prueba equivocado las había registrado como 0/3.
 
 ## Versión corta
 
@@ -69,6 +69,8 @@ Las mismas apps sin skill y de la 2.2.1 recibieron notas distintas de los dos ev
 
 ## Proyecto existente (suite de refactorización)
 
+El proyecto de práctica de 2.700 líneas del [benchmark de refactorización](BENCHMARK-REFACTOR.es.md), tres repeticiones.
+
 | Tarea | Lenguaje | Sin skill | 2.2.1 | 2.3.0 |
 |---|---|---|---|---|
 | Revisión, costo (USD) | Python | 0,365 | 0,416 | 0,386 |
@@ -77,22 +79,26 @@ Las mismas apps sin skill y de la 2.2.1 recibieron notas distintas de los dos ev
 | Corrección, costo (USD) | Node.js | 0,058 | 0,058 (skill no cargada) | 0,098 |
 | Corrección resuelta | ambos | 6/6 | 6/6 | 6/6 |
 
+Las 18 respuestas de revisión se calificaron a ciegas contra la clave de respuestas (`benchmark/refactor/manifest/`):
+
 | Condición | Problemas plantados encontrados (promedio de 13) | Afirmaciones falsas (total) | Problema más grave correcto |
 |---|---|---|---|
 | Sin skill | 10,8 | 4 | 6/6 |
 | 2.2.1 | 11,2 | 2 | 4/6 |
 | 2.3.0 | 11,3 | 0 | 6/6 |
 
+El evaluador contó la inyección de SQL como la clase más grave; las dos respuestas de la 2.2.1 que pusieron primero el hash MD5 son las marcadas como erróneas.
+
 ## Puertas para publicar
 
 | Puerta | Resultado |
 |---|---|
 | 1. Pruebas y ZIP | Pasó: 57 pruebas |
-| 2. Toda app nueva compila | **Para que decida el dueño.** Python y Node.js 8 de 8; C# no verificado; una app Node.js falla con un `npm start` simple |
+| 2. Toda app nueva compila | **Aceptada por el dueño el 2026-11-25.** Python y Node.js 8 de 8; C# no verificado; una app Node.js falla con un `npm start` simple |
 | 3. Seguridad al menos igual a la 2.2.1 | Pasó en las dos rondas a ciegas |
-| 4. Costo por entrega que funciona no mayor que la 2.2.1 | **Para que decida el dueño.** No fue más cara donde la skill funciona en ambas; la corrección cuesta USD 0,04 más, el precio de cargarse en cada edición |
+| 4. Costo por entrega que funciona no mayor que la 2.2.1 | **Aceptada por el dueño el 2026-11-25.** No fue más cara donde la skill funciona en ambas; la corrección cuesta USD 0,04 más, el precio de cargarse en cada edición |
 | 5. Activación (criterio registrado antes) | Pasó: 6/6, 19/20, 26/26, 0/16 |
 
 ## Límites
 
-Tres lenguajes, dos o tres repeticiones por celda y un modelo: unos centavos de diferencia por app están dentro del ruido. Cada ejecución tenía solo este plugin, así que el trabajo junto con otras skills (sección 11) no se midió. El piloto que eligió la descripción usó la tarea de corrección, que también se mide aquí. La regla de entrega proporcional se corrigió después de la primera revisión a ciegas y solo la suite de creación se ejecutó de nuevo.
+Tres lenguajes, dos o tres repeticiones por celda y un modelo: unos centavos de diferencia por app están dentro del ruido. Cada ejecución tenía solo este plugin, así que el trabajo junto con otras skills (sección 11) no se midió. Las rondas de activación y de revisión usaron el `SKILL.md` anterior a sus dos últimas frases (lanzador e instalación bloqueada). El piloto que eligió la descripción usó la tarea de corrección, que también se mide aquí. La regla de entrega proporcional se corrigió después de la primera revisión a ciegas y solo la suite de creación se ejecutó de nuevo. El banco de pruebas bloquea la instalación de paquetes y los servidores en ejecución, lo que es más estricto que una sesión real.

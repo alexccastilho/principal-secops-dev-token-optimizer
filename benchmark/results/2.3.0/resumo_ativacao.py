@@ -4,6 +4,8 @@ import glob
 import json
 import sys
 
+sys.stdout.reconfigure(encoding="utf-8")  # a Windows console would write CP1252
+
 B = sys.argv[1] if len(sys.argv) > 1 else "."  # folder that holds out-activation and out-refactor
 per = collections.defaultdict(lambda: collections.defaultdict(lambda: [0, 0]))
 for f in glob.glob(B + "/out-activation/**/run.json", recursive=True):

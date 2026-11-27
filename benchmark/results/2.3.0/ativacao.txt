@@ -18,5 +18,5 @@ bugfix | 0/6 | 0/6 | 6/6
 
 5a bugfix v23 > 0/6: 6/6 PASSA
 5b a04,a05,a07,a08,a10 v23 > 2/20: 19/20 PASSA
-5c sem regressão >= 23/26: 26/26 PASSA
+5c sem regressÃ£o >= 23/26: 26/26 PASSA
 5d falso positivo 0/16: 0/16 PASSA

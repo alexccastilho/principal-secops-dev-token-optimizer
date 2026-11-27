@@ -2,7 +2,7 @@
 
 [English](BENCHMARK-2.3.md) · [Español](BENCHMARK-2.3.es.md) · [Primeiro benchmark](BENCHMARK.pt-BR.md) · [Benchmark de refatoração](BENCHMARK-REFACTOR.pt-BR.md)
 
-Rodado em 2026-11-25 com o Claude Code 2.1.332, o modelo `sonnet` (`claude-sonnet-5-5`), no Windows 11, na configuração isolada do `benchmark/run_benchmark.py`. Três condições: sem a skill, versão 2.2.1 e versão 2.3.0. A 2.3.0 foi medida a partir dos arquivos do branch `v2.3` antes do primeiro commit, então as execuções registram o commit base com `-dirty`. **Esta rodada é parcial:** três linguagens em vez de seis, duas ou três repetições por célula e um modelo só. Os resumos brutos, as notas cegas e os mapas de rótulos estão em [benchmark/results/2.3.0/](../benchmark/results/2.3.0/).
+Rodado em 2026-11-25 com o Claude Code 2.1.332, o modelo `sonnet` (`claude-sonnet-5-5`), no Windows 11, na configuração isolada do `benchmark/run_benchmark.py`. Três condições: sem a skill, versão 2.2.1 e versão 2.3.0. A 2.3.0 foi medida a partir dos arquivos do branch `v2.3` antes do primeiro commit, então as execuções registram o commit base com `-dirty`. **Esta rodada é parcial:** três linguagens em vez de seis, duas ou três repetições por célula e um modelo só. Os resumos brutos, as notas cegas e os mapas de rótulos estão em [benchmark/results/2.3.0/](../benchmark/results/2.3.0/). A segunda rodada de app novo está em `custos2.json` e `create2-summary.json`. Na 2.3.1 os resumos foram recalculados a partir das mesmas execuções, sem chamar o modelo de novo: custo com três casas, build do C# como não conferido (0/0) em vez de falha, e os testes originais do Node.js na suíte de refatoração como 3/3; um comando de teste errado tinha gravado 0/3.
 
 ## Versão curta
 
@@ -94,9 +94,9 @@ O avaliador contou injeção de SQL como a classe mais grave; as duas respostas 
 | Portão | Resultado |
 |---|---|
 | 1. Testes passam e o ZIP é gerado | Passou: 57 testes |
-| 2. Todo app novo compila | **Para o dono decidir.** Python e Node.js compilaram 8 de 8; o C# não pôde ser conferido em nenhuma condição; um app Node.js falha num `npm start` simples |
+| 2. Todo app novo compila | **Aceito pelo dono em 2026-11-25.** Python e Node.js compilaram 8 de 8; o C# não pôde ser conferido em nenhuma condição; um app Node.js falha num `npm start` simples |
 | 3. Segurança no mínimo igual à da 2.2.1 | Passou nas duas rodadas cegas |
-| 4. Custo por entrega que funciona no máximo igual ao da 2.2.1 | **Para o dono decidir.** Não ficou mais caro onde a skill funciona nas duas (app novo, revisão); o bugfix custa US$ 0,04 a mais, o preço de carregar em toda edição, o que a 2.2.1 não fazia |
+| 4. Custo por entrega que funciona no máximo igual ao da 2.2.1 | **Aceito pelo dono em 2026-11-25.** Não ficou mais caro onde a skill funciona nas duas (app novo, revisão); o bugfix custa US$ 0,04 a mais, o preço de carregar em toda edição, o que a 2.2.1 não fazia |
 | 5. Ativação (critério registrado antes) | Passou: bugfix 6/6, pedidos que a 2.2.1 perdia 19/20, sem regressão 26/26, pedidos que não são de código 0/16 |
 
 ## Limites

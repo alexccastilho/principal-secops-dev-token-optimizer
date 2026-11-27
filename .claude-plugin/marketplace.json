@@ -9,7 +9,7 @@
     {
       "name": "principal-secops-dev-token-optimizer",
       "source": "./",
-      "description": "Secure, working code that stays easy to change, explained in plain pt-BR to people who do not program. Security, system integrity, structure and token economy.",
+      "description": "Secure, working code that stays easy to change, explained in plain pt-BR to people who do not program. Security, system integrity and structure.",
       "author": {
         "name": "Alex Camacho Castilho",
         "url": "https://github.com/alexccastilho"

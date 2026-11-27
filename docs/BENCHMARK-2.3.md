@@ -2,7 +2,7 @@
 
 [Português](BENCHMARK-2.3.pt-BR.md) · [Español](BENCHMARK-2.3.es.md) · [First benchmark](BENCHMARK.md) · [Refactor benchmark](BENCHMARK-REFACTOR.md)
 
-Run on 2026-11-25 with Claude Code 2.1.332, the `sonnet` model (`claude-sonnet-5-5`), on Windows 11, in the isolated configuration of `benchmark/run_benchmark.py`. Three conditions: no skill, version 2.2.1 and version 2.3.0. Version 2.3.0 was measured from the working tree of the `v2.3` branch before its first commit, so its runs record the base commit with `-dirty`. **This run is partial:** three languages instead of six, two or three repetitions per cell, and one model. The raw summaries, the blind grades and the label mappings are in [benchmark/results/2.3.0/](../benchmark/results/2.3.0/).
+Run on 2026-11-25 with Claude Code 2.1.332, the `sonnet` model (`claude-sonnet-5-5`), on Windows 11, in the isolated configuration of `benchmark/run_benchmark.py`. Three conditions: no skill, version 2.2.1 and version 2.3.0. Version 2.3.0 was measured from the working tree of the `v2.3` branch before its first commit, so its runs record the base commit with `-dirty`. **This run is partial:** three languages instead of six, two or three repetitions per cell, and one model. The raw summaries, the blind grades and the label mappings are in [benchmark/results/2.3.0/](../benchmark/results/2.3.0/). The second new-app round is in `custos2.json` and `create2-summary.json`. In 2.3.1 the summaries were recomputed from the same runs, with no new model call: cost with three decimals, C# build as not checked (0/0) instead of failed, and the Node.js original tests of the refactor suite as 3/3; a wrong test command had recorded them as 0/3.
 
 ## Short version
 
@@ -94,9 +94,9 @@ The grader counted SQL injection as the most serious class; the two 2.2.1 answer
 | Gate | Result |
 |---|---|
 | 1. Tests pass and the ZIP builds | Passed: 57 tests |
-| 2. Every new app compiles | **For the owner to rule on.** Python and Node.js compiled 8 of 8; C# could not be checked in any condition; one Node.js app fails a plain `npm start` |
+| 2. Every new app compiles | **Accepted by the owner on 2026-11-25.** Python and Node.js compiled 8 of 8; C# could not be checked in any condition; one Node.js app fails a plain `npm start` |
 | 3. Security at least that of 2.2.1 | Passed in both blind rounds |
-| 4. Cost per working delivery at most that of 2.2.1 | **For the owner to rule on.** Not more expensive where the skill works in both (new app, review); the bug fix costs USD 0.04 more, the price of loading on every edit, which 2.2.1 did not do |
+| 4. Cost per working delivery at most that of 2.2.1 | **Accepted by the owner on 2026-11-25.** Not more expensive where the skill works in both (new app, review); the bug fix costs USD 0.04 more, the price of loading on every edit, which 2.2.1 did not do |
 | 5. Activation (pre-registered criteria) | Passed: bug fix 6/6, prompts 2.2.1 missed 19/20, no regression 26/26, non-code 0/16 |
 
 ## Limits

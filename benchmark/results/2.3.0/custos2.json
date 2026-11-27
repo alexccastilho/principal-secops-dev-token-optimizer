@@ -1,0 +1,29 @@
+{
+ "csharp||v23": {
+  "cost_usd": 0.62131815,
+  "output_tokens": 31828,
+  "cache_creation_input_tokens": 60784,
+  "cache_read_input_tokens": 598421.5,
+  "input_tokens": 30,
+  "num_turns": 45.5,
+  "wall_seconds": 198.95
+ },
+ "node||v23": {
+  "cost_usd": 0.5527086000000001,
+  "output_tokens": 26655,
+  "cache_creation_input_tokens": 54129,
+  "cache_read_input_tokens": 695806,
+  "input_tokens": 31,
+  "num_turns": 43,
+  "wall_seconds": 172.15
+ },
+ "python||v23": {
+  "cost_usd": 0.44041805,
+  "output_tokens": 18457.5,
+  "cache_creation_input_tokens": 47462,
+  "cache_read_input_tokens": 659290.5,
+  "input_tokens": 33,
+  "num_turns": 35,
+  "wall_seconds": 134.65
+ }
+}
